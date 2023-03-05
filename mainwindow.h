@@ -2,7 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMap>
 #include <QSqlDatabase>
+#include <QSqlQuery>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -19,7 +21,10 @@ public:
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
+    QSqlQuery *qry;
+    QMap<QString, int> mapColonne;
     int verifichePath();
+    void compilaElencoColonne();
 
 };
 #endif // MAINWINDOW_H

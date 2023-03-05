@@ -3,6 +3,7 @@
 #include "ui_mainwindow.h"
 #include "connessionedb.h"
 
+#include <QCheckBox>
 #include <QFileInfo>
 #include <QMap>
 
@@ -16,18 +17,23 @@ MainWindow::MainWindow(QWidget *parent)
     if(!verifichePath())
         return;
 
+
     ConnessioneDB conn;
     db = conn.getConn();
+    qry = new QSqlQuery(db);
 
+    compilaElencoColonne();
 
     qInfo() << "OK!";
     db.close();
 }
 
+
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
 
 int MainWindow::verifichePath()
 {
@@ -73,3 +79,27 @@ int MainWindow::verifichePath()
     return 1;
 }
 
+
+void MainWindow::compilaElencoColonne()
+{
+    // COMPILA L'ELENCO LATERALE DELLE COLONNE DISPONIBILI
+
+    if(!db.isOpen()) db.open();
+    qInfo() << "a";
+
+    qry->prepare("SELECT * FROM Colonne WHERE Attivo = 1 AND Intabella = 1 ORDER BY OrdineColonna;");
+    qry->exec();
+
+    while(qry->next())
+    {
+        qInfo() << "a";
+        QCheckBox *c = new QCheckBox(qry->value("TestoColonna").toString());
+        c->setChecked(qry->value("Visibile").toInt());
+        c->setObjectName(qry->value("NomeColonna").toString());
+        //connect(c, SIGNAL(toggled(bool)), this, SLOT(nascondiColonna()));
+        ui->verticalLayoutColonne->addWidget(c);
+        mapColonne.insert(qry->value("TestoColonna").toString(), qry->value("Visibile").toInt());
+    }
+    db.close();
+    //qInfo() << mapColonne;
+}
