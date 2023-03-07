@@ -24,8 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     compilaElencoColonne();
 
-    qInfo() << "OK!";
     db.close();
+    qInfo() << "_Fine main!";
 }
 
 
@@ -85,14 +85,12 @@ void MainWindow::compilaElencoColonne()
     // COMPILA L'ELENCO LATERALE DELLE COLONNE DISPONIBILI
 
     if(!db.isOpen()) db.open();
-    qInfo() << "a";
 
     qry->prepare("SELECT * FROM Colonne WHERE Attivo = 1 AND Intabella = 1 ORDER BY OrdineColonna;");
     qry->exec();
 
     while(qry->next())
     {
-        qInfo() << "a";
         QCheckBox *c = new QCheckBox(qry->value("TestoColonna").toString());
         c->setChecked(qry->value("Visibile").toInt());
         c->setObjectName(qry->value("NomeColonna").toString());
