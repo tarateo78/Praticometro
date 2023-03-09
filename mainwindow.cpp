@@ -123,6 +123,8 @@ void MainWindow::compilaTabellaCompleta()
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->clearContents();
 
+    ui->tableWidget->setAlternatingRowColors(true);
+
     QList<QString> listaHeader;
 
     int nColonna=0;
@@ -144,15 +146,15 @@ void MainWindow::compilaTabellaCompleta()
         nColonna++;
     }
 
-    QString query ="SELECT * FROM Pratiche WHERE Incorso = :incorso AND (";
+    QString query ="SELECT * FROM Pratiche WHERE Incorso > :incorso AND (";
     query += "Pratica LIKE :filtro OR Titolo LIKE :filtro OR TitoloEsteso LIKE :filtro OR ";
     query += "Progettista LIKE :filtro OR Sicurezza LIKE :filtro OR Impresa LIKE :filtro OR ";
-    query += "Rup LIKE :filtro ";
+    query += "Rup LIKE :filtro OR Alias LIKE :filtro ";
     query += ");";
 
     qry->prepare(query);
 
-    qry->bindValue(":incorso", ui->checkBox->isChecked()?1:0);
+    qry->bindValue(":incorso", ui->checkBox->isChecked()?"0":"-1");
     qry->bindValue(":filtro", "%" + ui->lineEdit->text() + "%");
     qry->exec();
 
@@ -165,8 +167,14 @@ void MainWindow::compilaTabellaCompleta()
 
         nColonna = 0;
         foreach (QString head, listaHeader) {
+
             QTableWidgetItem *item = new QTableWidgetItem();
             item->setText(qry->value(head).toString());
+
+            if(qry->value("IterProgChiuso").toInt() && ui->checkBox_2->isChecked())
+            {
+                item->setBackground(QColor(0, 255, 0, 127));
+            }
 
             ui->tableWidget->setItem(row,nColonna,item);
             nColonna++;
@@ -200,5 +208,13 @@ void MainWindow::on_pushButton_clicked()
     // CANCELLA CASELLA FILTRO
 
     ui->lineEdit->setText("");
+}
+
+
+void MainWindow::on_checkBox_2_stateChanged(int arg1)
+{
+    // CHECK COLORA
+
+    compilaTabellaCompleta();
 }
 
