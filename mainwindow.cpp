@@ -17,12 +17,17 @@ MainWindow::MainWindow(QWidget *parent)
     if(!verifichePath())
         return;
 
-
     ConnessioneDB conn;
     db = conn.getConn();
     qry = new QSqlQuery(db);
 
+    // DISABILITA EDIT TABELLA
+
+    ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+//            table.setEditTriggers(QAbstractItemView::NoEditTriggers);
+
     compilaElencoColonne();
+    compilaTabellaCompleta();
 
     db.close();
     qInfo() << "_Fine main!";
@@ -101,3 +106,99 @@ void MainWindow::compilaElencoColonne()
     db.close();
     //qInfo() << mapColonne;
 }
+
+
+void MainWindow::compilaTabellaCompleta()
+{
+
+    // COMPILA LA TABELLA PRINCIPALE
+
+    refresh = 1;
+    if(!db.isOpen()) db.open();
+
+    qry->prepare("SELECT * FROM Colonne WHERE Intabella = 1 ORDER BY OrdineColonna;");
+    qry->exec();
+
+    ui->tableWidget->setColumnCount(0);
+    ui->tableWidget->setRowCount(0);
+    ui->tableWidget->clearContents();
+
+    QList<QString> listaHeader;
+
+    int nColonna=0;
+    while(qry->next())
+    {
+        listaHeader.append(qry->value("NomeColonna").toString());
+
+        ui->tableWidget->insertColumn(nColonna);
+        QTableWidgetItem *header = new QTableWidgetItem();
+        header->setText(qry->value("TestoColonna").toString());
+
+        ui->tableWidget->setHorizontalHeaderItem(nColonna, header);
+
+        ui->tableWidget->setColumnWidth(nColonna, qry->value("Larghezza").toInt());
+
+        if(!mapColonne[qry->value("TestoColonna").toString()])
+            ui->tableWidget->hideColumn(nColonna);
+
+        nColonna++;
+    }
+
+    QString query ="SELECT * FROM Pratiche WHERE Incorso = :incorso AND (";
+    query += "Pratica LIKE :filtro OR Titolo LIKE :filtro OR TitoloEsteso LIKE :filtro OR ";
+    query += "Progettista LIKE :filtro OR Sicurezza LIKE :filtro OR Impresa LIKE :filtro OR ";
+    query += "Rup LIKE :filtro ";
+    query += ");";
+
+    qry->prepare(query);
+
+    qry->bindValue(":incorso", ui->checkBox->isChecked()?1:0);
+    qry->bindValue(":filtro", "%" + ui->lineEdit->text() + "%");
+    qry->exec();
+
+    int row = 0;
+    while(qry->next())
+    {
+        //qInfo() << qry->value("Pratica").toString();
+
+        ui->tableWidget->insertRow(row);
+
+        nColonna = 0;
+        foreach (QString head, listaHeader) {
+            QTableWidgetItem *item = new QTableWidgetItem();
+            item->setText(qry->value(head).toString());
+
+            ui->tableWidget->setItem(row,nColonna,item);
+            nColonna++;
+        }
+
+        row++;
+    }
+
+    db.close();
+    refresh = 0;
+}
+
+void MainWindow::on_checkBox_stateChanged(int arg1)
+{
+    // CHECK SOLO IN CORSO
+
+    compilaTabellaCompleta();
+}
+
+
+void MainWindow::on_lineEdit_textChanged(const QString &arg1)
+{
+    // CAMPO FILTRO
+
+    compilaTabellaCompleta();
+}
+
+
+void MainWindow::on_pushButton_clicked()
+{
+    // CANCELLA CASELLA FILTRO
+
+    ui->lineEdit->setText("");
+}
+
