@@ -2,6 +2,7 @@
 #include "globalobject.h"
 #include "ui_mainwindow.h"
 #include "connessionedb.h"
+#include "schedadettaglio.h"
 
 #include <QCheckBox>
 #include <QFileInfo>
@@ -85,6 +86,16 @@ int MainWindow::verifichePath()
 }
 
 
+void MainWindow::nascondiColonna()
+{
+    // RICEVE EVENTO DEL CHECKBOX E MODIFICA IL VALORE NELLA mapColonne
+
+    QCheckBox *cb  = qobject_cast<QCheckBox*>(sender());
+    mapColonne[cb->text()] = (cb->isChecked() ? 1 : 0);
+    compilaTabellaCompleta();
+}
+
+
 void MainWindow::compilaElencoColonne()
 {
     // COMPILA L'ELENCO LATERALE DELLE COLONNE DISPONIBILI
@@ -99,7 +110,7 @@ void MainWindow::compilaElencoColonne()
         QCheckBox *c = new QCheckBox(qry->value("TestoColonna").toString());
         c->setChecked(qry->value("Visibile").toInt());
         c->setObjectName(qry->value("NomeColonna").toString());
-        //connect(c, SIGNAL(toggled(bool)), this, SLOT(nascondiColonna()));
+        connect(c, SIGNAL(toggled(bool)), this, SLOT(nascondiColonna()));
         ui->verticalLayoutColonne->addWidget(c);
         mapColonne.insert(qry->value("TestoColonna").toString(), qry->value("Visibile").toInt());
     }
@@ -216,5 +227,20 @@ void MainWindow::on_checkBox_2_stateChanged(int arg1)
     // CHECK COLORA
 
     compilaTabellaCompleta();
+}
+
+
+void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
+{
+    // APRI SCHEDA DETTAGLIO
+
+    QString pratica = ui->tableWidget->item(row, 0)->text();
+    qInfo() << "testo doubleclick" << pratica;
+
+    //db.close();
+
+    SchedaDettaglio schedaDettaglio(pratica, db);
+    schedaDettaglio.setModal(true);
+    schedaDettaglio.exec();
 }
 

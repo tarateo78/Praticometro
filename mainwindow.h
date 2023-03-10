@@ -27,6 +27,10 @@ private slots:
 
     void on_checkBox_2_stateChanged(int arg1);
 
+    void nascondiColonna();
+
+    void on_tableWidget_cellDoubleClicked(int row, int column);
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

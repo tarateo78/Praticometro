@@ -12,15 +12,18 @@ SOURCES += \
     connessionedb.cpp \
     globalobject.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    schedadettaglio.cpp
 
 HEADERS += \
     connessionedb.h \
     globalobject.h \
-    mainwindow.h
+    mainwindow.h \
+    schedadettaglio.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    schedadettaglio.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
