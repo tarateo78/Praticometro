@@ -4,7 +4,12 @@
 #include <QDialog>
 
 #include "connessionedb.h"
+#include <QLabel>
 #include <QSqlDatabase>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QCheckBox>
+#include <QDateEdit>
 
 namespace Ui {
 class SchedaDettaglio;
@@ -18,13 +23,19 @@ public:
     explicit SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidget *parent = nullptr);
     ~SchedaDettaglio();
 
+private slots:
+    void on_pushButton_clicked();
+    void aggiungiCampoCambiato();
+
 private:
     Ui::SchedaDettaglio *ui;
     QSqlDatabase db;
     QString pratica;
     QList<QWidget*> *campi;
+    QList<QWidget*> *campiModificati;
 
     void popolaCampi();
+    void pubblicaCampo(QString, QLabel *, QWidget *);
 };
 
 #endif // SCHEDADETTAGLIO_H
