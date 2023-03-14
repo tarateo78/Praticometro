@@ -1,6 +1,10 @@
 #include "schedadettaglio.h"
 #include "ui_schedadettaglio.h"
 
+#include <QDir>
+
+
+
 
 SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidget *parent) :
     QDialog(parent),
@@ -19,6 +23,7 @@ SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidge
     if(db.isOpen()) qInfo() << "aperto";
 
     popolaCampi();
+    compilaAtti();
 
 }
 
@@ -94,16 +99,94 @@ void SchedaDettaglio::popolaCampi()
 }
 
 
-void SchedaDettaglio::pubblicaCampo(QString cat, QLabel *lab, QWidget *wid)
+void SchedaDettaglio::compilaAtti()
 {
-    if(cat.compare("Dati") == 0 ||
-            cat.compare("Progettazione") == 0)
+
+    if(!db.isOpen()) db.open();
+
+    // PESCA LA CARTELLA LAVORI
+
+    QSqlQuery *qryCartLavori;
+    qryCartLavori = new QSqlQuery(db);
+    qryCartLavori->prepare("SELECT * FROM Setup WHERE Chiave = :valore;");
+    qryCartLavori->bindValue(":valore", "PathLavori");
+    qryCartLavori->exec();
+    qryCartLavori->next();
+
+    // TROVA IL PATH DELLA PRATICA CORRENTE
+    QString pathPratica = "";
+    QDir root(qryCartLavori->value("Valore").toString());
+    QFileInfoList elenco = root.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
+    foreach (QFileInfo file, elenco)
     {
-        ui->formLayout->addRow(lab, wid);
+        if(file.fileName().left(5).compare(pratica)==0)
+            pathPratica = qryCartLavori->value("Valore").toString() + "\\" + file.fileName();
+    }
+
+    // TROVA IL PATH DEGLI ATTI AMMINISTRATIVI
+    QString pathAtti = "";
+    QDir pPratica(pathPratica);
+    QFileInfoList elencoPratica = pPratica.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
+    foreach (QFileInfo file, elencoPratica)
+    {
+        if(file.fileName().toLower().contains("atti"))
+            pathAtti = pathPratica + "\\" + file.fileName();
+    }
+
+    // VERIFICA SE CARTELLA ATTI PRESENTE
+    if(pathAtti.compare("")==0)
+    {
+        ui->listWidget->addItem("Cartella Atti non presente");
     }
     else
     {
+        QDir pAtti(pathAtti);
+        QFileInfoList elencoAtti = pAtti.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
+        foreach (QFileInfo file, elencoAtti)
+        {
+            ui->listWidget->addItem(file.fileName());
+        }
+
+    }
+
+    db.close();
+
+//    MappaPratiche *mapP = new MappaPratiche;
+//    QMap map = mapP->getMappaPratiche();
+
+//    QList listaCartelle = mapP->getSottocartelle(globalPath + "\\" + map[pratica]);
+//    foreach (QString cartella, listaCartelle) {
+//        ui->listWidget_2->addItem(cartella);
+//    }
+
+//    QList listaAtti = mapP->getAttiAmm(pratica);
+//    foreach (QString atto, listaAtti) {
+//        ui->listWidget->addItem(atto);
+//    }
+}
+
+
+void SchedaDettaglio::pubblicaCampo(QString cat, QLabel *lab, QWidget *wid)
+{
+    if(cat.compare("Dati") == 0)
+    {
+        ui->formLayout->addRow(lab, wid);
+    }
+    else if(cat.compare("Progettazione") == 0)
+    {
         ui->formLayout_2->addRow(lab, wid);
+    }
+    else if(cat.compare("Finanziamento") == 0)
+    {
+        ui->formLayout_3->addRow(lab, wid);
+    }
+    else if(cat.compare("Lavori") == 0)
+    {
+        ui->formLayout_5->addRow(lab, wid);
+    }
+    else if(cat.compare("Altro") == 0)
+    {
+        ui->formLayout_4->addRow(lab, wid);
     }
 
 }

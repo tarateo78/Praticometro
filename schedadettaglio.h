@@ -10,6 +10,7 @@
 #include <QTextEdit>
 #include <QCheckBox>
 #include <QDateEdit>
+#include <QFileSystemModel>
 
 namespace Ui {
 class SchedaDettaglio;
@@ -36,6 +37,7 @@ private:
 
     void popolaCampi();
     void pubblicaCampo(QString, QLabel *, QWidget *);
+    void compilaAtti();
 };
 
 #endif // SCHEDADETTAGLIO_H
