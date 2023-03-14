@@ -161,7 +161,7 @@ void MainWindow::compilaTabellaCompleta()
     query += "Pratica LIKE :filtro OR Titolo LIKE :filtro OR TitoloEsteso LIKE :filtro OR ";
     query += "Progettista LIKE :filtro OR Sicurezza LIKE :filtro OR Impresa LIKE :filtro OR ";
     query += "Rup LIKE :filtro OR Alias LIKE :filtro ";
-    query += ");";
+    query += ") ORDER BY Pratica DESC;";
 
     qry->prepare(query);
 
@@ -184,7 +184,14 @@ void MainWindow::compilaTabellaCompleta()
 
             if(qry->value("IterProgChiuso").toInt() && ui->checkBox_2->isChecked())
             {
-                item->setBackground(QColor(0, 255, 0, 127));
+                if(qry->value("CreFatto").toInt() && ui->checkBox_2->isChecked())
+                {
+                    item->setBackground(QColor(0, 0, 255, 127));
+                }
+                else
+                {
+                    item->setBackground(QColor(0, 255, 0, 127));
+                }
             }
 
             ui->tableWidget->setItem(row,nColonna,item);
