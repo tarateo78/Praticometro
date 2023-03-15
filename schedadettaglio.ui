@@ -41,6 +41,13 @@
              <layout class="QFormLayout" name="formLayout"/>
             </item>
             <item>
+             <widget class="QPushButton" name="pushButton_2">
+              <property name="text">
+               <string>Cartella</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QPushButton" name="pushButton">
               <property name="text">
                <string>Salva</string>
@@ -75,6 +82,13 @@
                <item>
                 <layout class="QFormLayout" name="formLayout_5"/>
                </item>
+               <item>
+                <widget class="QLabel" name="label">
+                 <property name="text">
+                  <string>TextLabel</string>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
              <widget class="QWidget" name="tab_2">
@@ -100,7 +114,14 @@
             </widget>
            </item>
            <item>
-            <widget class="QListWidget" name="listWidget"/>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QListWidget" name="listWidget"/>
+             </item>
+             <item>
+              <widget class="QListWidget" name="listWidget_2"/>
+             </item>
+            </layout>
            </item>
           </layout>
          </item>

@@ -28,16 +28,21 @@ private slots:
     void on_pushButton_clicked();
     void aggiungiCampoCambiato();
 
+    void on_pushButton_2_clicked();
+
 private:
     Ui::SchedaDettaglio *ui;
     QSqlDatabase db;
     QString pratica;
     QList<QWidget*> *campi;
     QList<QWidget*> *campiModificati;
+    QString cartellaLavori;
 
     void popolaCampi();
     void pubblicaCampo(QString, QLabel *, QWidget *);
     void compilaAtti();
+    void compilaCantiere();
+    void settaCartellaLavori();
 };
 
 #endif // SCHEDADETTAGLIO_H

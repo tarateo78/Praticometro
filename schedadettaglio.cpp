@@ -2,6 +2,7 @@
 #include "ui_schedadettaglio.h"
 
 #include <QDir>
+#include <QProcess>
 
 
 
@@ -22,8 +23,10 @@ SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidge
 
     if(db.isOpen()) qInfo() << "aperto";
 
+    settaCartellaLavori();
     popolaCampi();
     compilaAtti();
+    compilaCantiere();
 
 }
 
@@ -104,33 +107,14 @@ void SchedaDettaglio::compilaAtti()
 
     if(!db.isOpen()) db.open();
 
-    // PESCA LA CARTELLA LAVORI
-
-    QSqlQuery *qryCartLavori;
-    qryCartLavori = new QSqlQuery(db);
-    qryCartLavori->prepare("SELECT * FROM Setup WHERE Chiave = :valore;");
-    qryCartLavori->bindValue(":valore", "PathLavori");
-    qryCartLavori->exec();
-    qryCartLavori->next();
-
-    // TROVA IL PATH DELLA PRATICA CORRENTE
-    QString pathPratica = "";
-    QDir root(qryCartLavori->value("Valore").toString());
-    QFileInfoList elenco = root.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
-    foreach (QFileInfo file, elenco)
-    {
-        if(file.fileName().left(5).compare(pratica)==0)
-            pathPratica = qryCartLavori->value("Valore").toString() + "\\" + file.fileName();
-    }
-
     // TROVA IL PATH DEGLI ATTI AMMINISTRATIVI
     QString pathAtti = "";
-    QDir pPratica(pathPratica);
+    QDir pPratica(cartellaLavori);
     QFileInfoList elencoPratica = pPratica.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
     foreach (QFileInfo file, elencoPratica)
     {
         if(file.fileName().toLower().contains("atti"))
-            pathAtti = pathPratica + "\\" + file.fileName();
+            pathAtti = cartellaLavori + "\\" + file.fileName();
     }
 
     // VERIFICA SE CARTELLA ATTI PRESENTE
@@ -150,19 +134,68 @@ void SchedaDettaglio::compilaAtti()
     }
 
     db.close();
+}
 
-//    MappaPratiche *mapP = new MappaPratiche;
-//    QMap map = mapP->getMappaPratiche();
 
-//    QList listaCartelle = mapP->getSottocartelle(globalPath + "\\" + map[pratica]);
-//    foreach (QString cartella, listaCartelle) {
-//        ui->listWidget_2->addItem(cartella);
-//    }
+void SchedaDettaglio::compilaCantiere()
+{
 
-//    QList listaAtti = mapP->getAttiAmm(pratica);
-//    foreach (QString atto, listaAtti) {
-//        ui->listWidget->addItem(atto);
-//    }
+    if(!db.isOpen()) db.open();
+
+    // TROVA IL PATH DEL CANTIERE
+    QString pathCantiere = "";
+    QDir pPratica(cartellaLavori);
+    QFileInfoList elencoPratica = pPratica.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
+    foreach (QFileInfo file, elencoPratica)
+    {
+        if(file.fileName().toLower().contains("cantiere"))
+            pathCantiere = cartellaLavori + "\\" + file.fileName();
+    }
+
+    // VERIFICA SE CARTELLA ATTI PRESENTE
+    if(pathCantiere.compare("")==0)
+    {
+        ui->listWidget_2->addItem("Cartella Cantiere non presente");
+    }
+    else
+    {
+        QDir pAtti(pathCantiere);
+        QFileInfoList elencoAtti = pAtti.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
+        foreach (QFileInfo file, elencoAtti)
+        {
+            ui->listWidget_2->addItem(file.fileName());
+        }
+
+    }
+
+    db.close();
+}
+
+
+void SchedaDettaglio::settaCartellaLavori()
+{
+
+    if(!db.isOpen()) db.open();
+
+    // PESCA LA CARTELLA LAVORI
+
+    QSqlQuery *qryCartLavori;
+    qryCartLavori = new QSqlQuery(db);
+    qryCartLavori->prepare("SELECT * FROM Setup WHERE Chiave = :valore;");
+    qryCartLavori->bindValue(":valore", "PathLavori");
+    qryCartLavori->exec();
+    qryCartLavori->next();
+
+    // TROVA IL PATH DELLA PRATICA CORRENTE
+    QDir root(qryCartLavori->value("Valore").toString());
+    QFileInfoList elenco = root.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
+    foreach (QFileInfo file, elenco)
+    {
+        if(file.fileName().left(5).compare(pratica)==0)
+            cartellaLavori = qryCartLavori->value("Valore").toString() + "\\" + file.fileName();
+    }
+    qInfo() << cartellaLavori;
+    db.close();
 }
 
 
@@ -244,5 +277,19 @@ void SchedaDettaglio::on_pushButton_clicked()
 
     db.close();
     this->close();
+}
+
+
+void SchedaDettaglio::on_pushButton_2_clicked()
+{
+    // APRI EXPLORER
+
+    QProcess *process = new QProcess(this);
+    QString file = "C:\\Windows\\explorer.exe";
+    QStringList arg;
+    ui->label->setText(cartellaLavori);
+    arg.append(cartellaLavori);
+    process->start(file, arg);
+
 }
 
