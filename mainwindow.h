@@ -31,6 +31,10 @@ private slots:
 
     void on_tableWidget_cellDoubleClicked(int row, int column);
 
+    void on_actionGestione_Stato_Pratiche_triggered();
+
+    void on_actionCartella_Progetti_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
@@ -38,6 +42,7 @@ private:
     QMap<QString, int> mapColonne;
     int refresh;
     int verifichePath();
+    void settaPathProgetti();
     void compilaElencoColonne();
     void compilaTabellaCompleta();
 

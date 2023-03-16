@@ -3,6 +3,8 @@
 #include "ui_mainwindow.h"
 #include "connessionedb.h"
 #include "schedadettaglio.h"
+#include "statopratiche.h"
+#include "cartellaprogetti.h"
 
 #include <QCheckBox>
 #include <QFileInfo>
@@ -23,9 +25,11 @@ MainWindow::MainWindow(QWidget *parent)
     qry = new QSqlQuery(db);
 
     // DISABILITA EDIT TABELLA
-
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-//            table.setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+
+    // SETTA PERCORSO PROGETTI
+    settaPathProgetti();
 
     compilaElencoColonne();
     compilaTabellaCompleta();
@@ -80,9 +84,24 @@ int MainWindow::verifichePath()
         return 0;
     if(sPath.right(sPath.length()-1).compare("\\") != 0)
         sPath += "\\";
-    globalPath = sPath + "config_db.db";
+    globalPathDB = sPath + "config_db.db";
 
     return 1;
+}
+
+void MainWindow::settaPathProgetti()
+{
+    // PESCA LA CARTELLA LAVORI
+
+    QSqlQuery *qryCartLavori;
+    qryCartLavori = new QSqlQuery(db);
+    qryCartLavori->prepare("SELECT * FROM Setup WHERE Chiave = :valore;");
+    qryCartLavori->bindValue(":valore", "PathLavori");
+    qryCartLavori->exec();
+    qryCartLavori->next();
+
+    globalPathProgetti = qryCartLavori->value("Valore").toString();
+//    qInfo() << globalPathProgetti;
 }
 
 
@@ -100,7 +119,7 @@ void MainWindow::compilaElencoColonne()
 {
     // COMPILA L'ELENCO LATERALE DELLE COLONNE DISPONIBILI
 
-    if(!db.isOpen()) db.open();
+//    if(!db.isOpen()) db.open();
 
     qry->prepare("SELECT * FROM Colonne WHERE Attivo = 1 AND Intabella = 1 ORDER BY OrdineColonna;");
     qry->exec();
@@ -114,7 +133,7 @@ void MainWindow::compilaElencoColonne()
         ui->verticalLayoutColonne->addWidget(c);
         mapColonne.insert(qry->value("TestoColonna").toString(), qry->value("Visibile").toInt());
     }
-    db.close();
+//    db.close();
     //qInfo() << mapColonne;
 }
 
@@ -201,7 +220,7 @@ void MainWindow::compilaTabellaCompleta()
         row++;
     }
 
-    db.close();
+//    db.close();
     refresh = 0;
 }
 
@@ -249,5 +268,21 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
     SchedaDettaglio schedaDettaglio(pratica, db);
     schedaDettaglio.setModal(true);
     schedaDettaglio.exec();
+}
+
+
+void MainWindow::on_actionGestione_Stato_Pratiche_triggered()
+{
+    StatoPratiche statoPratiche(db);
+    statoPratiche.setModal(true);
+    statoPratiche.exec();
+}
+
+
+void MainWindow::on_actionCartella_Progetti_triggered()
+{
+    CartellaProgetti cartellaProgetti(db);
+    cartellaProgetti.setModal(true);
+    cartellaProgetti.exec();
 }
 

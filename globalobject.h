@@ -9,7 +9,8 @@ public:
     GlobalObject();
 };
 
-extern QString globalPath;
+extern QString globalPathDB;
+extern QString globalPathProgetti;
 
 
 #endif // GLOBALOBJECT_H

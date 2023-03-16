@@ -2,18 +2,24 @@
 <ui version="4.0">
  <class>SchedaDettaglio</class>
  <widget class="QDialog" name="SchedaDettaglio">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
+    <width>1062</width>
     <height>650</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Dialog</string>
+  <property name="contextMenuPolicy">
+   <enum>Qt::DefaultContextMenu</enum>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <property name="windowTitle">
+   <string>Scheda Dettaglio</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_11">
    <item>
     <widget class="QScrollArea" name="scrollArea">
      <property name="widgetResizable">
@@ -24,8 +30,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>980</width>
-        <height>630</height>
+        <width>1038</width>
+        <height>626</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -41,18 +47,28 @@
              <layout class="QFormLayout" name="formLayout"/>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_2">
-              <property name="text">
-               <string>Cartella</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton">
-              <property name="text">
-               <string>Salva</string>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QPushButton" name="pushButton">
+                <property name="text">
+                 <string>Salva</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
             </item>
            </layout>
           </widget>
@@ -82,13 +98,6 @@
                <item>
                 <layout class="QFormLayout" name="formLayout_5"/>
                </item>
-               <item>
-                <widget class="QLabel" name="label">
-                 <property name="text">
-                  <string>TextLabel</string>
-                 </property>
-                </widget>
-               </item>
               </layout>
              </widget>
              <widget class="QWidget" name="tab_2">
@@ -114,12 +123,58 @@
             </widget>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
-              <widget class="QListWidget" name="listWidget"/>
+              <layout class="QVBoxLayout" name="verticalLayout_9">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_3">
+                 <item>
+                  <widget class="QLabel" name="label_2">
+                   <property name="text">
+                    <string>Cartella:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pushButton_2">
+                   <property name="text">
+                    <string>Cartella</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QTreeView" name="treeView_2"/>
+               </item>
+              </layout>
              </item>
              <item>
-              <widget class="QListWidget" name="listWidget_2"/>
+              <layout class="QVBoxLayout" name="verticalLayout_10">
+               <item>
+                <widget class="QLabel" name="label">
+                 <property name="text">
+                  <string>Atti:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QTreeView" name="treeView"/>
+               </item>
+              </layout>
              </item>
             </layout>
            </item>

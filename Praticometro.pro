@@ -9,21 +9,27 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    cartellaprogetti.cpp \
     connessionedb.cpp \
     globalobject.cpp \
     main.cpp \
     mainwindow.cpp \
-    schedadettaglio.cpp
+    schedadettaglio.cpp \
+    statopratiche.cpp
 
 HEADERS += \
+    cartellaprogetti.h \
     connessionedb.h \
     globalobject.h \
     mainwindow.h \
-    schedadettaglio.h
+    schedadettaglio.h \
+    statopratiche.h
 
 FORMS += \
+    cartellaprogetti.ui \
     mainwindow.ui \
-    schedadettaglio.ui
+    schedadettaglio.ui \
+    statopratiche.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Praticometro</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -100,6 +100,9 @@
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
           </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -132,8 +135,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>158</width>
-              <height>599</height>
+              <width>154</width>
+              <height>579</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -157,11 +160,29 @@
      <x>0</x>
      <y>0</y>
      <width>1250</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuStrumenti">
+    <property name="title">
+     <string>Strumenti</string>
+    </property>
+    <addaction name="actionGestione_Stato_Pratiche"/>
+    <addaction name="actionCartella_Progetti"/>
+   </widget>
+   <addaction name="menuStrumenti"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionGestione_Stato_Pratiche">
+   <property name="text">
+    <string>Gestione Stato Pratiche...</string>
+   </property>
+  </action>
+  <action name="actionCartella_Progetti">
+   <property name="text">
+    <string>Cartella Progetti...</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

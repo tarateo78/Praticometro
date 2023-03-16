@@ -40,8 +40,8 @@ private:
 
     void popolaCampi();
     void pubblicaCampo(QString, QLabel *, QWidget *);
-    void compilaAtti();
-    void compilaCantiere();
+    void compilaTreeAtti();
+    void compilaTreePratica();
     void settaCartellaLavori();
 };
 
