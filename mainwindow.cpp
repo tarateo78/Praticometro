@@ -5,6 +5,7 @@
 #include "schedadettaglio.h"
 #include "statopratiche.h"
 #include "cartellaprogetti.h"
+#include "signinadmin.h"
 
 #include <QCheckBox>
 #include <QFileInfo>
@@ -105,7 +106,7 @@ void MainWindow::settaPathProgetti()
     qryCartLavori->next();
 
     globalPathProgetti = qryCartLavori->value("Valore").toString();
-//    qInfo() << globalPathProgetti;
+    //    qInfo() << globalPathProgetti;
 }
 
 
@@ -123,7 +124,7 @@ void MainWindow::compilaElencoColonne()
 {
     // COMPILA L'ELENCO LATERALE DELLE COLONNE DISPONIBILI
 
-//    if(!db.isOpen()) db.open();
+    //    if(!db.isOpen()) db.open();
 
     qry->prepare("SELECT * FROM Colonne WHERE Attivo = 1 AND Intabella = 1 ORDER BY OrdineColonna;");
     qry->exec();
@@ -138,7 +139,7 @@ void MainWindow::compilaElencoColonne()
         mapColonne.insert(qry->value("TestoColonna").toString(), qry->value("Visibile").toInt());
         mapColonneTipo.insert(qry->value("NomeColonna").toString(), qry->value("TipoColonna").toString());
     }
-//    db.close();
+    //    db.close();
     //qInfo() << mapColonne;
 }
 
@@ -181,6 +182,9 @@ void MainWindow::compilaTabellaCompleta()
         nColonna++;
     }
 
+    QFont fontBold;
+    fontBold.setBold(true);
+
     eseguiQuerySelect();
     int row = 0;
     while(qry->next())
@@ -194,6 +198,11 @@ void MainWindow::compilaTabellaCompleta()
 
             QTableWidgetItem *item = new QTableWidgetItem();
             item->setText(qry->value(head).toString());
+
+            if(qry->value("Incorso").toString().compare("1")==0 &&
+                    head.compare("Pratica")==0 &&
+                    !ui->checkBox->isChecked())
+                item->setFont(fontBold);
 
             if(mapColonneTipo.value(head).compare("Bool")==0)
             {
@@ -237,7 +246,7 @@ void MainWindow::compilaTabellaCompleta()
         row++;
     }
 
-//    db.close();
+    //    db.close();
     refresh = 0;
 }
 
@@ -322,25 +331,17 @@ void MainWindow::on_coloraCheck_stateChanged(int arg1)
 
 void MainWindow::on_actionEsporta_csv_triggered()
 {
-
     // CSV
 
     QString csv;
     QList<QString> listaHead;
 
-    QString fileCsv = QFileDialog::getSaveFileName(this, tr("Salva File"),
-                                                   "C:\\",
-                                                   tr("CSV (*.csv)"));
+    QString nomefileCsv = QFileDialog::getSaveFileName(this, tr("Salva File"),                                                    QDir::homePath() + "/Desktop/Pratiche.csv", tr("File CSV (*.csv)"));
 
-
-    QFile file("dati.csv");
+    QFile file(nomefileCsv);
     file.open(QIODevice::Truncate | QIODevice::ReadWrite);
 
     QTextStream stream(&file);
-
-
-
-
 
     db.open();
 
@@ -348,22 +349,21 @@ void MainWindow::on_actionEsporta_csv_triggered()
     qry->exec();
     int nRecord = 0;
     while (qry->next()) {
-        if(nRecord!=0)
-            csv.append("\t");
-        csv.append(qry->value(0).toString());
-        listaHead.append(qry->value(0).toString());
-        nRecord++;
+        if(mapColonne[qry->value(1).toString()]){
+            if(nRecord!=0)
+                csv.append("\t");
+            csv.append(qry->value(0).toString());
+            listaHead.append(qry->value(0).toString());
+            nRecord++;
+        }
     }
     csv.append("\n\r");
     stream << csv;
     csv.clear();
 
-    //qInfo() << nRecord;
+    //    qInfo() << listaHead;
 
     eseguiQuerySelect();
-
-//    QSqlRecord rec = qry->record();
-//    qInfo() << rec.count();
 
     int row = 0;
     while(qry->next())
@@ -380,9 +380,21 @@ void MainWindow::on_actionEsporta_csv_triggered()
 
         row++;
     }
-//    qInfo() << csv;
     db.close();
-
     file.close();
+}
+
+
+void MainWindow::on_action_Sign_In_triggered()
+{
+    SignInAdmin signInAdmin(db);
+    signInAdmin.setModal(true);
+    signInAdmin.exec();
+}
+
+
+void MainWindow::on_action_Log_Out_triggered()
+{
+    globalAdmin = 0;
 }
 

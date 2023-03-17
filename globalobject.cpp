@@ -2,3 +2,4 @@
 
 QString globalPathDB;
 QString globalPathProgetti;
+int globalAdmin = 0;

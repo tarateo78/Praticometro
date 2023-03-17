@@ -15,6 +15,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     schedadettaglio.cpp \
+    signinadmin.cpp \
     statopratiche.cpp
 
 HEADERS += \
@@ -23,12 +24,14 @@ HEADERS += \
     globalobject.h \
     mainwindow.h \
     schedadettaglio.h \
+    signinadmin.h \
     statopratiche.h
 
 FORMS += \
     cartellaprogetti.ui \
     mainwindow.ui \
     schedadettaglio.ui \
+    signinadmin.ui \
     statopratiche.ui
 
 # Default rules for deployment.

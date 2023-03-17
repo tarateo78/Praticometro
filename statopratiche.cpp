@@ -218,6 +218,12 @@ void StatoPratiche::on_pushButton_clicked()
 
 void StatoPratiche::on_pushButton_2_clicked()
 {
+    if(!globalAdmin)
+    {
+        QMessageBox::warning(this, "Attenzione!", "Devi essere Admin per poter effettuare questa operazione");
+        return;
+    }
+
     if(QMessageBox::question(this,"Attenzione","Cancellare i dati in modo definitivo?") == QMessageBox::Yes)
     {
         rimuoviProgetto2DB();

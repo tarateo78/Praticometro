@@ -2,6 +2,7 @@
 #include "ui_cartellaprogetti.h"
 #include "globalobject.h"
 
+#include <QMessageBox>
 #include <QSqlQuery>
 
 
@@ -12,7 +13,7 @@ CartellaProgetti::CartellaProgetti(QSqlDatabase db, QWidget *parent) :
     ui->setupUi(this);
         this->db = db;
     ui->lineEdit->setText(globalPathProgetti);
-    ui->label_2->setText(globalPathDB);
+
 }
 
 CartellaProgetti::~CartellaProgetti()
@@ -22,6 +23,14 @@ CartellaProgetti::~CartellaProgetti()
 
 void CartellaProgetti::on_pushButton_2_clicked()
 {
+    if(!globalAdmin)
+    {
+        QMessageBox::warning(this, "Attenzione!", "Devi essere Admin per poter effettuare questa operazione");
+        return;
+    }
+
+    ui->label_2->setText(globalPathDB);
+
     ui->pushButton->setEnabled(true);
     ui->lineEdit->setEnabled(true);
 }

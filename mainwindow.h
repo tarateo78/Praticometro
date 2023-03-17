@@ -38,6 +38,10 @@ private slots:
 
     void on_actionEsporta_csv_triggered();
 
+    void on_action_Sign_In_triggered();
+
+    void on_action_Log_Out_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
