@@ -13,13 +13,8 @@
     <height>650</height>
    </rect>
   </property>
-<<<<<<< HEAD
-  <property name="windowTitle">
-   <string>Dettaglio</string>
-=======
   <property name="contextMenuPolicy">
    <enum>Qt::DefaultContextMenu</enum>
->>>>>>> 6948e0e120873f78fef817ba95ba85f4fef66d77
   </property>
   <property name="windowTitle">
    <string>Scheda Dettaglio</string>
@@ -132,16 +127,6 @@
              <item>
               <layout class="QVBoxLayout" name="verticalLayout_9">
                <item>
-<<<<<<< HEAD
-                <widget class="QLabel" name="label">
-                 <property name="text">
-                  <string>Atti Amministrativi:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QListWidget" name="listWidget"/>
-=======
                 <layout class="QHBoxLayout" name="horizontalLayout_3">
                  <item>
                   <widget class="QLabel" name="label_2">
@@ -174,31 +159,20 @@
                </item>
                <item>
                 <widget class="QTreeView" name="treeView_2"/>
->>>>>>> 6948e0e120873f78fef817ba95ba85f4fef66d77
                </item>
               </layout>
              </item>
              <item>
               <layout class="QVBoxLayout" name="verticalLayout_10">
                <item>
-<<<<<<< HEAD
-                <widget class="QLabel" name="label_2">
-                 <property name="text">
-                  <string>Cantiere:</string>
-=======
                 <widget class="QLabel" name="label">
                  <property name="text">
                   <string>Atti:</string>
->>>>>>> 6948e0e120873f78fef817ba95ba85f4fef66d77
                  </property>
                 </widget>
                </item>
                <item>
-<<<<<<< HEAD
-                <widget class="QListWidget" name="listWidget_2"/>
-=======
                 <widget class="QTreeView" name="treeView"/>
->>>>>>> 6948e0e120873f78fef817ba95ba85f4fef66d77
                </item>
               </layout>
              </item>

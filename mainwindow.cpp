@@ -285,3 +285,4 @@ void MainWindow::on_actionCartella_Progetti_triggered()
     cartellaProgetti.setModal(true);
     cartellaProgetti.exec();
 }
+

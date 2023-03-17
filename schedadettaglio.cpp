@@ -20,21 +20,13 @@ SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidge
 
     pratica = praticaPassata;
 
-    // qInfo() << "Scheda dettaglio" << praticaPassata;
+    qInfo() << "Scheda dettaglio" << praticaPassata;
 
-<<<<<<< HEAD
-    if(!db.isOpen()) db.open();
-
-    //if(db.isOpen()) qInfo() << "aperto";
-=======
->>>>>>> 6948e0e120873f78fef817ba95ba85f4fef66d77
 
     settaCartellaLavori();
     popolaCampi();
     compilaTreeAtti();
     compilaTreePratica();
-
-
 
 }
 
@@ -71,7 +63,7 @@ void SchedaDettaglio::popolaCampi()
     while(qry->next())
     {
         QLabel *label = new QLabel();
-        label->setText(qry->value("TestoColonna").toString());
+        label->setText(qry->value("NomeColonna").toString());
 
 
         if(qry->value("TipoColonna").toString().compare("Note")==0)
@@ -105,10 +97,7 @@ void SchedaDettaglio::popolaCampi()
         }
 
     }
-
-    impostaTabCorrente(qryPratica->value("IterProgChiuso").toInt());
-
-    //qInfo() << campi[0].data();
+    qInfo() << campi[0].data();
     db.close();
 }
 
@@ -197,21 +186,8 @@ void SchedaDettaglio::settaCartellaLavori()
         if(file.fileName().left(5).compare(pratica)==0)
             cartellaLavori = globalPathProgetti + "\\" + file.fileName();
     }
-    //qInfo() << cartellaLavori;
+    qInfo() << cartellaLavori;
     db.close();
-}
-
-void SchedaDettaglio::impostaTabCorrente(int iterProgChiuso)
-{
-
-    if(!iterProgChiuso)
-    {
-        ui->tabWidget->setCurrentWidget(ui->tab);
-    }
-    else
-    {
-        ui->tabWidget->setCurrentWidget(ui->tab_4);
-    }
 }
 
 
@@ -242,7 +218,7 @@ void SchedaDettaglio::pubblicaCampo(QString cat, QLabel *lab, QWidget *wid)
 
 void SchedaDettaglio::aggiungiCampoCambiato()
 {
-    //qInfo() << "cambiato";
+    qInfo() << "cambiato";
 }
 
 void SchedaDettaglio::on_pushButton_clicked()
