@@ -170,6 +170,13 @@
     <addaction name="actionGestione_Stato_Pratiche"/>
     <addaction name="actionCartella_Progetti"/>
    </widget>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionEsporta_csv"/>
+   </widget>
+   <addaction name="menu_File"/>
    <addaction name="menuStrumenti"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -181,6 +188,11 @@
   <action name="actionCartella_Progetti">
    <property name="text">
     <string>Cartella Progetti...</string>
+   </property>
+  </action>
+  <action name="actionEsporta_csv">
+   <property name="text">
+    <string>&amp;Esporta csv</string>
    </property>
   </action>
  </widget>

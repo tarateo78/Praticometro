@@ -33,7 +33,7 @@ void StatoPratiche::popolaMap()
     if(db.isOpen())
     {
         QSqlQuery *qry = new QSqlQuery(db);
-        if(qry->exec("SELECT * FROM Pratiche;"))
+        if(qry->exec("SELECT * FROM Pratiche ORDER BY Pratica DESC;"))
         {
             while(qry->next())
             {
@@ -137,6 +137,7 @@ void StatoPratiche::inserisciProgetto2DB()
     int row = ui->tableWidget->currentRow();
 
     QTableWidgetItem *itemPratica = ui->tableWidget->item(row, 0);
+    QTableWidgetItem *itemTitolo = ui->tableWidget->item(row, 1);
     QTableWidgetItem *itemIncorso = ui->tableWidget->item(row, 2);
 
 //    qInfo() << "pratica:" << itemPratica->text();
@@ -147,8 +148,9 @@ void StatoPratiche::inserisciProgetto2DB()
 
     if(!db.isOpen()) db.open();
 
-    qry->prepare("INSERT INTO Pratiche (Pratica, Incorso) VALUES (:pratica, 0);");
+    qry->prepare("INSERT INTO Pratiche (Pratica, Titolo, Incorso) VALUES (:pratica, :titolo, 0);");
     qry->bindValue(":pratica", itemPratica->text());
+    qry->bindValue(":titolo", itemTitolo->text());
 
     if(qry->exec())
     {

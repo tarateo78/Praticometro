@@ -97,7 +97,8 @@ void SchedaDettaglio::popolaCampi()
         }
 
     }
-    qInfo() << campi[0].data();
+    impostaTabCorrente(qryPratica->value("IterProgChiuso").toInt());
+    // qInfo() << campi[0].data();
     db.close();
 }
 
@@ -188,6 +189,20 @@ void SchedaDettaglio::settaCartellaLavori()
     }
     qInfo() << cartellaLavori;
     db.close();
+}
+
+
+void SchedaDettaglio::impostaTabCorrente(int iterProgChiuso)
+{
+
+    if(!iterProgChiuso)
+    {
+        ui->tabWidget->setCurrentWidget(ui->tab);
+    }
+    else
+    {
+        ui->tabWidget->setCurrentWidget(ui->tab_4);
+    }
 }
 
 

@@ -43,6 +43,7 @@ private:
     void compilaTreeAtti();
     void compilaTreePratica();
     void settaCartellaLavori();
+    void impostaTabCorrente(int);
 };
 
 #endif // SCHEDADETTAGLIO_H

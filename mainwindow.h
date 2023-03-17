@@ -5,6 +5,7 @@
 #include <QMap>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QFileDialog>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -35,6 +36,8 @@ private slots:
 
     void on_coloraCheck_stateChanged(int arg1);
 
+    void on_actionEsporta_csv_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
@@ -43,11 +46,13 @@ private:
     QMap<QString, QString> mapColonneTipo;
     QString iconaX;
     QString iconaV;
+    QString query;
     int refresh;
     int verifichePath();
     void settaPathProgetti();
     void compilaElencoColonne();
     void compilaTabellaCompleta();
+    void eseguiQuerySelect();
 
 };
 #endif // MAINWINDOW_H

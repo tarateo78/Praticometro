@@ -9,6 +9,7 @@
 #include <QCheckBox>
 #include <QFileInfo>
 #include <QMap>
+#include <QSqlRecord>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -180,18 +181,7 @@ void MainWindow::compilaTabellaCompleta()
         nColonna++;
     }
 
-    QString query ="SELECT * FROM Pratiche WHERE Incorso > :incorso AND (";
-    query += "Pratica LIKE :filtro OR Titolo LIKE :filtro OR TitoloEsteso LIKE :filtro OR ";
-    query += "Progettista LIKE :filtro OR Sicurezza LIKE :filtro OR Impresa LIKE :filtro OR ";
-    query += "Rup LIKE :filtro OR Alias LIKE :filtro ";
-    query += ") ORDER BY Pratica DESC;";
-
-    qry->prepare(query);
-
-    qry->bindValue(":incorso", ui->checkBox->isChecked()?"0":"-1");
-    qry->bindValue(":filtro", "%" + ui->lineEdit->text() + "%");
-    qry->exec();
-
+    eseguiQuerySelect();
     int row = 0;
     while(qry->next())
     {
@@ -249,6 +239,22 @@ void MainWindow::compilaTabellaCompleta()
 
 //    db.close();
     refresh = 0;
+}
+
+
+void MainWindow::eseguiQuerySelect()
+{
+    query ="SELECT * FROM Pratiche WHERE Incorso > :incorso AND (";
+    query += "Pratica LIKE :filtro OR Titolo LIKE :filtro OR TitoloEsteso LIKE :filtro OR ";
+    query += "Progettista LIKE :filtro OR Sicurezza LIKE :filtro OR Impresa LIKE :filtro OR ";
+    query += "Rup LIKE :filtro OR Alias LIKE :filtro OR  ";
+    query += "Cup LIKE :filtro OR Fascicolo LIKE :filtro ";
+    query += ") ORDER BY Pratica DESC;";
+
+    qry->prepare(query);
+    qry->bindValue(":incorso", ui->checkBox->isChecked()?"0":"-1");
+    qry->bindValue(":filtro", "%" + ui->lineEdit->text() + "%");
+    qry->exec();
 }
 
 void MainWindow::on_checkBox_stateChanged(int arg1)
@@ -311,5 +317,72 @@ void MainWindow::on_coloraCheck_stateChanged(int arg1)
     // CHECK COLORA
 
     compilaTabellaCompleta();
+}
+
+
+void MainWindow::on_actionEsporta_csv_triggered()
+{
+
+    // CSV
+
+    QString csv;
+    QList<QString> listaHead;
+
+    QString fileCsv = QFileDialog::getSaveFileName(this, tr("Salva File"),
+                                                   "C:\\",
+                                                   tr("CSV (*.csv)"));
+
+
+    QFile file("dati.csv");
+    file.open(QIODevice::Truncate | QIODevice::ReadWrite);
+
+    QTextStream stream(&file);
+
+
+
+
+
+    db.open();
+
+    qry->prepare("SELECT * FROM Colonne ORDER BY OrdineColonna;");
+    qry->exec();
+    int nRecord = 0;
+    while (qry->next()) {
+        if(nRecord!=0)
+            csv.append("\t");
+        csv.append(qry->value(0).toString());
+        listaHead.append(qry->value(0).toString());
+        nRecord++;
+    }
+    csv.append("\n\r");
+    stream << csv;
+    csv.clear();
+
+    //qInfo() << nRecord;
+
+    eseguiQuerySelect();
+
+//    QSqlRecord rec = qry->record();
+//    qInfo() << rec.count();
+
+    int row = 0;
+    while(qry->next())
+    {
+        for (int i = 0; i < nRecord; ++i) {
+            if(i!=0)
+                csv.append("\t");
+            csv.append(qry->value(listaHead[i]).toString());
+        }
+        csv.append("\n\r");
+
+        stream << csv;
+        csv.clear();
+
+        row++;
+    }
+//    qInfo() << csv;
+    db.close();
+
+    file.close();
 }
 
