@@ -32,6 +32,14 @@ MainWindow::MainWindow(QWidget *parent)
     // DISABILITA EDIT TABELLA
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
+    // POPOLA STATUSBAR
+//    ui->statusbar->addWidget(ui->legenda);
+//    ui->statusbar->addWidget(ui->prog);
+//    ui->statusbar->addWidget(ui->label_2);
+//    ui->statusbar->addWidget(ui->lavoriInCorso);
+//    ui->statusbar->addWidget(ui->label_3);
+//    ui->statusbar->addWidget(ui->creFatto);
+//    ui->statusbar->addWidget(ui->label_4);
 
     // SETTA PERCORSO PROGETTI
     settaPathProgetti();
@@ -245,6 +253,9 @@ void MainWindow::compilaTabellaCompleta()
 
         row++;
     }
+    ui->creFatto->setStyleSheet("QLabel { background-color : rgba(0, 0, 255, 127); }");
+    ui->lavoriInCorso->setStyleSheet("QLabel { background-color : rgba(255, 255, 153, 127); }");
+    ui->prog->setStyleSheet("QLabel { background-color : rgba(102, 255, 204, 127); }");
 
     //    db.close();
     refresh = 0;
