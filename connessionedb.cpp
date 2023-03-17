@@ -5,12 +5,12 @@ ConnessioneDB::ConnessioneDB()
 {
     //    qDebug() << QSqlDatabase::drivers();
 
-    QFileInfo file(globalPath);
+    QFileInfo file(globalPathDB);
 
     if(file.isFile())
     {
         db = QSqlDatabase::addDatabase("QSQLITE","SQLITE");
-        db.setDatabaseName(globalPath);
+        db.setDatabaseName(globalPathDB);
 
         if(!db.open())
         {

@@ -1,5 +1,6 @@
 #include "schedadettaglio.h"
 #include "ui_schedadettaglio.h"
+#include "globalobject.h"
 
 #include <QDir>
 #include <QProcess>
@@ -14,19 +15,24 @@ SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidge
     ui->setupUi(this);
 
     this->db = db;
+    if(!db.isOpen()) db.open();
+    if(db.isOpen()) qInfo() << "aperto";
 
     pratica = praticaPassata;
 
     // qInfo() << "Scheda dettaglio" << praticaPassata;
 
+<<<<<<< HEAD
     if(!db.isOpen()) db.open();
 
     //if(db.isOpen()) qInfo() << "aperto";
+=======
+>>>>>>> 6948e0e120873f78fef817ba95ba85f4fef66d77
 
     settaCartellaLavori();
     popolaCampi();
-    compilaAtti();
-    compilaCantiere();
+    compilaTreeAtti();
+    compilaTreePratica();
 
 
 
@@ -107,11 +113,8 @@ void SchedaDettaglio::popolaCampi()
 }
 
 
-void SchedaDettaglio::compilaAtti()
+void SchedaDettaglio::compilaTreeAtti()
 {
-
-    if(!db.isOpen()) db.open();
-
     // TROVA IL PATH DEGLI ATTI AMMINISTRATIVI
     QString pathAtti = "";
     QDir pPratica(cartellaLavori);
@@ -123,57 +126,61 @@ void SchedaDettaglio::compilaAtti()
     }
 
     // VERIFICA SE CARTELLA ATTI PRESENTE
-    if(pathAtti.compare("")==0)
+    if(pathAtti.compare("")!=0)
     {
-        ui->listWidget->addItem("Cartella Atti non presente");
+        QFileSystemModel *model = new QFileSystemModel(this);
+        model->setRootPath(pathAtti);
+        ui->treeView->setColumnWidth(0,200);
+        ui->treeView->setModel(model);
+        ui->treeView->setRootIndex(model->setRootPath(pathAtti));
+        ui->treeView->setColumnWidth(0,200);
     }
     else
     {
-        QDir pAtti(pathAtti);
-        QFileInfoList elencoAtti = pAtti.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
-        foreach (QFileInfo file, elencoAtti)
-        {
-            ui->listWidget->addItem(file.fileName());
-        }
-
+        ui->label->setText("Atti: NON PRESENTI");
     }
-
-    db.close();
 }
 
 
-void SchedaDettaglio::compilaCantiere()
+void SchedaDettaglio::compilaTreePratica()
 {
+    // COMPILA TREE PRATICA
 
-    if(!db.isOpen()) db.open();
+    QFileSystemModel *model = new QFileSystemModel(this);
+    model->setRootPath(cartellaLavori);
+    ui->treeView_2->setColumnWidth(0,200);
+    ui->treeView_2->setModel(model);
+    ui->treeView_2->setRootIndex(model->setRootPath(cartellaLavori));
+    ui->treeView_2->setColumnWidth(0,200);
+//    if(!db.isOpen()) db.open();
 
-    // TROVA IL PATH DEL CANTIERE
-    QString pathCantiere = "";
-    QDir pPratica(cartellaLavori);
-    QFileInfoList elencoPratica = pPratica.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
-    foreach (QFileInfo file, elencoPratica)
-    {
-        if(file.fileName().toLower().contains("cantiere"))
-            pathCantiere = cartellaLavori + "\\" + file.fileName();
-    }
+//    // TROVA IL PATH DEL CANTIERE
+//    QString pathCantiere = "";
+//    QDir pPratica(cartellaLavori);
+//    QFileInfoList elencoPratica = pPratica.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
+//    foreach (QFileInfo file, elencoPratica)
+//    {
+//        if(file.fileName().toLower().contains("cantiere"))
+//            pathCantiere = cartellaLavori + "\\" + file.fileName();
+//    }
 
-    // VERIFICA SE CARTELLA ATTI PRESENTE
-    if(pathCantiere.compare("")==0)
-    {
-        ui->listWidget_2->addItem("Cartella Cantiere non presente");
-    }
-    else
-    {
-        QDir pAtti(pathCantiere);
-        QFileInfoList elencoAtti = pAtti.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
-        foreach (QFileInfo file, elencoAtti)
-        {
-            ui->listWidget_2->addItem(file.fileName());
-        }
+//    // VERIFICA SE CARTELLA ATTI PRESENTE
+//    if(pathCantiere.compare("")==0)
+//    {
+//        ui->listWidget_2->addItem("Cartella Cantiere non presente");
+//    }
+//    else
+//    {
+//        QDir pAtti(pathCantiere);
+//        QFileInfoList elencoAtti = pAtti.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
+//        foreach (QFileInfo file, elencoAtti)
+//        {
+//            ui->listWidget_2->addItem(file.fileName());
+//        }
 
-    }
+//    }
 
-    db.close();
+//    db.close();
 }
 
 
@@ -182,22 +189,13 @@ void SchedaDettaglio::settaCartellaLavori()
 
     if(!db.isOpen()) db.open();
 
-    // PESCA LA CARTELLA LAVORI
-
-    QSqlQuery *qryCartLavori;
-    qryCartLavori = new QSqlQuery(db);
-    qryCartLavori->prepare("SELECT * FROM Setup WHERE Chiave = :valore;");
-    qryCartLavori->bindValue(":valore", "PathLavori");
-    qryCartLavori->exec();
-    qryCartLavori->next();
-
     // TROVA IL PATH DELLA PRATICA CORRENTE
-    QDir root(qryCartLavori->value("Valore").toString());
+    QDir root(globalPathProgetti);
     QFileInfoList elenco = root.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
     foreach (QFileInfo file, elenco)
     {
         if(file.fileName().left(5).compare(pratica)==0)
-            cartellaLavori = qryCartLavori->value("Valore").toString() + "\\" + file.fileName();
+            cartellaLavori = globalPathProgetti + "\\" + file.fileName();
     }
     //qInfo() << cartellaLavori;
     db.close();

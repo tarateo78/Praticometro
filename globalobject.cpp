@@ -1,3 +1,4 @@
 #include "globalobject.h"
 
-QString globalPath;
+QString globalPathDB;
+QString globalPathProgetti;
