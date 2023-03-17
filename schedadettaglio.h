@@ -43,6 +43,7 @@ private:
     void compilaAtti();
     void compilaCantiere();
     void settaCartellaLavori();
+    void impostaTabCorrente(int);
 };
 
 #endif // SCHEDADETTAGLIO_H

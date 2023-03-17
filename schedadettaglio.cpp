@@ -17,16 +17,18 @@ SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidge
 
     pratica = praticaPassata;
 
-    qInfo() << "Scheda dettaglio" << praticaPassata;
+    // qInfo() << "Scheda dettaglio" << praticaPassata;
 
     if(!db.isOpen()) db.open();
 
-    if(db.isOpen()) qInfo() << "aperto";
+    //if(db.isOpen()) qInfo() << "aperto";
 
     settaCartellaLavori();
     popolaCampi();
     compilaAtti();
     compilaCantiere();
+
+
 
 }
 
@@ -63,7 +65,7 @@ void SchedaDettaglio::popolaCampi()
     while(qry->next())
     {
         QLabel *label = new QLabel();
-        label->setText(qry->value("NomeColonna").toString());
+        label->setText(qry->value("TestoColonna").toString());
 
 
         if(qry->value("TipoColonna").toString().compare("Note")==0)
@@ -97,7 +99,10 @@ void SchedaDettaglio::popolaCampi()
         }
 
     }
-    qInfo() << campi[0].data();
+
+    impostaTabCorrente(qryPratica->value("IterProgChiuso").toInt());
+
+    //qInfo() << campi[0].data();
     db.close();
 }
 
@@ -194,8 +199,21 @@ void SchedaDettaglio::settaCartellaLavori()
         if(file.fileName().left(5).compare(pratica)==0)
             cartellaLavori = qryCartLavori->value("Valore").toString() + "\\" + file.fileName();
     }
-    qInfo() << cartellaLavori;
+    //qInfo() << cartellaLavori;
     db.close();
+}
+
+void SchedaDettaglio::impostaTabCorrente(int iterProgChiuso)
+{
+
+    if(!iterProgChiuso)
+    {
+        ui->tabWidget->setCurrentWidget(ui->tab);
+    }
+    else
+    {
+        ui->tabWidget->setCurrentWidget(ui->tab_4);
+    }
 }
 
 
@@ -226,7 +244,7 @@ void SchedaDettaglio::pubblicaCampo(QString cat, QLabel *lab, QWidget *wid)
 
 void SchedaDettaglio::aggiungiCampoCambiato()
 {
-    qInfo() << "cambiato";
+    //qInfo() << "cambiato";
 }
 
 void SchedaDettaglio::on_pushButton_clicked()
@@ -287,7 +305,6 @@ void SchedaDettaglio::on_pushButton_2_clicked()
     QProcess *process = new QProcess(this);
     QString file = "C:\\Windows\\explorer.exe";
     QStringList arg;
-    ui->label->setText(cartellaLavori);
     arg.append(cartellaLavori);
     process->start(file, arg);
 
