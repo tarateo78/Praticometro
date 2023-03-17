@@ -16,6 +16,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    iconaX = "✖️";
+    iconaV = "✔";
+
     // EFFETTUA VERIFICHE CONTROLLO FILE E PATH DATABASE
     if(!verifichePath())
         return;
@@ -132,6 +135,7 @@ void MainWindow::compilaElencoColonne()
         connect(c, SIGNAL(toggled(bool)), this, SLOT(nascondiColonna()));
         ui->verticalLayoutColonne->addWidget(c);
         mapColonne.insert(qry->value("TestoColonna").toString(), qry->value("Visibile").toInt());
+        mapColonneTipo.insert(qry->value("NomeColonna").toString(), qry->value("TipoColonna").toString());
     }
 //    db.close();
     //qInfo() << mapColonne;
@@ -201,16 +205,39 @@ void MainWindow::compilaTabellaCompleta()
             QTableWidgetItem *item = new QTableWidgetItem();
             item->setText(qry->value(head).toString());
 
-            if(qry->value("IterProgChiuso").toInt() && ui->checkBox_2->isChecked())
+            if(mapColonneTipo.value(head).compare("Bool")==0)
             {
-                if(qry->value("CreFatto").toInt() && ui->checkBox_2->isChecked())
+                if(qry->value(head).toString().compare("0")==0)
                 {
-                    item->setBackground(QColor(0, 0, 255, 127));
+                    item->setText("");
                 }
                 else
                 {
-                    item->setBackground(QColor(0, 255, 0, 127));
+                    item->setText(iconaV);
                 }
+            }
+            else if(mapColonneTipo.value(head).compare("Integer")==0)
+            {
+                // da implementare con formato numerico
+                item->setText(qry->value(head).toString());
+            }
+            else
+            {
+                //item->setTextAlignment(Qt::AlignRight);
+                item->setText(qry->value(head).toString());
+            }
+
+            if(qry->value("CreFatto").toInt() && ui->coloraCheck->isChecked())
+            {
+                item->setBackground(QColor(0, 0, 255, 127));
+            }
+            else if(qry->value("LavoriInCorso").toInt() && ui->coloraCheck->isChecked())
+            {
+                item->setBackground(QColor(255, 255, 153, 127));
+            }
+            else if(qry->value("IterProgChiuso").toInt() && ui->coloraCheck->isChecked())
+            {
+                item->setBackground(QColor(102, 255, 204, 127));
             }
 
             ui->tableWidget->setItem(row,nColonna,item);
@@ -248,14 +275,6 @@ void MainWindow::on_pushButton_clicked()
 }
 
 
-void MainWindow::on_checkBox_2_stateChanged(int arg1)
-{
-    // CHECK COLORA
-
-    compilaTabellaCompleta();
-}
-
-
 void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
 {
     // APRI SCHEDA DETTAGLIO
@@ -284,5 +303,13 @@ void MainWindow::on_actionCartella_Progetti_triggered()
     CartellaProgetti cartellaProgetti(db);
     cartellaProgetti.setModal(true);
     cartellaProgetti.exec();
+}
+
+
+void MainWindow::on_coloraCheck_stateChanged(int arg1)
+{
+    // CHECK COLORA
+
+    compilaTabellaCompleta();
 }
 

@@ -25,8 +25,6 @@ private slots:
 
     void on_pushButton_clicked();
 
-    void on_checkBox_2_stateChanged(int arg1);
-
     void nascondiColonna();
 
     void on_tableWidget_cellDoubleClicked(int row, int column);
@@ -35,11 +33,16 @@ private slots:
 
     void on_actionCartella_Progetti_triggered();
 
+    void on_coloraCheck_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
     QSqlQuery *qry;
     QMap<QString, int> mapColonne;
+    QMap<QString, QString> mapColonneTipo;
+    QString iconaX;
+    QString iconaV;
     int refresh;
     int verifichePath();
     void settaPathProgetti();
