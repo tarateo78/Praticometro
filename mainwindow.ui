@@ -306,6 +306,7 @@
     </property>
     <addaction name="actionGestione_Stato_Pratiche"/>
     <addaction name="actionCartella_Progetti"/>
+    <addaction name="action_Verifica_Aggiornamenti"/>
    </widget>
    <widget class="QMenu" name="menu_File">
     <property name="title">
@@ -348,6 +349,11 @@
   <action name="action_Log_Out">
    <property name="text">
     <string>&amp;Log Out</string>
+   </property>
+  </action>
+  <action name="action_Verifica_Aggiornamenti">
+   <property name="text">
+    <string>&amp;Verifica Aggiornamenti...</string>
    </property>
   </action>
  </widget>

@@ -14,25 +14,30 @@ SOURCES += \
     globalobject.cpp \
     main.cpp \
     mainwindow.cpp \
+    praticaobject.cpp \
     schedadettaglio.cpp \
     signinadmin.cpp \
-    statopratiche.cpp
+    statopratiche.cpp \
+    verificaaggiornamenti.cpp
 
 HEADERS += \
     cartellaprogetti.h \
     connessionedb.h \
     globalobject.h \
     mainwindow.h \
+    praticaobject.h \
     schedadettaglio.h \
     signinadmin.h \
-    statopratiche.h
+    statopratiche.h \
+    verificaaggiornamenti.h
 
 FORMS += \
     cartellaprogetti.ui \
     mainwindow.ui \
     schedadettaglio.ui \
     signinadmin.ui \
-    statopratiche.ui
+    statopratiche.ui \
+    verificaaggiornamenti.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

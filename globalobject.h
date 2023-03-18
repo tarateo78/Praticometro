@@ -12,6 +12,7 @@ public:
 extern QString globalPathDB;
 extern QString globalPathProgetti;
 extern int globalAdmin;
+extern int globalCount;
 
 
 #endif // GLOBALOBJECT_H

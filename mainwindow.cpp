@@ -6,6 +6,7 @@
 #include "statopratiche.h"
 #include "cartellaprogetti.h"
 #include "signinadmin.h"
+#include "verificaaggiornamenti.h"
 
 #include <QCheckBox>
 #include <QFileInfo>
@@ -407,5 +408,13 @@ void MainWindow::on_action_Sign_In_triggered()
 void MainWindow::on_action_Log_Out_triggered()
 {
     globalAdmin = 0;
+}
+
+
+void MainWindow::on_action_Verifica_Aggiornamenti_triggered()
+{
+    VerificaAggiornamenti verificaAggiornamenti(db);
+    verificaAggiornamenti.setModal(true);
+    verificaAggiornamenti.exec();
 }
 

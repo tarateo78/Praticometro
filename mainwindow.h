@@ -42,6 +42,8 @@ private slots:
 
     void on_action_Log_Out_triggered();
 
+    void on_action_Verifica_Aggiornamenti_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
@@ -57,6 +59,5 @@ private:
     void compilaElencoColonne();
     void compilaTabellaCompleta();
     void eseguiQuerySelect();
-
 };
 #endif // MAINWINDOW_H
