@@ -78,6 +78,7 @@ void SchedaDettaglio::popolaCampi()
         }
         else if(qry->value("TipoColonna").toString().compare("Testo")==0 ||
                 qry->value("TipoColonna").toString().compare("Data")==0 ||
+                qry->value("TipoColonna").toString().compare("Intero")==0 ||
                 qry->value("TipoColonna").toString().compare("Decimale")==0)
         {
             QLineEdit *lEdit = new QLineEdit(this);
@@ -224,7 +225,11 @@ void SchedaDettaglio::pubblicaCampo(QString cat, QLabel *lab, QWidget *wid)
     {
         ui->formLayout_5->addRow(lab, wid);
     }
-    else if(cat.compare("Altro") == 0)
+    else if(cat.compare("Controllo") == 0)
+    {
+        ui->formLayout_6->addRow(lab, wid);
+    }
+    else
     {
         ui->formLayout_4->addRow(lab, wid);
     }

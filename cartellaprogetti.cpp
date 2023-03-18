@@ -29,10 +29,23 @@ void CartellaProgetti::on_pushButton_2_clicked()
         return;
     }
 
-    ui->label_2->setText(globalPathDB);
+    ui->label_2->setText("db: " + globalPathDB);
+
+    ui->label_3->setText("user: " + getUtenteWin());
 
     ui->pushButton->setEnabled(true);
     ui->lineEdit->setEnabled(true);
+}
+
+
+QString CartellaProgetti::getUtenteWin()
+{
+    // GET UTENTE WINDOWS
+    QString name = qgetenv("USER");
+    if (name.isEmpty())
+        name = qgetenv("USERNAME");
+
+    return name;
 }
 
 

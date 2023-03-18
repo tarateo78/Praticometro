@@ -24,6 +24,7 @@ private slots:
 private:
     Ui::CartellaProgetti *ui;
     QSqlDatabase db;
+    QString getUtenteWin();
 };
 
 #endif // CARTELLAPROGETTI_H

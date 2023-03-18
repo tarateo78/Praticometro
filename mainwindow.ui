@@ -144,6 +144,9 @@
                      <height>0</height>
                     </size>
                    </property>
+                   <property name="frameShape">
+                    <enum>QFrame::Box</enum>
+                   </property>
                    <property name="text">
                     <string/>
                    </property>
@@ -170,6 +173,9 @@
                      <height>0</height>
                     </size>
                    </property>
+                   <property name="frameShape">
+                    <enum>QFrame::Box</enum>
+                   </property>
                    <property name="text">
                     <string/>
                    </property>
@@ -195,6 +201,9 @@
                      <width>20</width>
                      <height>0</height>
                     </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::Box</enum>
                    </property>
                    <property name="text">
                     <string/>
