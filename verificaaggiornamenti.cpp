@@ -45,7 +45,6 @@ void VerificaAggiornamenti::compilaTabella()
     // COMPILA LA TABELLA
 
 
-
     ui->tableWidget->setColumnCount(5);
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->clearContents();
@@ -102,8 +101,7 @@ void VerificaAggiornamenti::compilaTabella()
         QString nome = file.fileName().left(5);
 
         if(!mapPratiche.contains(nome))
-            return;
-
+            continue;
 
         contaFile(globalPathProgetti + "\\" + file.fileName());
         if(mapPratiche[nome]->nFileEffettivi != globalCount)
