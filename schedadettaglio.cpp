@@ -128,21 +128,6 @@ void SchedaDettaglio::compilaTreeAtti()
         if(file.fileName().toLower().contains("atti"))
             pathAtti = cartellaLavori + "\\" + file.fileName();
     }
-
-    // VERIFICA SE CARTELLA ATTI PRESENTE
-    if(pathAtti.compare("")!=0)
-    {
-        QFileSystemModel *model = new QFileSystemModel(this);
-        model->setRootPath(pathAtti);
-        ui->treeView->setColumnWidth(0,200);
-        ui->treeView->setModel(model);
-        ui->treeView->setRootIndex(model->setRootPath(pathAtti));
-        ui->treeView->setColumnWidth(0,200);
-    }
-    else
-    {
-        ui->label->setText("Atti: NON PRESENTI");
-    }
 }
 
 
@@ -222,29 +207,33 @@ void SchedaDettaglio::impostaTabCorrente(int iterProgChiuso)
 
 void SchedaDettaglio::pubblicaCampo(QString cat, QLabel *lab, QWidget *wid)
 {
-    if(cat.compare("Dati") == 0)
+    if(cat.compare("Pratica") == 0)
     {
-        ui->formLayout->addRow(lab, wid);
+        ui->formPratica->addRow(lab, wid);
+    }
+    else if(cat.compare("Dati") == 0)
+    {
+        ui->formDati->addRow(lab, wid);
     }
     else if(cat.compare("Progettazione") == 0)
     {
-        ui->formLayout_2->addRow(lab, wid);
+        ui->formProgetto->addRow(lab, wid);
     }
     else if(cat.compare("Finanziamento") == 0)
     {
-        ui->formLayout_3->addRow(lab, wid);
+        ui->formFinanziamento->addRow(lab, wid);
     }
     else if(cat.compare("Lavori") == 0)
     {
-        ui->formLayout_5->addRow(lab, wid);
+        ui->formLavori->addRow(lab, wid);
     }
     else if(cat.compare("Controllo") == 0)
     {
-        ui->formLayout_6->addRow(lab, wid);
+        ui->formControllo->addRow(lab, wid);
     }
     else
     {
-        ui->formLayout_4->addRow(lab, wid);
+        ui->formAltro->addRow(lab, wid);
     }
 
 }
