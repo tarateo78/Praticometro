@@ -64,7 +64,7 @@ void StatoPratiche::compilaTabella()
     hTable << "Pratica" << "Cartella" << "Stato";
     ui->tableWidget->setHorizontalHeaderLabels(hTable);
     ui->tableWidget->setColumnWidth(0, 70);
-    ui->tableWidget->setColumnWidth(1, 400);
+    ui->tableWidget->setColumnWidth(1, 500);
     ui->tableWidget->setColumnWidth(2, 50);
 
     int row = 0;

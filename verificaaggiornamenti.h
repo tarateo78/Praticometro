@@ -28,12 +28,15 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_pushButton_2_clicked();
+
 private:
     Ui::VerificaAggiornamenti *ui;
     QSqlDatabase db;
     int refresh;
     QSqlQuery *qry;
     QSqlQuery *qryUpdate;
+    QMap<QString, PraticaObject*> mapPratiche;
     void compilaTabella();
 };
 

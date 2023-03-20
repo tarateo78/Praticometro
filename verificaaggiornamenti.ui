@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>748</width>
-    <height>604</height>
+    <width>862</width>
+    <height>635</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,9 +39,16 @@
         </spacer>
        </item>
        <item>
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="text">
+          <string>Verifica aggiornamenti nelle cartelle</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="pushButton">
          <property name="text">
-          <string>Aggiorna Tutto</string>
+          <string>Aggiorna tutti gli n. File con quelli Effettivi</string>
          </property>
         </widget>
        </item>
