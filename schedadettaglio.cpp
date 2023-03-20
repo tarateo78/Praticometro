@@ -3,7 +3,9 @@
 #include "globalobject.h"
 
 #include <QDir>
+#include <QDoubleSpinBox>
 #include <QProcess>
+#include <QLocale>
 
 
 
@@ -39,6 +41,7 @@ SchedaDettaglio::~SchedaDettaglio()
 void SchedaDettaglio::popolaCampi()
 {
 
+    QLocale ita = QLocale::Italian;
     campi = new QList<QWidget*>;
     campiModificati = new QList<QWidget*>;
 
@@ -78,8 +81,7 @@ void SchedaDettaglio::popolaCampi()
         }
         else if(qry->value("TipoColonna").toString().compare("Testo")==0 ||
                 qry->value("TipoColonna").toString().compare("Data")==0 ||
-                qry->value("TipoColonna").toString().compare("Intero")==0 ||
-                qry->value("TipoColonna").toString().compare("Decimale")==0)
+                qry->value("TipoColonna").toString().compare("Intero")==0)
         {
             QLineEdit *lEdit = new QLineEdit(this);
             lEdit->setText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
@@ -87,6 +89,17 @@ void SchedaDettaglio::popolaCampi()
             //connect(lEdit, &QLineEdit::textChanged, this, &SchedaDettaglio::aggiungiCampoCambiato);
             campi->append(lEdit);
             pubblicaCampo(qry->value("Categoria").toString(), label, lEdit);
+        }
+        else if(qry->value("TipoColonna").toString().compare("Decimale")==0)
+        {
+            QDoubleSpinBox *dEdit = new QDoubleSpinBox(this);
+            dEdit->setMaximum(10000000);
+            dEdit->setGroupSeparatorShown(true);
+            dEdit->setValue(ita.toDouble(qryPratica->value(qry->value("NomeColonna").toString()).toString()));
+            dEdit->setObjectName(qry->value("NomeColonna").toString());
+            //connect(lEdit, &QLineEdit::textChanged, this, &SchedaDettaglio::aggiungiCampoCambiato);
+            campi->append(dEdit);
+            pubblicaCampo(qry->value("Categoria").toString(), label, dEdit);
         }
         else if(qry->value("TipoColonna").toString().compare("Bool")==0)
         {
@@ -143,35 +156,35 @@ void SchedaDettaglio::compilaTreePratica()
     ui->treeView_2->setModel(model);
     ui->treeView_2->setRootIndex(model->setRootPath(cartellaLavori));
     ui->treeView_2->setColumnWidth(0,200);
-//    if(!db.isOpen()) db.open();
+    //    if(!db.isOpen()) db.open();
 
-//    // TROVA IL PATH DEL CANTIERE
-//    QString pathCantiere = "";
-//    QDir pPratica(cartellaLavori);
-//    QFileInfoList elencoPratica = pPratica.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
-//    foreach (QFileInfo file, elencoPratica)
-//    {
-//        if(file.fileName().toLower().contains("cantiere"))
-//            pathCantiere = cartellaLavori + "\\" + file.fileName();
-//    }
+    //    // TROVA IL PATH DEL CANTIERE
+    //    QString pathCantiere = "";
+    //    QDir pPratica(cartellaLavori);
+    //    QFileInfoList elencoPratica = pPratica.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
+    //    foreach (QFileInfo file, elencoPratica)
+    //    {
+    //        if(file.fileName().toLower().contains("cantiere"))
+    //            pathCantiere = cartellaLavori + "\\" + file.fileName();
+    //    }
 
-//    // VERIFICA SE CARTELLA ATTI PRESENTE
-//    if(pathCantiere.compare("")==0)
-//    {
-//        ui->listWidget_2->addItem("Cartella Cantiere non presente");
-//    }
-//    else
-//    {
-//        QDir pAtti(pathCantiere);
-//        QFileInfoList elencoAtti = pAtti.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
-//        foreach (QFileInfo file, elencoAtti)
-//        {
-//            ui->listWidget_2->addItem(file.fileName());
-//        }
+    //    // VERIFICA SE CARTELLA ATTI PRESENTE
+    //    if(pathCantiere.compare("")==0)
+    //    {
+    //        ui->listWidget_2->addItem("Cartella Cantiere non presente");
+    //    }
+    //    else
+    //    {
+    //        QDir pAtti(pathCantiere);
+    //        QFileInfoList elencoAtti = pAtti.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
+    //        foreach (QFileInfo file, elencoAtti)
+    //        {
+    //            ui->listWidget_2->addItem(file.fileName());
+    //        }
 
-//    }
+    //    }
 
-//    db.close();
+    //    db.close();
 }
 
 
@@ -246,6 +259,7 @@ void SchedaDettaglio::on_pushButton_clicked()
     // SALVA
 
     if(!db.isOpen()) db.open();
+    QLocale ita = QLocale::Italian;
 
     QListIterator<QWidget*> i(*campi);
     while(i.hasNext())
@@ -254,6 +268,7 @@ void SchedaDettaglio::on_pushButton_clicked()
         QTextEdit *tEdit;
         QLineEdit *lEdit;
         QCheckBox *cBox;
+        QDoubleSpinBox *dEdit;
 
         QString chiave = "";
         QString valore = "";
@@ -269,6 +284,13 @@ void SchedaDettaglio::on_pushButton_clicked()
             tEdit = qobject_cast<QTextEdit*>(wid);
             chiave = tEdit->objectName();
             valore = tEdit->toPlainText();
+        }
+        if(wid->inherits(QDoubleSpinBox::staticMetaObject.className()))
+        {
+            dEdit = qobject_cast<QDoubleSpinBox*>(wid);
+            chiave = dEdit->objectName();
+            valore = ita.toString(dEdit->value(), 'f', 2);
+            qInfo() << valore;
         }
         if(wid->inherits(QCheckBox::staticMetaObject.className()))
         {
