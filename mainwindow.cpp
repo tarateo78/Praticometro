@@ -426,3 +426,4 @@ void MainWindow::on_action_Verifica_Aggiornamenti_triggered()
     verificaAggiornamenti.exec();
 }
 
+

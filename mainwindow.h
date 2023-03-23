@@ -44,6 +44,7 @@ private slots:
 
     void on_action_Verifica_Aggiornamenti_triggered();
 
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
