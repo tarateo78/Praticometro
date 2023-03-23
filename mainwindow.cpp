@@ -172,6 +172,7 @@ void MainWindow::compilaTabellaCompleta()
 
     QList<QString> listaHeader;
 
+    // IMPOSTA TITOLI TABELLA
     int nColonna=0;
     while(qry->next())
     {
@@ -182,6 +183,7 @@ void MainWindow::compilaTabellaCompleta()
         header->setText(qry->value("TestoColonna").toString());
 
         ui->tableWidget->setHorizontalHeaderItem(nColonna, header);
+        ui->tableWidget->setStyleSheet("QHeaderView::section { background-color:#d9d9d9 }");
 
         ui->tableWidget->setColumnWidth(nColonna, qry->value("Larghezza").toInt());
 
@@ -223,11 +225,16 @@ void MainWindow::compilaTabellaCompleta()
                 {
                     item->setText(iconaV);
                 }
+                item->setData(Qt::TextAlignmentRole,Qt::AlignCenter);
             }
-            else if(mapColonneTipo.value(head).compare("Integer")==0)
+            else if(mapColonneTipo.value(head).compare("Intero")==0)
             {
-                // da implementare con formato numerico
                 item->setText(qry->value(head).toString());
+            }
+            else if(mapColonneTipo.value(head).compare("Decimale")==0)
+            {
+                item->setText(qry->value(head).toString());
+                item->setData(Qt::TextAlignmentRole,Qt::AlignRight);
             }
             else
             {
@@ -269,6 +276,7 @@ void MainWindow::eseguiQuerySelect()
     query += "Pratica LIKE :filtro OR Titolo LIKE :filtro OR TitoloEsteso LIKE :filtro OR ";
     query += "Progettista LIKE :filtro OR Sicurezza LIKE :filtro OR Impresa LIKE :filtro OR ";
     query += "Rup LIKE :filtro OR Alias LIKE :filtro OR  ";
+    query += "Finanziamento LIKE :filtro OR DirezioneLavori LIKE :filtro OR  ";
     query += "Cup LIKE :filtro OR Fascicolo LIKE :filtro ";
     query += ") ORDER BY Pratica DESC;";
 
@@ -309,11 +317,11 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
     QString pratica = ui->tableWidget->item(row, 0)->text();
     qInfo() << "testo doubleclick" << pratica;
 
-    //db.close();
-
     SchedaDettaglio schedaDettaglio(pratica, db);
     schedaDettaglio.setModal(true);
     schedaDettaglio.exec();
+
+    compilaTabellaCompleta();
 }
 
 
@@ -397,7 +405,7 @@ void MainWindow::on_actionEsporta_csv_triggered()
 }
 
 
-void MainWindow::on_action_Sign_In_triggered()
+void MainWindow::on_action_Log_In_triggered()
 {
     SignInAdmin signInAdmin(db);
     signInAdmin.setModal(true);
