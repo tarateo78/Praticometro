@@ -80,7 +80,6 @@ void SchedaDettaglio::popolaCampi()
             pubblicaCampo(qry->value("Categoria").toString(), label, tEdit);
         }
         else if(qry->value("TipoColonna").toString().compare("Testo")==0 ||
-                qry->value("TipoColonna").toString().compare("Data")==0 ||
                 qry->value("TipoColonna").toString().compare("Intero")==0)
         {
             QLineEdit *lEdit = new QLineEdit(this);
@@ -90,10 +89,34 @@ void SchedaDettaglio::popolaCampi()
             campi->append(lEdit);
             pubblicaCampo(qry->value("Categoria").toString(), label, lEdit);
         }
+        else if(qry->value("TipoColonna").toString().compare("Data")==0)
+        {
+            if(qryPratica->value(qry->value("NomeColonna").toString()).toString().isEmpty())
+            {
+                QLineEdit *lEdit = new QLineEdit(this);
+                    lEdit->setText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
+                    lEdit->setObjectName(qry->value("NomeColonna").toString());
+                    lEdit->setMaximumWidth(100);
+                    campi->append(lEdit);
+                    pubblicaCampo(qry->value("Categoria").toString(), label, lEdit);
+            }
+            else
+            {
+                QDateEdit *dEdit = new QDateEdit(this);
+                QString format = "yyyy-MM-dd";
+                QDate miaData = QDate::fromString(qryPratica->value(qry->value("NomeColonna").toString()).toString(), format);
+                dEdit->setObjectName(qry->value("NomeColonna").toString());
+                dEdit->setDate(miaData);
+                dEdit->setMaximumWidth(100);
+                campi->append(dEdit);
+                pubblicaCampo(qry->value("Categoria").toString(), label, dEdit);
+            }
+        }
         else if(qry->value("TipoColonna").toString().compare("Decimale")==0)
         {
             QDoubleSpinBox *dEdit = new QDoubleSpinBox(this);
             dEdit->setMaximum(10000000);
+            dEdit->setMaximumWidth(100);
             dEdit->setGroupSeparatorShown(true);
             dEdit->setValue(ita.toDouble(qryPratica->value(qry->value("NomeColonna").toString()).toString()));
             dEdit->setObjectName(qry->value("NomeColonna").toString());
@@ -258,6 +281,7 @@ void SchedaDettaglio::on_pushButton_clicked()
         QLineEdit *lEdit;
         QCheckBox *cBox;
         QDoubleSpinBox *dEdit;
+        QDateEdit *dDate;
 
         QString chiave = "";
         QString valore = "";
@@ -286,6 +310,14 @@ void SchedaDettaglio::on_pushButton_clicked()
             cBox = qobject_cast<QCheckBox*>(wid);
             chiave = cBox->objectName();
             valore = (cBox->isChecked()?"1":"0");
+        }
+        if(wid->inherits(QDateEdit::staticMetaObject.className()))
+        {
+            dDate = qobject_cast<QDateEdit*>(wid);
+            chiave = dDate->objectName();
+            QString format = "yyyy-MM-dd";
+            QDate miaData = QDate::fromString(tEdit->toPlainText(), format);
+            valore = miaData.toString();
         }
 
         if(chiave.compare("Pratica")==0) continue;
