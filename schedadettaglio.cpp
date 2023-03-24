@@ -66,7 +66,7 @@ void SchedaDettaglio::popolaCampi()
     while(qry->next())
     {
         QLabel *label = new QLabel();
-        label->setText(qry->value("NomeColonna").toString());
+        label->setText(qry->value("TestoColonna").toString());
 
 
         if(qry->value("TipoColonna").toString().compare("Note")==0)
@@ -91,26 +91,43 @@ void SchedaDettaglio::popolaCampi()
         }
         else if(qry->value("TipoColonna").toString().compare("Data")==0)
         {
+
+            QDateEdit *dEdit = new QDateEdit(this);
+            QString format = "yyyy-MM-dd";
+            QDate miaData = QDate::fromString(qryPratica->value(qry->value("NomeColonna").toString()).toString(), format);
+            dEdit->setObjectName(qry->value("NomeColonna").toString());
+            dEdit->setDate(miaData);
+            dEdit->setMaximumWidth(100);
+
+            // SE DATO VUOTO
             if(qryPratica->value(qry->value("NomeColonna").toString()).toString().isEmpty())
             {
-                QLineEdit *lEdit = new QLineEdit(this);
-                    lEdit->setText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
-                    lEdit->setObjectName(qry->value("NomeColonna").toString());
-                    lEdit->setMaximumWidth(100);
-                    campi->append(lEdit);
-                    pubblicaCampo(qry->value("Categoria").toString(), label, lEdit);
+                dEdit->setStyleSheet("border: 1px solid green; color: gray; ");
             }
-            else
-            {
-                QDateEdit *dEdit = new QDateEdit(this);
-                QString format = "yyyy-MM-dd";
-                QDate miaData = QDate::fromString(qryPratica->value(qry->value("NomeColonna").toString()).toString(), format);
-                dEdit->setObjectName(qry->value("NomeColonna").toString());
-                dEdit->setDate(miaData);
-                dEdit->setMaximumWidth(100);
-                campi->append(dEdit);
-                pubblicaCampo(qry->value("Categoria").toString(), label, dEdit);
-            }
+
+            campi->append(dEdit);
+            pubblicaCampo(qry->value("Categoria").toString(), label, dEdit);
+
+//            if(qryPratica->value(qry->value("NomeColonna").toString()).toString().isEmpty())
+//            {
+//                QLineEdit *lEdit = new QLineEdit(this);
+//                lEdit->setText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
+//                lEdit->setObjectName(qry->value("NomeColonna").toString());
+//                lEdit->setMaximumWidth(100);
+//                campi->append(lEdit);
+//                pubblicaCampo(qry->value("Categoria").toString(), label, lEdit);
+//            }
+//            else
+//            {
+//                QDateEdit *dEdit = new QDateEdit(this);
+//                QString format = "yyyy-MM-dd";
+//                QDate miaData = QDate::fromString(qryPratica->value(qry->value("NomeColonna").toString()).toString(), format);
+//                dEdit->setObjectName(qry->value("NomeColonna").toString());
+//                dEdit->setDate(miaData);
+//                dEdit->setMaximumWidth(100);
+//                campi->append(dEdit);
+//                pubblicaCampo(qry->value("Categoria").toString(), label, dEdit);
+//            }
         }
         else if(qry->value("TipoColonna").toString().compare("Decimale")==0)
         {
@@ -315,9 +332,11 @@ void SchedaDettaglio::on_pushButton_clicked()
         {
             dDate = qobject_cast<QDateEdit*>(wid);
             chiave = dDate->objectName();
+            QString valoreTmp;
             QString format = "yyyy-MM-dd";
-            QDate miaData = QDate::fromString(tEdit->toPlainText(), format);
-            valore = miaData.toString();
+            QDate miaData = QDate::fromString(dDate->date().toString());
+            valoreTmp = miaData.toString(format);
+            valore = valoreTmp.compare("2000-01-01") == 0? "" : valoreTmp;
         }
 
         if(chiave.compare("Pratica")==0) continue;
