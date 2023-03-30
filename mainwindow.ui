@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1250</width>
+    <width>1350</width>
     <height>700</height>
    </rect>
   </property>
@@ -161,7 +161,36 @@
                     </size>
                    </property>
                    <property name="text">
-                    <string>Prog Chiusa</string>
+                    <string>Progettazione</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="gara">
+                   <property name="minimumSize">
+                    <size>
+                     <width>20</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::Box</enum>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_5">
+                   <property name="minimumSize">
+                    <size>
+                     <width>100</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>Gara</string>
                    </property>
                   </widget>
                  </item>
@@ -272,8 +301,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>154</width>
-              <height>579</height>
+              <width>158</width>
+              <height>599</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -296,8 +325,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1250</width>
-     <height>26</height>
+     <width>1350</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuStrumenti">

@@ -242,18 +242,26 @@ void MainWindow::compilaTabellaCompleta()
                 item->setText(qry->value(head).toString());
             }
 
+            if(qry->value("AvvioProgettazione").toInt() && ui->coloraCheck->isChecked())
+            {
+                item->setBackground(QColor(255, 255, 179));
+            }
+
+            if(qry->value("AvvioGara").toInt() && ui->coloraCheck->isChecked())
+            {
+                item->setBackground(QColor(179, 255, 179));
+            }
+
+            if(qry->value("LavoriInCorso").toInt() && ui->coloraCheck->isChecked())
+            {
+                item->setBackground(QColor(179, 217, 255));
+            }
+
             if(qry->value("CreFatto").toInt() && ui->coloraCheck->isChecked())
             {
-                item->setBackground(QColor(0, 0, 255, 127));
+                item->setBackground(QColor(153, 153, 255));
             }
-            else if(qry->value("LavoriInCorso").toInt() && ui->coloraCheck->isChecked())
-            {
-                item->setBackground(QColor(255, 255, 153, 127));
-            }
-            else if(qry->value("IterProgChiuso").toInt() && ui->coloraCheck->isChecked())
-            {
-                item->setBackground(QColor(102, 255, 204, 127));
-            }
+
 
             ui->tableWidget->setItem(row,nColonna,item);
             nColonna++;
@@ -261,9 +269,10 @@ void MainWindow::compilaTabellaCompleta()
 
         row++;
     }
-    ui->creFatto->setStyleSheet("QLabel { background-color : rgba(0, 0, 255, 127); }");
-    ui->lavoriInCorso->setStyleSheet("QLabel { background-color : rgba(255, 255, 153, 127); }");
-    ui->prog->setStyleSheet("QLabel { background-color : rgba(102, 255, 204, 127); }");
+    ui->prog->setStyleSheet("QLabel { background-color : rgb(255, 255, 179); }");
+    ui->gara->setStyleSheet("QLabel { background-color : rgb(179, 255, 179); }");
+    ui->lavoriInCorso->setStyleSheet("QLabel { background-color : rgb(179, 217, 255); }");
+    ui->creFatto->setStyleSheet("QLabel { background-color : rgb(153, 153, 255); }");
 
     //    db.close();
     refresh = 0;

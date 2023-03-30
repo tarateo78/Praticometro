@@ -16,6 +16,11 @@ SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidge
 {
     ui->setupUi(this);
 
+    // IMPOSTA TREE SU 2 COLONNE
+
+QGroupBox *b = ui->groupBox_4;
+    ui->gridLayout->addWidget(b,0,1,2,3);
+
     this->db = db;
     if(!db.isOpen()) db.open();
     if(db.isOpen()) qInfo() << "aperto";
@@ -151,7 +156,34 @@ void SchedaDettaglio::popolaCampi()
         }
 
     }
-    impostaTabCorrente(qryPratica->value("IterProgChiuso").toInt());
+
+    int tabCorrente;
+
+    if(qryPratica->value("AvvioProgettazione").toInt())
+    {
+        // tabProgettazione
+        tabCorrente = 0;
+    }
+
+    if(qryPratica->value("AvvioGara").toInt())
+    {
+        // tabGara
+        tabCorrente = 1;
+    }
+
+    if(qryPratica->value("LavoriInCorso").toInt())
+    {
+        // tabLavori
+        tabCorrente = 2;
+    }
+
+    if(qryPratica->value("CreFatto").toInt())
+    {
+        // tabCre
+        tabCorrente = 3;
+    }
+
+    impostaTabCorrente(tabCorrente);
     // qInfo() << campi[0].data();
     db.close();
 }
@@ -177,10 +209,9 @@ void SchedaDettaglio::compilaTreePratica()
 
     QFileSystemModel *model = new QFileSystemModel(this);
     model->setRootPath(cartellaLavori);
-    ui->treeView_2->setColumnWidth(0,200);
     ui->treeView_2->setModel(model);
     ui->treeView_2->setRootIndex(model->setRootPath(cartellaLavori));
-    ui->treeView_2->setColumnWidth(0,200);
+    ui->treeView_2->setColumnWidth(0,400);
     //    if(!db.isOpen()) db.open();
 
     //    // TROVA IL PATH DEL CANTIERE
@@ -231,16 +262,24 @@ void SchedaDettaglio::settaCartellaLavori()
 }
 
 
-void SchedaDettaglio::impostaTabCorrente(int iterProgChiuso)
+void SchedaDettaglio::impostaTabCorrente(int tabCorrente)
 {
-
-    if(!iterProgChiuso)
-    {
-        ui->tabWidget->setCurrentWidget(ui->tab);
-    }
-    else
-    {
-        ui->tabWidget->setCurrentWidget(ui->tab_4);
+    switch (tabCorrente) {
+    case 0:
+        ui->tabWidget->setCurrentWidget(ui->tabProgettazione);
+        break;
+    case 1:
+        ui->tabWidget->setCurrentWidget(ui->tabGara);
+        break;
+    case 2:
+        ui->tabWidget->setCurrentWidget(ui->tabLavori);
+        break;
+    case 3:
+        ui->tabWidget->setCurrentWidget(ui->tabCre);
+        break;
+    default:
+        ui->tabWidget->setCurrentWidget(ui->tabProgettazione);
+        break;
     }
 }
 
@@ -263,9 +302,17 @@ void SchedaDettaglio::pubblicaCampo(QString cat, QLabel *lab, QWidget *wid)
     {
         ui->formFinanziamento->addRow(lab, wid);
     }
+    else if(cat.compare("Gara") == 0)
+    {
+        ui->formGara->addRow(lab, wid);
+    }
     else if(cat.compare("Lavori") == 0)
     {
         ui->formLavori->addRow(lab, wid);
+    }
+    else if(cat.compare("Cre") == 0)
+    {
+        ui->formCre->addRow(lab, wid);
     }
     else if(cat.compare("Controllo") == 0)
     {
