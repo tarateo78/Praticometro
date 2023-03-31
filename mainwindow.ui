@@ -106,7 +106,7 @@
           <item>
            <widget class="QGroupBox" name="groupBox">
             <property name="title">
-             <string>Opzioni</string>
+             <string>Legenda</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout">
              <item>
@@ -190,7 +190,7 @@
                     </size>
                    </property>
                    <property name="text">
-                    <string>Gara</string>
+                    <string>Gara in corso</string>
                    </property>
                   </widget>
                  </item>
@@ -219,7 +219,7 @@
                     </size>
                    </property>
                    <property name="text">
-                    <string>Lavori in Corso</string>
+                    <string>Lavori in corso</string>
                    </property>
                   </widget>
                  </item>
@@ -248,7 +248,7 @@
                     </size>
                    </property>
                    <property name="text">
-                    <string>Cre Fatto</string>
+                    <string>Cre fatto</string>
                    </property>
                   </widget>
                  </item>

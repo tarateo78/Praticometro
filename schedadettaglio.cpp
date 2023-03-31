@@ -17,9 +17,8 @@ SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidge
     ui->setupUi(this);
 
     // IMPOSTA TREE SU 2 COLONNE
-
-QGroupBox *b = ui->groupBox_4;
-    ui->gridLayout->addWidget(b,0,1,2,3);
+    QGroupBox *b = ui->groupBox_4;
+    ui->gridLayout->addWidget(b,0,1,1,3);
 
     this->db = db;
     if(!db.isOpen()) db.open();
@@ -65,7 +64,7 @@ void SchedaDettaglio::popolaCampi()
 
     QSqlQuery *qry;
     qry = new QSqlQuery(db);
-    qry->prepare("SELECT * FROM Colonne ORDER BY OrdineColonna;");
+    qry->prepare("SELECT * FROM Colonne WHERE Attivo=1 ORDER BY OrdineColonna;");
     qry->exec();
 
     while(qry->next())
@@ -112,27 +111,6 @@ void SchedaDettaglio::popolaCampi()
 
             campi->append(dEdit);
             pubblicaCampo(qry->value("Categoria").toString(), label, dEdit);
-
-//            if(qryPratica->value(qry->value("NomeColonna").toString()).toString().isEmpty())
-//            {
-//                QLineEdit *lEdit = new QLineEdit(this);
-//                lEdit->setText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
-//                lEdit->setObjectName(qry->value("NomeColonna").toString());
-//                lEdit->setMaximumWidth(100);
-//                campi->append(lEdit);
-//                pubblicaCampo(qry->value("Categoria").toString(), label, lEdit);
-//            }
-//            else
-//            {
-//                QDateEdit *dEdit = new QDateEdit(this);
-//                QString format = "yyyy-MM-dd";
-//                QDate miaData = QDate::fromString(qryPratica->value(qry->value("NomeColonna").toString()).toString(), format);
-//                dEdit->setObjectName(qry->value("NomeColonna").toString());
-//                dEdit->setDate(miaData);
-//                dEdit->setMaximumWidth(100);
-//                campi->append(dEdit);
-//                pubblicaCampo(qry->value("Categoria").toString(), label, dEdit);
-//            }
         }
         else if(qry->value("TipoColonna").toString().compare("Decimale")==0)
         {
@@ -212,35 +190,7 @@ void SchedaDettaglio::compilaTreePratica()
     ui->treeView_2->setModel(model);
     ui->treeView_2->setRootIndex(model->setRootPath(cartellaLavori));
     ui->treeView_2->setColumnWidth(0,400);
-    //    if(!db.isOpen()) db.open();
 
-    //    // TROVA IL PATH DEL CANTIERE
-    //    QString pathCantiere = "";
-    //    QDir pPratica(cartellaLavori);
-    //    QFileInfoList elencoPratica = pPratica.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
-    //    foreach (QFileInfo file, elencoPratica)
-    //    {
-    //        if(file.fileName().toLower().contains("cantiere"))
-    //            pathCantiere = cartellaLavori + "\\" + file.fileName();
-    //    }
-
-    //    // VERIFICA SE CARTELLA ATTI PRESENTE
-    //    if(pathCantiere.compare("")==0)
-    //    {
-    //        ui->listWidget_2->addItem("Cartella Cantiere non presente");
-    //    }
-    //    else
-    //    {
-    //        QDir pAtti(pathCantiere);
-    //        QFileInfoList elencoAtti = pAtti.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
-    //        foreach (QFileInfo file, elencoAtti)
-    //        {
-    //            ui->listWidget_2->addItem(file.fileName());
-    //        }
-
-    //    }
-
-    //    db.close();
 }
 
 
