@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     iconaX = "✖️";
     iconaV = "✔";
+    iconaO = "🔴";
 
     // EFFETTUA VERIFICHE CONTROLLO FILE E PATH DATABASE
     if(!verifichePath())
@@ -242,11 +243,10 @@ void MainWindow::compilaTabellaCompleta()
             else if(mapColonneTipo.value(head).compare("Decimale")==0)
             {
                 item->setText(qry->value(head).toString());
-                item->setData(Qt::TextAlignmentRole,Qt::AlignRight);
+                item->setData(Qt::TextAlignmentRole, int(Qt::AlignVCenter|Qt::AlignRight));
             }
             else
             {
-                //item->setTextAlignment(Qt::AlignRight);
                 item->setText(qry->value(head).toString());
             }
 
@@ -270,6 +270,12 @@ void MainWindow::compilaTabellaCompleta()
                 item->setBackground(QColor(153, 153, 255));
             }
 
+            if(qry->value("Urgente").toInt() && head.compare("Pratica") == 0 && ui->coloraCheck->isChecked())
+            {
+                //item->setForeground(QColor(255, 0, 0));
+                item->setText(item->text() + " " + iconaO);
+                item->setToolTip("Urgente... " + qry->value("ProsScadNote").toString());
+            }
 
             ui->tableWidget->setItem(row,nColonna,item);
             nColonna++;
@@ -348,7 +354,7 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
     // APRI SCHEDA DETTAGLIO
 
     QString pratica = ui->tableWidget->item(row, 0)->text();
-    qInfo() << "testo doubleclick" << pratica;
+    //qInfo() << "testo doubleclick" << pratica;
 
     SchedaDettaglio schedaDettaglio(pratica, db);
     schedaDettaglio.setModal(true);

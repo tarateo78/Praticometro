@@ -55,6 +55,7 @@ private:
     QMap<QString, QString> mapColonneTipo;
     QString iconaX;
     QString iconaV;
+    QString iconaO;
     QString query;
     int refresh;
     int verifichePath();
