@@ -42,6 +42,14 @@ MainWindow::MainWindow(QWidget *parent)
 //    ui->statusbar->addWidget(ui->creFatto);
 //    ui->statusbar->addWidget(ui->label_4);
 
+    // POPOLA COMBO
+    ui->comboBox->addItem("Tutti");
+    ui->comboBox->addItem("Nulla in corso");
+    ui->comboBox->addItem("Progetti in corso");
+    ui->comboBox->addItem("Gara in corso");
+    ui->comboBox->addItem("Lavori in corso");
+    ui->comboBox->addItem("Lavori conclusi");
+
     // SETTA PERCORSO PROGETTI
     settaPathProgetti();
 
@@ -281,17 +289,33 @@ void MainWindow::compilaTabellaCompleta()
 
 void MainWindow::eseguiQuerySelect()
 {
+    QString lCombo;
+    if(ui->comboBox->currentText().compare("Tutti"))
+        lCombo = "";
+    if(ui->comboBox->currentText().compare("Nulla in corso") == 0)
+        lCombo = "AND AvvioProgettazione = 0 AND AvvioGara = 0 AND LavoriInCorso = 0 AND CreFatto = 0 ";
+    if(ui->comboBox->currentText().compare("Progetti in corso") == 0)
+        lCombo = "AND AvvioProgettazione = 1 AND AvvioGara = 0 AND LavoriInCorso = 0 AND CreFatto = 0 ";
+    if(ui->comboBox->currentText().compare("Gara in corso") == 0)
+        lCombo = "AND AvvioGara = 1 AND LavoriInCorso = 0 AND CreFatto = 0 ";
+    if(ui->comboBox->currentText().compare("Lavori in corso") == 0)
+        lCombo = "AND LavoriInCorso = 1 AND CreFatto = 0 ";
+    if(ui->comboBox->currentText().compare("Lavori conclusi") == 0)
+        lCombo = "AND CreFatto = 1 ";
+
     query ="SELECT * FROM Pratiche WHERE Incorso > :incorso AND (";
     query += "Pratica LIKE :filtro OR Titolo LIKE :filtro OR TitoloEsteso LIKE :filtro OR ";
     query += "Progettista LIKE :filtro OR Sicurezza LIKE :filtro OR Impresa LIKE :filtro OR ";
     query += "Rup LIKE :filtro OR Alias LIKE :filtro OR  ";
     query += "Finanziamento LIKE :filtro OR DirezioneLavori LIKE :filtro OR  ";
     query += "Cup LIKE :filtro OR Fascicolo LIKE :filtro ";
-    query += ") ORDER BY Pratica DESC;";
+    query += ") " + lCombo;
+    query += " ORDER BY Pratica DESC;";
 
     qry->prepare(query);
     qry->bindValue(":incorso", ui->checkBox->isChecked()?"0":"-1");
     qry->bindValue(":filtro", "%" + ui->lineEdit->text() + "%");
+
     qry->exec();
 }
 
@@ -435,4 +459,11 @@ void MainWindow::on_action_Verifica_Aggiornamenti_triggered()
     verificaAggiornamenti.exec();
 }
 
+
+
+void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
+{
+    // CAMBIA STATO COMBO
+    compilaTabellaCompleta();
+}
 

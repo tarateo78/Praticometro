@@ -45,6 +45,8 @@ private slots:
     void on_action_Verifica_Aggiornamenti_triggered();
 
 
+    void on_comboBox_currentTextChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
