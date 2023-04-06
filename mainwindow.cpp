@@ -270,10 +270,10 @@ void MainWindow::compilaTabellaCompleta()
                 item->setBackground(QColor(153, 153, 255));
             }
 
-            if(qry->value("Urgente").toInt() && head.compare("Pratica") == 0 && ui->coloraCheck->isChecked())
+            if(qry->value("Urgente").toInt() && head.compare("Titolo") == 0 && ui->coloraCheck->isChecked())
             {
                 //item->setForeground(QColor(255, 0, 0));
-                item->setText(item->text() + " " + iconaO);
+                item->setText(iconaO + " " + item->text());
                 item->setToolTip("Urgente... " + qry->value("ProsScadNote").toString());
             }
 
