@@ -30,6 +30,8 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_treeView_2_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::SchedaDettaglio *ui;
     QSqlDatabase db;

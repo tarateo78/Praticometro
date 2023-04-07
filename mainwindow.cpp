@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     iconaX = "✖️";
     iconaV = "✔";
     iconaO = "🔴";
+    iconaEscalmativo = "❗";
 
     // EFFETTUA VERIFICHE CONTROLLO FILE E PATH DATABASE
     if(!verifichePath())

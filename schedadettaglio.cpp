@@ -6,6 +6,7 @@
 #include <QDoubleSpinBox>
 #include <QProcess>
 #include <QLocale>
+#include <QDesktopServices>
 
 
 
@@ -361,5 +362,17 @@ void SchedaDettaglio::on_pushButton_2_clicked()
     arg.append(cartellaLavori);
     process->start(file, arg);
 
+}
+
+
+void SchedaDettaglio::on_treeView_2_doubleClicked(const QModelIndex &index)
+{
+    QFileSystemModel *model = new QFileSystemModel(this);
+    QFileInfo fileInfo = model->fileInfo(index);
+    if(fileInfo.isFile())
+    {
+//        qDebug() << fileInfo.fileName() << fileInfo.filePath() << '\n';
+        QDesktopServices::openUrl(QUrl::fromLocalFile(fileInfo.filePath()));
+    }
 }
 
