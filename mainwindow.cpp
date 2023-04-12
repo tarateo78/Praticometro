@@ -7,6 +7,7 @@
 #include "cartellaprogetti.h"
 #include "signinadmin.h"
 #include "verificaaggiornamenti.h"
+#include "monitoraggi.h"
 
 #include <QCheckBox>
 #include <QFileInfo>
@@ -472,5 +473,13 @@ void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
 {
     // CAMBIA STATO COMBO
     compilaTabellaCompleta();
+}
+
+
+void MainWindow::on_action_Monitoraggi_triggered()
+{
+    Monitoraggi monitoraggi(db);
+    monitoraggi.setModal(true);
+    monitoraggi.exec();
 }
 

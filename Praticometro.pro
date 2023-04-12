@@ -14,6 +14,7 @@ SOURCES += \
     globalobject.cpp \
     main.cpp \
     mainwindow.cpp \
+    monitoraggi.cpp \
     praticaobject.cpp \
     schedadettaglio.cpp \
     signinadmin.cpp \
@@ -25,6 +26,7 @@ HEADERS += \
     connessionedb.h \
     globalobject.h \
     mainwindow.h \
+    monitoraggi.h \
     praticaobject.h \
     schedadettaglio.h \
     signinadmin.h \
@@ -34,6 +36,7 @@ HEADERS += \
 FORMS += \
     cartellaprogetti.ui \
     mainwindow.ui \
+    monitoraggi.ui \
     schedadettaglio.ui \
     signinadmin.ui \
     statopratiche.ui \

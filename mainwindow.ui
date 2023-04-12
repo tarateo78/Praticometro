@@ -350,6 +350,7 @@
     <addaction name="actionGestione_Stato_Pratiche"/>
     <addaction name="actionCartella_Progetti"/>
     <addaction name="action_Verifica_Aggiornamenti"/>
+    <addaction name="action_Monitoraggi"/>
    </widget>
    <widget class="QMenu" name="menu_File">
     <property name="title">
@@ -397,6 +398,11 @@
   <action name="action_Verifica_Aggiornamenti">
    <property name="text">
     <string>&amp;Verifica Aggiornamenti...</string>
+   </property>
+  </action>
+  <action name="action_Monitoraggi">
+   <property name="text">
+    <string>&amp;Monitoraggi...</string>
    </property>
   </action>
  </widget>

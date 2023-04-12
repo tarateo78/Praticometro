@@ -46,7 +46,6 @@ void VerificaAggiornamenti::compilaTabella()
 
     // COMPILA LA TABELLA
 
-
     ui->tableWidget->setColumnCount(5);
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->clearContents();
