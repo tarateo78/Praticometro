@@ -26,6 +26,10 @@ private:
     Ui::Monitoraggi *ui;
     void compilaTabella();
     QSqlDatabase db;
+    QString iconaX;
+    QString iconaV;
+    QString iconaO;
+    QString iconaEscalmativo;
 };
 
 #endif // MONITORAGGI_H

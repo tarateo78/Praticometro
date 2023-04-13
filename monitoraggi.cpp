@@ -8,13 +8,13 @@ Monitoraggi::Monitoraggi(QSqlDatabase db,QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->db = db;
+    //this->db = db;
 
     ui->comboBox->addItem("BDAP");
     ui->comboBox->addItem("RL");
     ui->comboBox->addItem("MIMS");
 
-    compilaTabella();
+    //compilaTabella();
 }
 
 Monitoraggi::~Monitoraggi()
@@ -25,18 +25,61 @@ Monitoraggi::~Monitoraggi()
 void Monitoraggi::compilaTabella()
 {
 
-    // COLONNE
-    QStringList colonne;
+    iconaX = "✖️";
+    iconaV = "✔";
+    iconaO = "🔴";
+    iconaEscalmativo = "❗";
+
+    // lColList
+    QStringList lColList;
     if(ui->comboBox->currentText().compare("BDAP") == 0)
-        colonne << "Pratica" << "Titolo" << "Finanziamento"<< "BdapConvalidato" << "BdapNote";
+        lColList << "Pratica" << "Titolo" << "Finanziamento"<< "BdapConvalidato" << "BdapNote";
     if(ui->comboBox->currentText().compare("RL") == 0)
-        colonne << "Pratica" << "Titolo" << "Finanziamento" << "RLCodice";
+        lColList << "Pratica" << "Titolo" << "Finanziamento" << "RLCodice";
     if(ui->comboBox->currentText().compare("MIMS") == 0)
-        colonne << "Pratica" << "Titolo" << "Finanziamento" << "MIMSCodice";
+        lColList << "Pratica" << "Titolo" << "Finanziamento" << "MIMSCodice";
+
+
+
+    // POPOLA MAP COLONNE
+    struct ColStruct
+    {
+        QString nomeColonna;
+        QString testoColonna;
+        int larghezza;
+        QString tipoColonna;
+        QString categoria;
+        int ordineColonna;
+    };
+
+    QMap<QString, ColStruct> map;
+
+    if(!db.isOpen()) db.open();
+
+    int i = 0;
+    foreach (QString s, lColList) {
+        QSqlQuery *qryCol = new QSqlQuery(db);
+        qryCol->prepare("SELECT * FROM Colonne WHERE NomeColonna = :colonna;");
+        qryCol->bindValue(":colonna",s);
+        qryCol->exec();
+
+        qryCol->next();
+
+        ColStruct myStruct;
+        myStruct.nomeColonna = qryCol->value("NomeColonna").toString();
+        myStruct.testoColonna = qryCol->value("TestoColonna").toString();
+        myStruct.larghezza = qryCol->value("Larghezza").toInt();
+        myStruct.tipoColonna = qryCol->value("TipoColonna").toString();
+        myStruct.categoria = qryCol->value("Categoria").toString();
+        myStruct.ordineColonna = qryCol->value("OrdineColonna").toInt();
+        map.insert(s,myStruct);
+        i++;
+    }
+
+    //    qInfo() << map.keys();
 
     // COMPILA LA TABELLA
-
-    ui->tableWidget->setColumnCount(colonne.size());
+    ui->tableWidget->setColumnCount(lColList.size());
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->clearContents();
 
@@ -45,35 +88,38 @@ void Monitoraggi::compilaTabella()
     // DISABILITA EDIT TABELLA
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    // TITOLO COLONNE
-    ui->tableWidget->setHorizontalHeaderLabels(colonne);
 
-//    ui->tableWidget->setColumnWidth(0,70);
-//    ui->tableWidget->setColumnWidth(1,400);
-//    ui->tableWidget->setColumnWidth(2,80);
-//    ui->tableWidget->setColumnWidth(3,100);
-//    ui->tableWidget->setColumnWidth(4,130);
+    // HEADER
+    QStringList lTitoloColonne;
+    int col = 0;
+    foreach (QString s, lColList) {
+        lTitoloColonne.append(map[s].testoColonna);
+        ui->tableWidget->setColumnWidth(col,map[s].larghezza);
+        col++;
+    }
+    ui->tableWidget->setHorizontalHeaderLabels(lTitoloColonne);
+
 
     QFont fontBold;
     fontBold.setBold(true);
 
-    if(!db.isOpen()) db.open();
-
+    // SELEZIONE PRATICHE
     QSqlQuery *qry = new QSqlQuery(db);
-    QString queryTmp = "SELECT * FROM Pratiche WHERE Incorso = 1 ";
+    QString queryTmp = "SELECT * FROM Pratiche WHERE ";
 
     if(ui->comboBox->currentText().compare("BDAP") == 0)
     {
-        queryTmp += "AND Bdap = 1 ";
+        queryTmp += "Bdap = 1 ";
     }
     if(ui->comboBox->currentText().compare("RL") == 0)
     {
-        queryTmp += "AND RL = 1 ";
+        queryTmp += "RL = 1 ";
     }
     if(ui->comboBox->currentText().compare("MIMS") == 0)
     {
-        queryTmp += "AND MIMS = 1 ";
+        queryTmp += "MIMS = 1 ";
     }
+    queryTmp += (ui->checkBox->isChecked() ? " AND Incorso = 1 " : "");
     queryTmp += ";";
 
     qry->prepare(queryTmp);
@@ -84,11 +130,27 @@ void Monitoraggi::compilaTabella()
     {
         ui->tableWidget->insertRow(row);
 
-        int col = 0;
-        foreach (QString s, colonne) {
+        col = 0;
+        foreach (QString s, lColList) {
             QTableWidgetItem *item1;
             item1 = new QTableWidgetItem();
+
+            //            if(map[s].tipoColonna.compare("Bool")==0)
+            //            {
+            //                if(qry->value(s).toString().compare("0")==0)
+            //                {
+            //                    item1->setText("");
+            //                }
+            //                else
+            //                {
+            //                    item1->setText(iconaV);
+            //                }
+            //                item1->setData(Qt::TextAlignmentRole,Qt::AlignCenter);
+            //            }
+            //            else
+            //            {
             item1->setText(qry->value(s).toString());
+            //            }
             ui->tableWidget->setItem(row,col,item1);
             col++;
         }
@@ -107,4 +169,6 @@ void Monitoraggi::on_checkBox_stateChanged(int arg1)
 {
     compilaTabella();
 }
+
+
 
