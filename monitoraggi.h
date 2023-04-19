@@ -5,6 +5,8 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
+#include "schedadettaglio.h"
+
 namespace Ui {
 class Monitoraggi;
 }
@@ -21,6 +23,8 @@ private slots:
     void on_comboBox_currentTextChanged(const QString &arg1);
 
     void on_checkBox_stateChanged(int arg1);
+
+    void on_tableWidget_cellDoubleClicked(int row, int column);
 
 private:
     Ui::Monitoraggi *ui;

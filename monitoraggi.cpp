@@ -8,13 +8,13 @@ Monitoraggi::Monitoraggi(QSqlDatabase db,QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //this->db = db;
+    this->db = db;
 
     ui->comboBox->addItem("BDAP");
     ui->comboBox->addItem("RL");
     ui->comboBox->addItem("MIMS");
 
-    //compilaTabella();
+    compilaTabella();
 }
 
 Monitoraggi::~Monitoraggi()
@@ -33,7 +33,8 @@ void Monitoraggi::compilaTabella()
     // lColList
     QStringList lColList;
     if(ui->comboBox->currentText().compare("BDAP") == 0)
-        lColList << "Pratica" << "Titolo" << "Finanziamento"<< "BdapConvalidato" << "BdapNote";
+        lColList << "Pratica" << "Titolo" << "Finanziamento"<< "BdapConvalidato"
+                 << "BdapNote";
     if(ui->comboBox->currentText().compare("RL") == 0)
         lColList << "Pratica" << "Titolo" << "Finanziamento" << "RLCodice";
     if(ui->comboBox->currentText().compare("MIMS") == 0)
@@ -120,7 +121,7 @@ void Monitoraggi::compilaTabella()
         queryTmp += "MIMS = 1 ";
     }
     queryTmp += (ui->checkBox->isChecked() ? " AND Incorso = 1 " : "");
-    queryTmp += ";";
+    queryTmp += " ORDER BY Pratica DESC;";
 
     qry->prepare(queryTmp);
     qry->exec();
@@ -135,22 +136,22 @@ void Monitoraggi::compilaTabella()
             QTableWidgetItem *item1;
             item1 = new QTableWidgetItem();
 
-            //            if(map[s].tipoColonna.compare("Bool")==0)
-            //            {
-            //                if(qry->value(s).toString().compare("0")==0)
-            //                {
-            //                    item1->setText("");
-            //                }
-            //                else
-            //                {
-            //                    item1->setText(iconaV);
-            //                }
-            //                item1->setData(Qt::TextAlignmentRole,Qt::AlignCenter);
-            //            }
-            //            else
-            //            {
-            item1->setText(qry->value(s).toString());
-            //            }
+            if(map[s].tipoColonna.compare("Bool")==0)
+            {
+                if(qry->value(s).toString().compare("0")==0)
+                {
+                    item1->setText("");
+                }
+                else
+                {
+                    item1->setText(iconaV);
+                }
+                item1->setData(Qt::TextAlignmentRole,Qt::AlignCenter);
+            }
+            else
+            {
+                item1->setText(qry->value(s).toString());
+            }
             ui->tableWidget->setItem(row,col,item1);
             col++;
         }
@@ -171,4 +172,14 @@ void Monitoraggi::on_checkBox_stateChanged(int arg1)
 }
 
 
+
+
+void Monitoraggi::on_tableWidget_cellDoubleClicked(int row, int column)
+{
+    // APRI SCHEDA DETTAGLIO
+    QString pratica = ui->tableWidget->item(row, 0)->text();
+    SchedaDettaglio schedaDettaglio(pratica, db);
+    schedaDettaglio.setModal(true);
+    schedaDettaglio.exec();
+}
 
