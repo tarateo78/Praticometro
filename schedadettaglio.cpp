@@ -101,6 +101,7 @@ void SchedaDettaglio::popolaCampi()
             dEdit->setObjectName(qry->value("NomeColonna").toString());
             dEdit->setDate(miaData);
             dEdit->setMaximumWidth(100);
+            dEdit->setCalendarPopup(true);
 
             // SE DATO VUOTO
             if(qryPratica->value(qry->value("NomeColonna").toString()).toString().isEmpty())
