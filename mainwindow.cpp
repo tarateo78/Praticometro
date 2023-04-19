@@ -24,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
     iconaV = "✔";
     iconaO = "🔴";
     iconaEscalmativo = "❗";
+    iconaTempo = "⏳";
+    iconaAppunto = "📌";
 
     // EFFETTUA VERIFICHE CONTROLLO FILE E PATH DATABASE
     if(!verifichePath())
@@ -37,13 +39,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     // POPOLA STATUSBAR
-//    ui->statusbar->addWidget(ui->legenda);
-//    ui->statusbar->addWidget(ui->prog);
-//    ui->statusbar->addWidget(ui->label_2);
-//    ui->statusbar->addWidget(ui->lavoriInCorso);
-//    ui->statusbar->addWidget(ui->label_3);
-//    ui->statusbar->addWidget(ui->creFatto);
-//    ui->statusbar->addWidget(ui->label_4);
+    //    ui->statusbar->addWidget(ui->legenda);
+    //    ui->statusbar->addWidget(ui->prog);
+    //    ui->statusbar->addWidget(ui->label_2);
+    //    ui->statusbar->addWidget(ui->lavoriInCorso);
+    //    ui->statusbar->addWidget(ui->label_3);
+    //    ui->statusbar->addWidget(ui->creFatto);
+    //    ui->statusbar->addWidget(ui->label_4);
 
     // POPOLA COMBO
     ui->comboBox->addItem("Tutti");
@@ -272,13 +274,24 @@ void MainWindow::compilaTabellaCompleta()
                 item->setBackground(QColor(153, 153, 255));
             }
 
-            if(qry->value("Urgente").toInt() && head.compare("Titolo") == 0 && ui->coloraCheck->isChecked())
+            // URGENTE
+            if(qry->value("Urgente").toInt() && head.compare("Titolo") == 0
+                    && ui->coloraCheck->isChecked())
             {
                 //item->setForeground(QColor(255, 0, 0));
-                item->setText(iconaO + " " + item->text());
-                item->setToolTip("Urgente... " + qry->value("ProsScadNote").toString());
+                item->setText(iconaAppunto + " " + item->text());
+                item->setToolTip("Urgente... " + qry->value("UrgenteNota").toString());
             }
 
+            // SCADENZA
+            if(qry->value("ProsScadData").toString().compare("") != 0 &&
+                    QDate::currentDate() >= qry->value("ProsScadData").toDate() &&
+                    head.compare("Titolo") == 0 &&
+                    ui->coloraCheck->isChecked())
+            {
+                item->setText(iconaTempo + " " + item->text());
+                item->setToolTip(qry->value("ProsScadNote").toString());
+            }
             ui->tableWidget->setItem(row,nColonna,item);
             nColonna++;
         }

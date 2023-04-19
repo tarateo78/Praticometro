@@ -23,12 +23,10 @@ SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidge
 
     this->db = db;
     if(!db.isOpen()) db.open();
-    if(db.isOpen()) qInfo() << "aperto";
+//    if(db.isOpen()) qInfo() << "aperto";
 
     pratica = praticaPassata;
-
-    qInfo() << "Scheda dettaglio" << praticaPassata;
-
+//    qInfo() << "Scheda dettaglio" << praticaPassata;
 
     settaCartellaLavori();
     popolaCampi();
@@ -208,7 +206,7 @@ void SchedaDettaglio::settaCartellaLavori()
         if(file.fileName().left(5).compare(pratica)==0)
             cartellaLavori = globalPathProgetti + "\\" + file.fileName();
     }
-    qInfo() << cartellaLavori;
+//    qInfo() << cartellaLavori;
     db.close();
 }
 
@@ -318,7 +316,7 @@ void SchedaDettaglio::on_pushButton_clicked()
             dEdit = qobject_cast<QDoubleSpinBox*>(wid);
             chiave = dEdit->objectName();
             valore = ita.toString(dEdit->value(), 'f', 2);
-            qInfo() << valore;
+//            qInfo() << valore;
         }
         if(wid->inherits(QCheckBox::staticMetaObject.className()))
         {

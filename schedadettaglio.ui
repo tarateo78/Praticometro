@@ -104,7 +104,7 @@
            </property>
            <widget class="QWidget" name="tabProgettazione">
             <attribute name="title">
-             <string>Progettazione</string>
+             <string>📐Progetto</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <item>
@@ -114,7 +114,7 @@
            </widget>
            <widget class="QWidget" name="tabGara">
             <attribute name="title">
-             <string>Gara</string>
+             <string>🏁Gara</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_11">
              <item>
@@ -124,7 +124,7 @@
            </widget>
            <widget class="QWidget" name="tabLavori">
             <attribute name="title">
-             <string>Lavori</string>
+             <string>🛠Lavori</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_7">
              <item>
@@ -134,7 +134,7 @@
            </widget>
            <widget class="QWidget" name="tabCre">
             <attribute name="title">
-             <string>Cre</string>
+             <string>📌Cre</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_8">
              <item>
@@ -144,7 +144,7 @@
            </widget>
            <widget class="QWidget" name="tabControllo">
             <attribute name="title">
-             <string>Controllo</string>
+             <string>✅Check</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout">
              <item>
@@ -154,7 +154,7 @@
            </widget>
            <widget class="QWidget" name="tabAltro">
             <attribute name="title">
-             <string>Altro</string>
+             <string>🚽Altro</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_6">
              <item>

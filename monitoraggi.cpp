@@ -10,6 +10,8 @@ Monitoraggi::Monitoraggi(QSqlDatabase db,QWidget *parent) :
 
     this->db = db;
 
+    ui->comboBox->addItem("Scadenze");
+    ui->comboBox->addItem("Urgenti");
     ui->comboBox->addItem("BDAP");
     ui->comboBox->addItem("RL");
     ui->comboBox->addItem("MIMS");
@@ -32,13 +34,19 @@ void Monitoraggi::compilaTabella()
 
     // lColList
     QStringList lColList;
+    lColList << "Pratica" << "Titolo" << "Finanziamento";
+    if(ui->comboBox->currentText().compare("Scadenze") == 0)
+         lColList <<"ProsScadData"
+                  << "ProsScadNote";
+    if(ui->comboBox->currentText().compare("Urgenti") == 0)
+         lColList << "UrgenteNota";
     if(ui->comboBox->currentText().compare("BDAP") == 0)
-        lColList << "Pratica" << "Titolo" << "Finanziamento"<< "BdapConvalidato"
+        lColList << "BdapConvalidato"
                  << "BdapNote";
     if(ui->comboBox->currentText().compare("RL") == 0)
-        lColList << "Pratica" << "Titolo" << "Finanziamento" << "RLCodice";
+        lColList << "RLCodice";
     if(ui->comboBox->currentText().compare("MIMS") == 0)
-        lColList << "Pratica" << "Titolo" << "Finanziamento" << "MIMSCodice";
+        lColList << "MIMSCodice";
 
 
 
@@ -84,6 +92,8 @@ void Monitoraggi::compilaTabella()
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->clearContents();
 
+    // STILE TABELLA
+    ui->tableWidget->setStyleSheet("QHeaderView::section { background-color:#d9d9d9 }");
     ui->tableWidget->setAlternatingRowColors(true);
 
     // DISABILITA EDIT TABELLA
@@ -108,6 +118,14 @@ void Monitoraggi::compilaTabella()
     QSqlQuery *qry = new QSqlQuery(db);
     QString queryTmp = "SELECT * FROM Pratiche WHERE ";
 
+    if(ui->comboBox->currentText().compare("Scadenze") == 0)
+    {
+        queryTmp += "ProsScadData != '' ";
+    }
+    if(ui->comboBox->currentText().compare("Urgenti") == 0)
+    {
+        queryTmp += "Urgente = 1 ";
+    }
     if(ui->comboBox->currentText().compare("BDAP") == 0)
     {
         queryTmp += "Bdap = 1 ";

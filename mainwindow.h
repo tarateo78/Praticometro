@@ -59,6 +59,8 @@ private:
     QString iconaV;
     QString iconaO;
     QString iconaEscalmativo;
+    QString iconaTempo;
+    QString iconaAppunto;
     QString query;
     int refresh;
     int verifichePath();

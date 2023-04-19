@@ -82,7 +82,7 @@
                <item>
                 <widget class="QLabel" name="label">
                  <property name="text">
-                  <string>Cerca:</string>
+                  <string>🔎 Cerca:</string>
                  </property>
                 </widget>
                </item>
@@ -108,7 +108,7 @@
                   <bool>false</bool>
                  </property>
                  <property name="text">
-                  <string>Pulisci</string>
+                  <string>🗑 Pulisci</string>
                  </property>
                 </widget>
                </item>
@@ -387,7 +387,7 @@
   </action>
   <action name="action_Log_In">
    <property name="text">
-    <string>&amp;Accedi</string>
+    <string>🔑 &amp;Accedi</string>
    </property>
   </action>
   <action name="action_Log_Out">
