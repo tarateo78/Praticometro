@@ -33,22 +33,7 @@ void Monitoraggi::compilaTabella()
     iconaEscalmativo = "❗";
 
     // lColList
-    QStringList lColList;
-    lColList << "Pratica" << "Titolo" << "Finanziamento";
-    if(ui->comboBox->currentText().compare("Scadenze") == 0)
-         lColList <<"ProsScadData"
-                  << "ProsScadNote";
-    if(ui->comboBox->currentText().compare("Urgenti") == 0)
-         lColList << "UrgenteNota";
-    if(ui->comboBox->currentText().compare("BDAP") == 0)
-        lColList << "BdapConvalidato"
-                 << "BdapNote";
-    if(ui->comboBox->currentText().compare("RL") == 0)
-        lColList << "RLCodice";
-    if(ui->comboBox->currentText().compare("MIMS") == 0)
-        lColList << "MIMSCodice";
-
-
+    lColList = getListaColonne();
 
     // POPOLA MAP COLONNE
     struct ColStruct
@@ -177,6 +162,25 @@ void Monitoraggi::compilaTabella()
     }
     db.close();
 }
+
+
+QStringList Monitoraggi::getListaColonne()
+{
+    if(!db.isOpen()) db.open();
+    QSqlQuery *qryList = new QSqlQuery(db);
+    qryList->prepare("SELECT * FROM Monitoraggi WHERE Area = 'Globale' OR Area = :area;");
+    qryList->bindValue(":area", ui->comboBox->currentText());
+    qryList->exec();
+
+    lColList = {};
+    while(qryList->next())
+    {
+        lColList << qryList->value("Colonna").toString();
+    }
+    db.close();
+    return lColList;
+}
+
 
 void Monitoraggi::on_comboBox_currentTextChanged(const QString &arg1)
 {

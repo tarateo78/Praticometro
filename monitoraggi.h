@@ -29,7 +29,9 @@ private slots:
 private:
     Ui::Monitoraggi *ui;
     void compilaTabella();
+    QStringList getListaColonne();
     QSqlDatabase db;
+    QStringList lColList;
     QString iconaX;
     QString iconaV;
     QString iconaO;

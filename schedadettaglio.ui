@@ -96,11 +96,26 @@
          </item>
          <item row="1" column="3">
           <widget class="QTabWidget" name="tabWidget">
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
            <property name="autoFillBackground">
             <bool>false</bool>
            </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="tabPosition">
+            <enum>QTabWidget::North</enum>
+           </property>
+           <property name="tabShape">
+            <enum>QTabWidget::Rounded</enum>
+           </property>
            <property name="currentIndex">
             <number>5</number>
+           </property>
+           <property name="elideMode">
+            <enum>Qt::ElideNone</enum>
            </property>
            <widget class="QWidget" name="tabProgettazione">
             <attribute name="title">
@@ -192,7 +207,7 @@
               <item>
                <widget class="QPushButton" name="pushButton_2">
                 <property name="text">
-                 <string>Apri Cartella</string>
+                 <string>📂Apri Cartella</string>
                 </property>
                </widget>
               </item>
