@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/icone">
+        <file>icone_32/appunti.png</file>
+        <file>icone_32/chiave.png</file>
+        <file>icone_32/calendario.png</file>
+        <file>icone_32/cartella.png</file>
+        <file>icone_32/clessidra.png</file>
+        <file>icone_32/grafico.png</file>
+        <file>icone_32/esporta.png</file>
+        <file>icone_32/lavori.png</file>
+        <file>icone_32/lente.png</file>
+        <file>icone_32/lucchetto-chiave.png</file>
+        <file>icone_32/puntina.png</file>
+        <file>icone_32/squadra.png</file>
+        <file>icone_32/rosso.png</file>
+        <file>icone_32/vero.png</file>
+        <file>icone_32/giallo.png</file>
+        <file>icone_32/arancione.png</file>
+        <file>icone_32/blu.png</file>
+        <file>icone_32/cassetti.png</file>
+        <file>icone_32/verde.png</file>
+    </qresource>
+</RCC>

@@ -32,6 +32,10 @@ private slots:
 
     void on_treeView_2_doubleClicked(const QModelIndex &index);
 
+    void on_pushButtonSalvaEsci_clicked();
+
+    void on_pushButtonEsci_clicked();
+
 private:
     Ui::SchedaDettaglio *ui;
     QSqlDatabase db;
@@ -46,6 +50,7 @@ private:
     void compilaTreePratica();
     void settaCartellaLavori();
     void impostaTabCorrente(int);
+    void salvaModifiche();
 };
 
 #endif // SCHEDADETTAGLIO_H

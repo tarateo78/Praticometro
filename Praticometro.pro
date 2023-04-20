@@ -46,3 +46,28 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    Immagini.qrc
+
+DISTFILES += \
+    icone_32/appunti.png \
+    icone_32/arancione.png \
+    icone_32/blu.png \
+    icone_32/calendario.png \
+    icone_32/cartella.png \
+    icone_32/cassetti.png \
+    icone_32/chiave.png \
+    icone_32/clessidra.png \
+    icone_32/esporta.png \
+    icone_32/giallo.png \
+    icone_32/grafico.png \
+    icone_32/lavori.png \
+    icone_32/lente.png \
+    icone_32/lucchetto-chiave.png \
+    icone_32/puntina.png \
+    icone_32/rosso.png \
+    icone_32/squadra.png \
+    icone_32/verde.png \
+    icone_32/vero.png \
+    icone_32/vioala.png

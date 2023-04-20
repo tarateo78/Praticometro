@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1350</width>
+    <width>1404</width>
     <height>700</height>
    </rect>
   </property>
@@ -81,8 +81,20 @@
                </item>
                <item>
                 <widget class="QLabel" name="label">
+                 <property name="maximumSize">
+                  <size>
+                   <width>25</width>
+                   <height>25</height>
+                  </size>
+                 </property>
                  <property name="text">
-                  <string>🔎 Cerca:</string>
+                  <string/>
+                 </property>
+                 <property name="pixmap">
+                  <pixmap resource="Immagini.qrc">:/icone/icone_32/lente.png</pixmap>
+                 </property>
+                 <property name="scaledContents">
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -93,6 +105,9 @@
                    <width>300</width>
                    <height>16777215</height>
                   </size>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Cerca</string>
                  </property>
                 </widget>
                </item>
@@ -315,8 +330,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>158</width>
-              <height>599</height>
+              <width>154</width>
+              <height>579</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -339,8 +354,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1350</width>
-     <height>22</height>
+     <width>1404</width>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuStrumenti">
@@ -376,36 +391,62 @@
    </property>
   </action>
   <action name="actionCartella_Progetti">
+   <property name="icon">
+    <iconset resource="Immagini.qrc">
+     <normaloff>:/icone/icone_32/cartella.png</normaloff>:/icone/icone_32/cartella.png</iconset>
+   </property>
    <property name="text">
     <string>Cartella Progetti...</string>
    </property>
   </action>
   <action name="actionEsporta_csv">
+   <property name="icon">
+    <iconset resource="Immagini.qrc">
+     <normaloff>:/icone/icone_32/esporta.png</normaloff>:/icone/icone_32/esporta.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Esporta csv</string>
    </property>
   </action>
   <action name="action_Log_In">
+   <property name="icon">
+    <iconset resource="Immagini.qrc">
+     <normaloff>:/icone/icone_32/chiave.png</normaloff>:/icone/icone_32/chiave.png</iconset>
+   </property>
    <property name="text">
-    <string>🔑 &amp;Accedi</string>
+    <string>&amp;Accedi</string>
    </property>
   </action>
   <action name="action_Log_Out">
+   <property name="icon">
+    <iconset resource="Immagini.qrc">
+     <normaloff>:/icone/icone_32/lucchetto-chiave.png</normaloff>:/icone/icone_32/lucchetto-chiave.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Esci</string>
    </property>
   </action>
   <action name="action_Verifica_Aggiornamenti">
+   <property name="icon">
+    <iconset resource="Immagini.qrc">
+     <normaloff>:/icone/icone_32/vero.png</normaloff>:/icone/icone_32/vero.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Verifica Aggiornamenti...</string>
    </property>
   </action>
   <action name="action_Monitoraggi">
+   <property name="icon">
+    <iconset resource="Immagini.qrc">
+     <normaloff>:/icone/icone_32/grafico.png</normaloff>:/icone/icone_32/grafico.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Monitoraggi...</string>
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="Immagini.qrc"/>
+ </resources>
  <connections/>
 </ui>

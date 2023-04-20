@@ -234,53 +234,7 @@ void SchedaDettaglio::impostaTabCorrente(int tabCorrente)
 }
 
 
-void SchedaDettaglio::pubblicaCampo(QString cat, QLabel *lab, QWidget *wid)
-{
-    if(cat.compare("Pratica") == 0)
-    {
-        ui->formPratica->addRow(lab, wid);
-    }
-    else if(cat.compare("Dati") == 0)
-    {
-        ui->formDati->addRow(lab, wid);
-    }
-    else if(cat.compare("Progettazione") == 0)
-    {
-        ui->formProgetto->addRow(lab, wid);
-    }
-    else if(cat.compare("Finanziamento") == 0)
-    {
-        ui->formFinanziamento->addRow(lab, wid);
-    }
-    else if(cat.compare("Gara") == 0)
-    {
-        ui->formGara->addRow(lab, wid);
-    }
-    else if(cat.compare("Lavori") == 0)
-    {
-        ui->formLavori->addRow(lab, wid);
-    }
-    else if(cat.compare("Cre") == 0)
-    {
-        ui->formCre->addRow(lab, wid);
-    }
-    else if(cat.compare("Controllo") == 0)
-    {
-        ui->formControllo->addRow(lab, wid);
-    }
-    else
-    {
-        ui->formAltro->addRow(lab, wid);
-    }
-
-}
-
-void SchedaDettaglio::aggiungiCampoCambiato()
-{
-    qInfo() << "cambiato";
-}
-
-void SchedaDettaglio::on_pushButton_clicked()
+void SchedaDettaglio::salvaModifiche()
 {
     // SALVA
 
@@ -345,8 +299,73 @@ void SchedaDettaglio::on_pushButton_clicked()
         qry->bindValue(":pratica", pratica);
         qry->exec();
     }
-
     db.close();
+}
+
+
+void SchedaDettaglio::pubblicaCampo(QString cat, QLabel *lab, QWidget *wid)
+{
+    if(cat.compare("Pratica") == 0)
+    {
+        ui->formPratica->addRow(lab, wid);
+    }
+    else if(cat.compare("Scadenza") == 0)
+    {
+        ui->formScadenza->addRow(lab, wid);
+    }
+    else if(cat.compare("Urgente") == 0)
+    {
+        ui->formUrgente->addRow(lab, wid);
+    }
+    else if(cat.compare("Dati") == 0)
+    {
+        ui->formDati->addRow(lab, wid);
+    }
+    else if(cat.compare("Progettazione") == 0)
+    {
+        ui->formProgetto->addRow(lab, wid);
+    }
+    else if(cat.compare("Finanziamento") == 0)
+    {
+        ui->formFinanziamento->addRow(lab, wid);
+    }
+    else if(cat.compare("Gara") == 0)
+    {
+        ui->formGara->addRow(lab, wid);
+    }
+    else if(cat.compare("Lavori") == 0)
+    {
+        ui->formLavori->addRow(lab, wid);
+    }
+    else if(cat.compare("Cre") == 0)
+    {
+        ui->formCre->addRow(lab, wid);
+    }
+    else if(cat.compare("Controllo") == 0)
+    {
+        ui->formControllo->addRow(lab, wid);
+    }
+    else
+    {
+        ui->formAltro->addRow(lab, wid);
+    }
+
+}
+
+void SchedaDettaglio::aggiungiCampoCambiato()
+{
+    qInfo() << "cambiato";
+}
+
+void SchedaDettaglio::on_pushButton_clicked()
+{
+    salvaModifiche();
+}
+
+
+void SchedaDettaglio::on_pushButtonSalvaEsci_clicked()
+{
+    salvaModifiche();
     this->close();
 }
 
@@ -373,5 +392,14 @@ void SchedaDettaglio::on_treeView_2_doubleClicked(const QModelIndex &index)
 //        qDebug() << fileInfo.fileName() << fileInfo.filePath() << '\n';
         QDesktopServices::openUrl(QUrl::fromLocalFile(fileInfo.filePath()));
     }
+}
+
+
+
+
+
+void SchedaDettaglio::on_pushButtonEsci_clicked()
+{
+    this->close();
 }
 
