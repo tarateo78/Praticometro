@@ -28,9 +28,10 @@ VerificaAggiornamenti::~VerificaAggiornamenti()
 void VerificaAggiornamenti::contaFile(QString cartella)
 {
     // RICORSIVO
-
     QDir root(cartella);
     QFileInfoList elenco = root.entryInfoList(QDir::Filter::AllEntries | QDir::Filter::NoDotAndDotDot);
+
+
     foreach (QFileInfo entita, elenco)
     {
         if(entita.isDir())
@@ -192,7 +193,15 @@ void VerificaAggiornamenti::on_pushButton_2_clicked()
         if(!mapPratiche.contains(nome))
             continue;
 
-        contaFile(globalPathProgetti + "\\" + file.fileName());
+        //--------------------------
+        QDir rootBase(globalPathProgetti + "\\" + file.fileName());
+        QFileInfoList elencoBase = rootBase.entryInfoList(QDir::Filter::AllEntries | QDir::Filter::NoDotAndDotDot);
+        foreach (QFileInfo sub, elencoBase) {
+            if(sub.fileName().contains("amministrativi",  Qt::CaseInsensitive) ||
+                    sub.fileName().contains("cantiere",  Qt::CaseInsensitive))
+            contaFile(globalPathProgetti + "\\" + file.fileName() + "\\" + sub.fileName());
+        }
+
         if(mapPratiche[nome]->nFileEffettivi != globalCount)
         {
             db.open();
