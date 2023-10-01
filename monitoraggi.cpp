@@ -1,6 +1,8 @@
 #include "monitoraggi.h"
 #include "ui_monitoraggi.h"
 
+#include "colore.h"
+
 
 Monitoraggi::Monitoraggi(QSqlDatabase db,QWidget *parent) :
     QDialog(parent),
@@ -155,6 +157,31 @@ void Monitoraggi::compilaTabella()
             {
                 item1->setText(qry->value(s).toString());
             }
+
+
+
+            // COLORA LE RIGHE IN BASE ALLA FASE
+            Colore colore;
+            if(qry->value("AvvioProgettazione").toInt())
+            {
+                item1->setBackground(colore.prog());
+            }
+
+            if(qry->value("AvvioGara").toInt())
+            {
+                item1->setBackground(colore.gara());
+            }
+
+            if(qry->value("LavoriInCorso").toInt())
+            {
+                item1->setBackground(colore.lavori());
+            }
+
+            if(qry->value("CreFatto").toInt())
+            {
+                item1->setBackground(colore.cre());
+            }
+
             ui->tableWidget->setItem(row,col,item1);
             col++;
         }

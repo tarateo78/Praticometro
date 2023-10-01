@@ -8,6 +8,7 @@
 #include "signinadmin.h"
 #include "verificaaggiornamenti.h"
 #include "monitoraggi.h"
+#include "colore.h"
 
 #include <QCheckBox>
 #include <QFileInfo>
@@ -254,24 +255,26 @@ void MainWindow::compilaTabellaCompleta()
                 item->setText(qry->value(head).toString());
             }
 
+            // COLORA LE RIGHE IN BASE ALLA FASE
+            Colore colore;
             if(qry->value("AvvioProgettazione").toInt() && ui->coloraCheck->isChecked())
             {
-                item->setBackground(QColor(255, 255, 179));
+                item->setBackground(colore.prog());
             }
 
             if(qry->value("AvvioGara").toInt() && ui->coloraCheck->isChecked())
             {
-                item->setBackground(QColor(179, 255, 179));
+                item->setBackground(colore.gara());
             }
 
             if(qry->value("LavoriInCorso").toInt() && ui->coloraCheck->isChecked())
             {
-                item->setBackground(QColor(179, 217, 255));
+                item->setBackground(colore.lavori());
             }
 
             if(qry->value("CreFatto").toInt() && ui->coloraCheck->isChecked())
             {
-                item->setBackground(QColor(153, 153, 255));
+                item->setBackground(colore.cre());
             }
 
             // URGENTE

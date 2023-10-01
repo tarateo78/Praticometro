@@ -37,6 +37,7 @@ private:
     QSqlQuery *qry;
     QSqlQuery *qryUpdate;
     QMap<QString, PraticaObject*> mapPratiche;
+    QString iconaEscalmativo;
     void compilaTabella();
 };
 

@@ -1,6 +1,7 @@
 #include "verificaaggiornamenti.h"
 #include "ui_verificaaggiornamenti.h"
 #include "schedadettaglio.h"
+#include "colore.h"
 
 #include <QDir>
 #include <QFont>
@@ -44,6 +45,8 @@ void VerificaAggiornamenti::contaFile(QString cartella)
 
 void VerificaAggiornamenti::compilaTabella()
 {
+
+    iconaEscalmativo = "❗";
 
     // COMPILA LA TABELLA
 
@@ -97,16 +100,50 @@ void VerificaAggiornamenti::compilaTabella()
         item4 = new QTableWidgetItem();
         item5 = new QTableWidgetItem();
 
+        // COLORA LE RIGHE IN BASE ALLA FASE
+        Colore colore;
+        if(qry->value("AvvioProgettazione").toInt())
+        {
+            item1->setBackground(colore.prog());
+            item2->setBackground(colore.prog());
+            item3->setBackground(colore.prog());
+            item4->setBackground(colore.prog());
+        }
+        if(qry->value("AvvioGara").toInt())
+        {
+            item1->setBackground(colore.gara());
+            item2->setBackground(colore.gara());
+            item3->setBackground(colore.gara());
+            item4->setBackground(colore.gara());
+        }
+        if(qry->value("LavoriInCorso").toInt())
+        {
+            item1->setBackground(colore.lavori());
+            item2->setBackground(colore.lavori());
+            item3->setBackground(colore.lavori());
+            item4->setBackground(colore.lavori());
+        }
+        if(qry->value("CreFatto").toInt())
+        {
+            item1->setBackground(colore.cre());
+            item2->setBackground(colore.cre());
+            item3->setBackground(colore.cre());
+            item4->setBackground(colore.cre());
+        }
+
+
         QString stato = "";
         if(qry->value("nFile").toInt() == qry->value("nFileEffettivi").toInt())
         {
-            stato = "Aggiornato";
-            item5->setBackground(QColor(0, 255, 0, 64));
+//            stato = "Aggiornato";
+//            item5->setBackground(QColor(0, 255, 0, 64));
         }
         else
         {
-            stato = "Aggiornare!";
-            item5->setBackground(QColor(255, 0, 0, 64));
+            stato = iconaEscalmativo + " AGGIORNARE";
+            item5->setForeground(QColor(255, 0, 0));
+            item5->setFont(QFont(fontBold));
+            item5->setTextAlignment(Qt::AlignCenter);
         }
 
         item1->setText(qry->value("Pratica").toString());
