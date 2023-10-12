@@ -448,8 +448,9 @@ void MainWindow::on_actionEsporta_csv_triggered()
         for (int i = 0; i < nRecord; ++i) {
             if(i!=0)
                 csv.append("\t");
-            csv.append(qry->value(listaHead[i]).toString());
+            csv.append( qry->value(listaHead[i]).toString().replace("\n"," # "));
         }
+
         csv.append("\n\r");
 
         stream << csv;
