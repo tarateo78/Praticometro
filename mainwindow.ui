@@ -372,6 +372,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="actionEsporta_csv"/>
+    <addaction name="actionEsporta_csv_completo"/>
    </widget>
    <widget class="QMenu" name="menuAdmin">
     <property name="title">
@@ -442,6 +443,14 @@
    </property>
    <property name="text">
     <string>&amp;Monitoraggi...</string>
+   </property>
+  </action>
+  <action name="actionEsporta_csv_completo">
+   <property name="text">
+    <string>Esporta csv completo</string>
+   </property>
+   <property name="toolTip">
+    <string>Esporta csv completo</string>
    </property>
   </action>
  </widget>

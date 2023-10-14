@@ -14,6 +14,7 @@
 #include <QFileInfo>
 #include <QMap>
 #include <QSqlRecord>
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -413,7 +414,11 @@ void MainWindow::on_actionEsporta_csv_triggered()
     QString csv;
     QList<QString> listaHead;
 
-    QString nomefileCsv = QFileDialog::getSaveFileName(this, tr("Salva File"),                                                    QDir::homePath() + "/Desktop/Pratiche.csv", tr("File CSV (*.csv)"));
+    // Data e ora per titolo
+    QDateTime dt;
+    QString dataTimeString = dt.currentDateTime().toString("yyyyMMdd_hhmm");
+
+    QString nomefileCsv = QFileDialog::getSaveFileName(this, tr("Salva File"), QDir::homePath() + "/Desktop/Pratiche_" + dataTimeString + ".csv", tr("File CSV (*.csv)"));
 
     QFile file(nomefileCsv);
     file.open(QIODevice::Truncate | QIODevice::ReadWrite);
@@ -463,6 +468,17 @@ void MainWindow::on_actionEsporta_csv_triggered()
 }
 
 
+
+void MainWindow::on_actionEsporta_csv_completo_triggered()
+{
+    qInfo() << "ok";
+QDateTime dt;
+qInfo() << dt.currentDateTime();
+qInfo() << dt.currentDateTime().toString("yyyyMMdd_hhmm");
+
+}
+
+
 void MainWindow::on_action_Log_In_triggered()
 {
     SignInAdmin signInAdmin(db);
@@ -499,4 +515,6 @@ void MainWindow::on_action_Monitoraggi_triggered()
     monitoraggi.setModal(true);
     monitoraggi.exec();
 }
+
+
 

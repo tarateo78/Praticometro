@@ -49,6 +49,8 @@ private slots:
 
     void on_action_Monitoraggi_triggered();
 
+    void on_actionEsporta_csv_completo_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
