@@ -6,6 +6,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QFileDialog>
+#include <QKeyEvent>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -51,6 +52,8 @@ private slots:
 
     void on_actionEsporta_csv_completo_triggered();
 
+    void on_prog_linkActivated(const QString &link);
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
@@ -70,5 +73,6 @@ private:
     void compilaElencoColonne();
     void compilaTabellaCompleta();
     void eseguiQuerySelect();
+    void keyPressEvent(QKeyEvent *event);
 };
 #endif // MAINWINDOW_H

@@ -15,6 +15,7 @@
 #include <QMap>
 #include <QSqlRecord>
 #include <QDateTime>
+#include <QClipboard>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -344,6 +345,49 @@ void MainWindow::eseguiQuerySelect()
     qry->exec();
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (event->matches(QKeySequence::Copy))
+    {
+        QString copiaTabella;
+
+        QList<QTableWidgetSelectionRange> q = ui->tableWidget->selectedRanges();
+
+        if(q.isEmpty()) return;
+
+        // CICLO SU TITOLI COLONNE
+        for(int x = 0; x < ui->tableWidget->columnCount(); x++)
+        {
+            if(!ui->tableWidget->isColumnHidden(x))
+            {
+                QString text = ui->tableWidget->horizontalHeaderItem(x)->text();
+                copiaTabella.append("\""+text+"\"");
+                copiaTabella.append('\t');
+            }
+        }
+        copiaTabella.append('\n');
+
+        // CICLO SU RIGHE SELEZIONATE
+        for(int y = q.begin()->topRow(); y <= q.begin()->bottomRow(); y++)
+        {
+            for(int x = 0; x < ui->tableWidget->columnCount(); x++)
+            {
+                if(!ui->tableWidget->isColumnHidden(x))
+                {
+                    QString text =  ui->tableWidget->item(y,x)->text();
+                    copiaTabella.append("\""+text+"\"");
+                    copiaTabella.append('\t');
+                }
+            }
+            copiaTabella.append('\n');
+        }
+        qInfo() << "Dati copiati in memoria";
+        QClipboard *clipboard = QApplication::clipboard();
+        clipboard->setText(copiaTabella);
+
+    }
+}
+
 void MainWindow::on_checkBox_stateChanged(int arg1)
 {
     // CHECK SOLO IN CORSO
@@ -472,9 +516,9 @@ void MainWindow::on_actionEsporta_csv_triggered()
 void MainWindow::on_actionEsporta_csv_completo_triggered()
 {
     qInfo() << "ok";
-QDateTime dt;
-qInfo() << dt.currentDateTime();
-qInfo() << dt.currentDateTime().toString("yyyyMMdd_hhmm");
+    QDateTime dt;
+    qInfo() << dt.currentDateTime();
+    qInfo() << dt.currentDateTime().toString("yyyyMMdd_hhmm");
 
 }
 
@@ -517,4 +561,10 @@ void MainWindow::on_action_Monitoraggi_triggered()
 }
 
 
+
+
+void MainWindow::on_prog_linkActivated(const QString &link)
+{
+
+}
 
