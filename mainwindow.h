@@ -8,6 +8,8 @@
 #include <QFileDialog>
 #include <QKeyEvent>
 
+#include "colonna.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -60,6 +62,7 @@ private:
     QSqlQuery *qry;
     QMap<QString, int> mapColonne;
     QMap<QString, QString> mapColonneTipo;
+    QMap<QString, Colonna*> mappaColonne;
     QString iconaX;
     QString iconaV;
     QString iconaO;

@@ -141,6 +141,10 @@ void MainWindow::nascondiColonna()
 
     QCheckBox *cb  = qobject_cast<QCheckBox*>(sender());
     mapColonne[cb->text()] = (cb->isChecked() ? 1 : 0);
+
+    // APPLICA CAMBIAMENTO A MAPPACOLONNE OGGETTI
+    mappaColonne[cb->text()]->setVisibile(cb->isChecked() ? 1 : 0);
+
     compilaTabellaCompleta();
 }
 
@@ -156,6 +160,23 @@ void MainWindow::compilaElencoColonne()
 
     while(qry->next())
     {
+
+        // COMPILA MAPPA DI OGGETTI COLONNE
+        mappaColonne.insert(
+                    qry->value("TestoColonna").toString(),
+                    new Colonna(
+                        qry->value("NomeColonna").toString(),
+                        qry->value("TestoColonna").toString(),
+                        qry->value("Larghezza").toString(),
+                        qry->value("TipoColonna").toString(),
+                        qry->value("Categoria").toString(),
+                        qry->value("OrdineColonna").toInt(),
+                        qry->value("Visibile").toInt(),
+                        qry->value("InTabella").toInt(),
+                        qry->value("Attivo").toInt()
+                        )
+                    );
+
         QCheckBox *c = new QCheckBox(qry->value("TestoColonna").toString());
         c->setChecked(qry->value("Visibile").toInt());
         c->setObjectName(qry->value("NomeColonna").toString());
@@ -361,6 +382,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             if(!ui->tableWidget->isColumnHidden(x))
             {
                 QString text = ui->tableWidget->horizontalHeaderItem(x)->text();
+
                 copiaTabella.append("\""+text+"\"");
                 copiaTabella.append('\t');
             }
@@ -375,7 +397,15 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
                 if(!ui->tableWidget->isColumnHidden(x))
                 {
                     QString text =  ui->tableWidget->item(y,x)->text();
-                    copiaTabella.append("\""+text+"\"");
+                    if(mappaColonne[ui->tableWidget->horizontalHeaderItem(x)->text()]->getTipoColonna().compare("Decimale") == 0 || mappaColonne[ui->tableWidget->horizontalHeaderItem(x)->text()]->getTipoColonna().compare("Data") == 0)
+                    {
+                        copiaTabella.append(text);
+                    }
+                    else
+                    {
+                        copiaTabella.append("\""+text+"\"");
+                    }
+
                     copiaTabella.append('\t');
                 }
             }

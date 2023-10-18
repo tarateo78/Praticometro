@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     cartellaprogetti.cpp \
+    colonna.cpp \
     colore.cpp \
     connessionedb.cpp \
     globalobject.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
 
 HEADERS += \
     cartellaprogetti.h \
+    colonna.h \
     colore.h \
     connessionedb.h \
     globalobject.h \
