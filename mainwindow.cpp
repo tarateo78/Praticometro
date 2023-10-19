@@ -64,6 +64,10 @@ MainWindow::MainWindow(QWidget *parent)
     compilaElencoColonne();
     compilaTabellaCompleta();
 
+    // STATUS BAR PERMANENTE
+    adminLabel = new QLabel(globalAdmin?"🟡 Modalità Amministratore":"🟢 Modalità utente");
+    ui->statusbar->addPermanentWidget(adminLabel);
+
     db.close();
     qInfo() << "_Fine main!";
 }
@@ -366,54 +370,73 @@ void MainWindow::eseguiQuerySelect()
     qry->exec();
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event)
+
+void MainWindow::copiaSelezione()
 {
-    if (event->matches(QKeySequence::Copy))
+    QString copiaTabella;
+
+    QList<QTableWidgetSelectionRange> q = ui->tableWidget->selectedRanges();
+
+    if(q.isEmpty())
     {
-        QString copiaTabella;
+        ui->statusbar->showMessage("Attenzione: Nessun dato selezionato.", 5000);
+        return;
+}
 
-        QList<QTableWidgetSelectionRange> q = ui->tableWidget->selectedRanges();
+    // CICLO SU TITOLI COLONNE
+    for(int x = 0; x < ui->tableWidget->columnCount(); x++)
+    {
+        if(!ui->tableWidget->isColumnHidden(x))
+        {
+            QString text = ui->tableWidget->horizontalHeaderItem(x)->text();
 
-        if(q.isEmpty()) return;
+            copiaTabella.append("\""+text+"\"");
+            copiaTabella.append('\t');
+        }
+    }
+    copiaTabella.append('\n');
 
-        // CICLO SU TITOLI COLONNE
+    // CICLO SU RIGHE SELEZIONATE
+    for(int y = q.begin()->topRow(); y <= q.begin()->bottomRow(); y++)
+    {
         for(int x = 0; x < ui->tableWidget->columnCount(); x++)
         {
             if(!ui->tableWidget->isColumnHidden(x))
             {
-                QString text = ui->tableWidget->horizontalHeaderItem(x)->text();
+                QString text =  ui->tableWidget->item(y,x)->text();
+                if(mappaColonne[ui->tableWidget->horizontalHeaderItem(x)->text()]->getTipoColonna().compare("Decimale") == 0 || mappaColonne[ui->tableWidget->horizontalHeaderItem(x)->text()]->getTipoColonna().compare("Data") == 0)
+                {
+                    copiaTabella.append(text);
+                }
+                else
+                {
+                    copiaTabella.append("\""+text+"\"");
+                }
 
-                copiaTabella.append("\""+text+"\"");
                 copiaTabella.append('\t');
             }
         }
         copiaTabella.append('\n');
+    }
+    qInfo() << "Dati copiati in memoria";
+    ui->statusbar->showMessage("Dati copiati in memoria.", 5000);
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(copiaTabella);
 
-        // CICLO SU RIGHE SELEZIONATE
-        for(int y = q.begin()->topRow(); y <= q.begin()->bottomRow(); y++)
-        {
-            for(int x = 0; x < ui->tableWidget->columnCount(); x++)
-            {
-                if(!ui->tableWidget->isColumnHidden(x))
-                {
-                    QString text =  ui->tableWidget->item(y,x)->text();
-                    if(mappaColonne[ui->tableWidget->horizontalHeaderItem(x)->text()]->getTipoColonna().compare("Decimale") == 0 || mappaColonne[ui->tableWidget->horizontalHeaderItem(x)->text()]->getTipoColonna().compare("Data") == 0)
-                    {
-                        copiaTabella.append(text);
-                    }
-                    else
-                    {
-                        copiaTabella.append("\""+text+"\"");
-                    }
+}
 
-                    copiaTabella.append('\t');
-                }
-            }
-            copiaTabella.append('\n');
-        }
-        qInfo() << "Dati copiati in memoria";
-        QClipboard *clipboard = QApplication::clipboard();
-        clipboard->setText(copiaTabella);
+
+void MainWindow::on_actionCopia_triggered()
+{
+    copiaSelezione();
+}
+
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (event->matches(QKeySequence::Copy))
+    {
+        copiaSelezione();
 
     }
 }
@@ -558,12 +581,16 @@ void MainWindow::on_action_Log_In_triggered()
     SignInAdmin signInAdmin(db);
     signInAdmin.setModal(true);
     signInAdmin.exec();
+
+    adminLabel->setText(globalAdmin?"🟡 Modalità Amministratore":"🟢 Modalità utente");
 }
 
 
 void MainWindow::on_action_Log_Out_triggered()
 {
     globalAdmin = 0;
+
+    adminLabel->setText(globalAdmin?"🟡 Modalità Amministratore":"🟢 Modalità utente");
 }
 
 
@@ -597,4 +624,7 @@ void MainWindow::on_prog_linkActivated(const QString &link)
 {
 
 }
+
+
+
 

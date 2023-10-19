@@ -35,11 +35,13 @@ void SignInAdmin::on_pushButton_clicked()
             if(pwdCriptata.compare(qry->value("Valore").toString())==0)
             {
                 globalAdmin = 1;
-                qInfo() << "Grande Admni!";
+                qInfo() << "Grande Admin!";
             }
         }
     }
     db.close();
-    this->close();
+    if(globalAdmin) this->close();
+    else ui->lineEdit->setText("");
+
 }
 

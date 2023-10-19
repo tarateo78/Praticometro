@@ -292,6 +292,9 @@
         </item>
         <item>
          <widget class="QTableWidget" name="tableWidget">
+          <property name="contextMenuPolicy">
+           <enum>Qt::NoContextMenu</enum>
+          </property>
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
           </property>
@@ -381,7 +384,14 @@
     <addaction name="action_Log_In"/>
     <addaction name="action_Log_Out"/>
    </widget>
+   <widget class="QMenu" name="menuModifica">
+    <property name="title">
+     <string>Modifica</string>
+    </property>
+    <addaction name="actionCopia"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menuModifica"/>
    <addaction name="menuStrumenti"/>
    <addaction name="menuAdmin"/>
   </widget>
@@ -451,6 +461,11 @@
    </property>
    <property name="toolTip">
     <string>Esporta csv completo</string>
+   </property>
+  </action>
+  <action name="actionCopia">
+   <property name="text">
+    <string>Copia</string>
    </property>
   </action>
  </widget>
