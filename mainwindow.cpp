@@ -381,28 +381,32 @@ void MainWindow::copiaSelezione()
     {
         ui->statusbar->showMessage("Attenzione: Nessun dato selezionato.", 5000);
         return;
-}
+    }
 
     // CICLO SU TITOLI COLONNE
+    bool primo = true;
     for(int x = 0; x < ui->tableWidget->columnCount(); x++)
     {
         if(!ui->tableWidget->isColumnHidden(x))
         {
+            if(!primo) copiaTabella.append('\t');
+            primo = false;
             QString text = ui->tableWidget->horizontalHeaderItem(x)->text();
-
             copiaTabella.append("\""+text+"\"");
-            copiaTabella.append('\t');
         }
     }
     copiaTabella.append('\n');
 
     // CICLO SU RIGHE SELEZIONATE
+    primo = true;
     for(int y = q.begin()->topRow(); y <= q.begin()->bottomRow(); y++)
     {
         for(int x = 0; x < ui->tableWidget->columnCount(); x++)
         {
             if(!ui->tableWidget->isColumnHidden(x))
             {
+                if(!primo) copiaTabella.append('\t');
+                primo = false;
                 QString text =  ui->tableWidget->item(y,x)->text();
                 if(mappaColonne[ui->tableWidget->horizontalHeaderItem(x)->text()]->getTipoColonna().compare("Decimale") == 0 || mappaColonne[ui->tableWidget->horizontalHeaderItem(x)->text()]->getTipoColonna().compare("Data") == 0)
                 {
@@ -413,7 +417,6 @@ void MainWindow::copiaSelezione()
                     copiaTabella.append("\""+text+"\"");
                 }
 
-                copiaTabella.append('\t');
             }
         }
         copiaTabella.append('\n');
