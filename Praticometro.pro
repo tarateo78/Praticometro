@@ -9,7 +9,6 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    cartellaprogetti.cpp \
     colonna.cpp \
     colore.cpp \
     connessionedb.cpp \
@@ -17,6 +16,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     monitoraggi.cpp \
+    personalizza.cpp \
     praticaobject.cpp \
     schedadettaglio.cpp \
     signinadmin.cpp \
@@ -24,13 +24,13 @@ SOURCES += \
     verificaaggiornamenti.cpp
 
 HEADERS += \
-    cartellaprogetti.h \
     colonna.h \
     colore.h \
     connessionedb.h \
     globalobject.h \
     mainwindow.h \
     monitoraggi.h \
+    personalizza.h \
     praticaobject.h \
     schedadettaglio.h \
     signinadmin.h \
@@ -38,9 +38,9 @@ HEADERS += \
     verificaaggiornamenti.h
 
 FORMS += \
-    cartellaprogetti.ui \
     mainwindow.ui \
     monitoraggi.ui \
+    personalizza.ui \
     schedadettaglio.ui \
     signinadmin.ui \
     statopratiche.ui \

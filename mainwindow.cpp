@@ -4,7 +4,7 @@
 #include "connessionedb.h"
 #include "schedadettaglio.h"
 #include "statopratiche.h"
-#include "cartellaprogetti.h"
+#include "personalizza.h"
 #include "signinadmin.h"
 #include "verificaaggiornamenti.h"
 #include "monitoraggi.h"
@@ -493,9 +493,9 @@ void MainWindow::on_actionGestione_Stato_Pratiche_triggered()
 
 void MainWindow::on_actionCartella_Progetti_triggered()
 {
-    CartellaProgetti cartellaProgetti(db);
-    cartellaProgetti.setModal(true);
-    cartellaProgetti.exec();
+    Personalizza personalizza(db);
+    personalizza.setModal(true);
+    personalizza.exec();
 }
 
 

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Praticometro</string>
+   <string>Elenco Progetti</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -366,7 +366,6 @@
      <string>Strumenti</string>
     </property>
     <addaction name="actionGestione_Stato_Pratiche"/>
-    <addaction name="actionCartella_Progetti"/>
     <addaction name="action_Verifica_Aggiornamenti"/>
     <addaction name="action_Monitoraggi"/>
    </widget>
@@ -389,6 +388,7 @@
      <string>Modifica</string>
     </property>
     <addaction name="actionCopia"/>
+    <addaction name="actionCartella_Progetti"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuModifica"/>
@@ -407,7 +407,7 @@
      <normaloff>:/icone/icone_32/cartella.png</normaloff>:/icone/icone_32/cartella.png</iconset>
    </property>
    <property name="text">
-    <string>Cartella Progetti...</string>
+    <string>Personalizza...</string>
    </property>
   </action>
   <action name="actionEsporta_csv">

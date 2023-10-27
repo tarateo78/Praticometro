@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CartellaProgetti</class>
- <widget class="QDialog" name="CartellaProgetti">
+ <class>Personalizza</class>
+ <widget class="QDialog" name="Personalizza">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>719</width>
-    <height>156</height>
+    <height>183</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Cartella Progetti</string>
+   <string>Personalizza</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>

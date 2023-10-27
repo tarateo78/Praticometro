@@ -1,14 +1,14 @@
-#include "cartellaprogetti.h"
-#include "ui_cartellaprogetti.h"
+#include "personalizza.h"
+#include "ui_personalizza.h"
 #include "globalobject.h"
 
 #include <QMessageBox>
 #include <QSqlQuery>
 
 
-CartellaProgetti::CartellaProgetti(QSqlDatabase db, QWidget *parent) :
+Personalizza::Personalizza(QSqlDatabase db, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::CartellaProgetti)
+    ui(new Ui::Personalizza)
 {
     ui->setupUi(this);
         this->db = db;
@@ -16,12 +16,12 @@ CartellaProgetti::CartellaProgetti(QSqlDatabase db, QWidget *parent) :
 
 }
 
-CartellaProgetti::~CartellaProgetti()
+Personalizza::~Personalizza()
 {
     delete ui;
 }
 
-void CartellaProgetti::on_pushButton_2_clicked()
+void Personalizza::on_pushButton_2_clicked()
 {
     if(!globalAdmin)
     {
@@ -38,7 +38,7 @@ void CartellaProgetti::on_pushButton_2_clicked()
 }
 
 
-QString CartellaProgetti::getUtenteWin()
+QString Personalizza::getUtenteWin()
 {
     // GET UTENTE WINDOWS
     QString name = qgetenv("USER");
@@ -49,7 +49,7 @@ QString CartellaProgetti::getUtenteWin()
 }
 
 
-void CartellaProgetti::on_pushButton_clicked()
+void Personalizza::on_pushButton_clicked()
 {
     if(!db.isOpen()) db.open();
     globalPathProgetti = ui->lineEdit->text();
