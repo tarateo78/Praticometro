@@ -19,5 +19,7 @@
         <file>icone_32/blu.png</file>
         <file>icone_32/cassetti.png</file>
         <file>icone_32/verde.png</file>
+        <file>icone_32/copia.png</file>
+        <file>icone_32/impostazioni.png</file>
     </qresource>
 </RCC>

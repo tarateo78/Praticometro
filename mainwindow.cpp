@@ -68,6 +68,9 @@ MainWindow::MainWindow(QWidget *parent)
     adminLabel = new QLabel(globalAdmin?"🟡 Modalità Amministratore":"🟢 Modalità utente");
     ui->statusbar->addPermanentWidget(adminLabel);
 
+    // DISABILITA MENU > ESCI
+    ui->action_Log_Out->setEnabled(false);
+
     db.close();
     qInfo() << "_Fine main!";
 }
@@ -585,7 +588,14 @@ void MainWindow::on_action_Log_In_triggered()
     signInAdmin.setModal(true);
     signInAdmin.exec();
 
+    // STATUSBAR
     adminLabel->setText(globalAdmin?"🟡 Modalità Amministratore":"🟢 Modalità utente");
+
+    // ABILITA/DISABILITA VOCE MENU
+    ui->action_Log_Out->setEnabled(true);
+    ui->action_Log_In->setEnabled(false);
+
+
 }
 
 
@@ -593,7 +603,13 @@ void MainWindow::on_action_Log_Out_triggered()
 {
     globalAdmin = 0;
 
+    // STATUSBAR
     adminLabel->setText(globalAdmin?"🟡 Modalità Amministratore":"🟢 Modalità utente");
+
+    // ABILITA/DISABILITA VOCE MENU
+    ui->action_Log_Out->setEnabled(false);
+    ui->action_Log_In->setEnabled(true);
+
 }
 
 
