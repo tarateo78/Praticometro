@@ -17,7 +17,9 @@ VerificaAggiornamenti::VerificaAggiornamenti(QSqlDatabase db, QWidget *parent) :
     this->db = db;
     qry = new QSqlQuery(db);
 
-    ui->pushButton_2->setToolTip("L'operazione impieghera molto tempo!");
+    ui->verifica->setToolTip("L'operazione impieghera molto tempo!");
+    if(!globalAdmin) ui->verifica->setEnabled(false);
+    if(!globalAdmin) ui->aggiorna->setEnabled(false);
     compilaTabella();
 }
 
@@ -179,15 +181,9 @@ void VerificaAggiornamenti::on_tableWidget_cellDoubleClicked(int row, int column
 }
 
 
-void VerificaAggiornamenti::on_pushButton_clicked()
+void VerificaAggiornamenti::on_aggiorna_clicked()
 {
     // AGGIORNA TUTTI I NFILE CON QUELLI EFFETTIVI
-
-    if(!globalAdmin)
-    {
-        QMessageBox::warning(this, "Attenzione!", "Devi essere Admin per poter effettuare questa operazione");
-        return;
-    }
 
     db.open();
     qryUpdate = new QSqlQuery(db);
@@ -199,16 +195,10 @@ void VerificaAggiornamenti::on_pushButton_clicked()
 }
 
 
-void VerificaAggiornamenti::on_pushButton_2_clicked()
+void VerificaAggiornamenti::on_verifica_clicked()
 {
 
     // EFFETUA CONTROLLO RICORSIVO
-
-    if(!globalAdmin)
-    {
-        QMessageBox::warning(this, "Attenzione!", "Devi essere Admin per poter effettuare questa operazione");
-        return;
-    }
 
     QDir root(globalPathProgetti);
     QFileInfoList elenco = root.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);

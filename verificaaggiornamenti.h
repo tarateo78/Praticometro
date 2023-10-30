@@ -26,9 +26,8 @@ public:
 private slots:
     void on_tableWidget_cellDoubleClicked(int row, int column);
 
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
+    void on_aggiorna_clicked();
+    void on_verifica_clicked();
 
 private:
     Ui::VerificaAggiornamenti *ui;
