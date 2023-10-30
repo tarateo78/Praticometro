@@ -14,6 +14,9 @@ StatoPratiche::StatoPratiche(QSqlDatabase db, QWidget *parent) :
     this->db = db;
     iconaX = "✖️";
 
+    if(!globalAdmin) ui->rimuovi->setEnabled(false);
+    popolaStatoMap();
+
     aggiorna();
 
 }
@@ -65,7 +68,7 @@ void StatoPratiche::compilaTabella()
     ui->tableWidget->setHorizontalHeaderLabels(hTable);
     ui->tableWidget->setColumnWidth(0, 70);
     ui->tableWidget->setColumnWidth(1, 500);
-    ui->tableWidget->setColumnWidth(2, 50);
+    ui->tableWidget->setColumnWidth(2, 130);
 
     int row = 0;
     foreach (QFileInfo file, elenco)
@@ -107,19 +110,19 @@ void StatoPratiche::compilaTabella()
         {
             if(map.value(list[0]) == 1)
             {
-                ui->tableWidget->setItem(row,2,new QTableWidgetItem("1"));
+                ui->tableWidget->setItem(row,2,new QTableWidgetItem(statoMap[map.value(list[0])]));
                 ui->tableWidget->item(row, 0)->setFont(fontBold);
                 ui->tableWidget->item(row, 1)->setFont(fontBold);
                 ui->tableWidget->item(row, 2)->setFont(fontBold);
             }
             else
             {
-                ui->tableWidget->setItem(row,2,new QTableWidgetItem("0"));
+                ui->tableWidget->setItem(row,2,new QTableWidgetItem(statoMap[map.value(list[0])]));
             }
         }
         else
         {
-            ui->tableWidget->setItem(row,2,new QTableWidgetItem(iconaX));
+            ui->tableWidget->setItem(row,2,new QTableWidgetItem(statoMap[2]));
             ui->tableWidget->item(row, 0)->setFont(fontItalic);
             ui->tableWidget->item(row, 1)->setFont(fontItalic);
             ui->tableWidget->item(row, 2)->setFont(fontItalic);
@@ -170,8 +173,15 @@ void StatoPratiche::aggiorna()
 
 }
 
+void StatoPratiche::popolaStatoMap()
+{
+    statoMap[0] = "Disattivo";
+    statoMap[1] = "Attivo / in corso";
+    statoMap[2] = "Non registrato";
+}
 
-void StatoPratiche::on_pushButton_clicked()
+
+void StatoPratiche::on_cambiaStato_clicked()
 {
     // CAMBIA STATO
 
@@ -192,7 +202,7 @@ void StatoPratiche::on_pushButton_clicked()
 
     if(db.open())
     {
-        if(itemIncorso->text().compare(iconaX) == 0)
+        if(itemIncorso->text().compare(statoMap[2]) == 0)
         {
             inserisciProgetto2DB();
             return;
@@ -203,7 +213,8 @@ void StatoPratiche::on_pushButton_clicked()
 
         qry->prepare("UPDATE Pratiche SET Incorso = :incorso WHERE Pratica = :pratica");
         qry->bindValue(":pratica", itemPratica->text());
-        qry->bindValue(":incorso", !itemIncorso->text().toInt());
+        int statoTmp = statoMap.key( itemIncorso->text() );
+        qry->bindValue(":incorso", !statoTmp);
 
         if(qry->exec())
         {
@@ -216,13 +227,8 @@ void StatoPratiche::on_pushButton_clicked()
 }
 
 
-void StatoPratiche::on_pushButton_2_clicked()
+void StatoPratiche::on_rimuovi_clicked()
 {
-    if(!globalAdmin)
-    {
-        QMessageBox::warning(this, "Attenzione!", "Devi essere Admin per poter effettuare questa operazione");
-        return;
-    }
 
     if(QMessageBox::question(this,"Attenzione","Cancellare i dati in modo definitivo?") == QMessageBox::Yes)
     {

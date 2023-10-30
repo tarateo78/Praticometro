@@ -17,13 +17,13 @@ public:
     ~StatoPratiche();
 
 private slots:
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
+    void on_cambiaStato_clicked();
+    void on_rimuovi_clicked();
 
 private:
     Ui::StatoPratiche *ui;
     QMap<QString, int> map;
+    QMap<int, QString> statoMap;
     QSqlDatabase db;
     QString iconaX;
     void popolaMap();
@@ -31,6 +31,7 @@ private:
     void inserisciProgetto2DB();
     void rimuoviProgetto2DB();
     void aggiorna();
+    void popolaStatoMap();
 };
 
 #endif // STATOPRATICHE_H

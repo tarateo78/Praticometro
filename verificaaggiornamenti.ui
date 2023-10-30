@@ -91,6 +91,13 @@
            </widget>
           </item>
           <item>
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Aggiornare il numero di file memorizzati nel database con quelli presenti effettivamente nelle cartelle su disco.</string>
