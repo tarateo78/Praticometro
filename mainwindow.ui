@@ -14,7 +14,8 @@
    <string>Elenco Progetti</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="accessories-calculator"/>
+   <iconset theme="accessories-calculator">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -416,7 +417,10 @@
      <normaloff>:/icone/icone_32/impostazioni.png</normaloff>:/icone/icone_32/impostazioni.png</iconset>
    </property>
    <property name="text">
-    <string>Personalizza...</string>
+    <string>Impostazioni...</string>
+   </property>
+   <property name="toolTip">
+    <string>Impostazioni</string>
    </property>
   </action>
   <action name="actionEsporta_csv">

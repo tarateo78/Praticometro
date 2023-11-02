@@ -13,10 +13,10 @@ SOURCES += \
     colore.cpp \
     connessionedb.cpp \
     globalobject.cpp \
+    impostazioni.cpp \
     main.cpp \
     mainwindow.cpp \
     monitoraggi.cpp \
-    personalizza.cpp \
     praticaobject.cpp \
     schedadettaglio.cpp \
     signinadmin.cpp \
@@ -28,9 +28,9 @@ HEADERS += \
     colore.h \
     connessionedb.h \
     globalobject.h \
+    impostazioni.h \
     mainwindow.h \
     monitoraggi.h \
-    personalizza.h \
     praticaobject.h \
     schedadettaglio.h \
     signinadmin.h \
@@ -38,9 +38,9 @@ HEADERS += \
     verificaaggiornamenti.h
 
 FORMS += \
+    impostazioni.ui \
     mainwindow.ui \
     monitoraggi.ui \
-    personalizza.ui \
     schedadettaglio.ui \
     signinadmin.ui \
     statopratiche.ui \
