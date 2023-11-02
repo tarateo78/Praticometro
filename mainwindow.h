@@ -65,5 +65,6 @@ private:
     void compilaTabellaCompleta();
     void eseguiQuerySelect();
     void keyPressEvent(QKeyEvent *event);
+    int verificaUtente();
 };
 #endif // MAINWINDOW_H

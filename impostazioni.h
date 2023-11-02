@@ -15,16 +15,16 @@ class Impostazioni : public QDialog
 public:
     explicit Impostazioni(QSqlDatabase db, QWidget *parent = nullptr);
     ~Impostazioni();
+    static QString getUtenteWin();
 
 private slots:
-    void on_pushButton_2_clicked();
+    void on_salvaBtn_clicked();
 
-    void on_pushButton_clicked();
+    void on_criptaBtn_clicked();
 
 private:
     Ui::Impostazioni *ui;
     QSqlDatabase db;
-    QString getUtenteWin();
 };
 
 #endif // IMPOSTAZIONI_H

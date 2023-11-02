@@ -1,6 +1,7 @@
 #include "impostazioni.h"
 #include "ui_impostazioni.h"
 #include "globalobject.h"
+#include "criptazione.h"
 
 #include <QMessageBox>
 #include <QSqlQuery>
@@ -12,32 +13,27 @@ Impostazioni::Impostazioni(QSqlDatabase db, QWidget *parent) :
 {
     ui->setupUi(this);
         this->db = db;
-    ui->lineEdit->setText(globalPathProgetti);
-    ui->label_2->setText(globalPathDB);
-    ui->label_3->setText(getUtenteWin());
+    ui->cartellaProgettiEdit->setText(globalPathProgetti);
+    ui->utenteEdit->setText(getUtenteWin());
+     ui->generaGroup->setVisible(false);
 
+    if(globalAdmin)
+    {
+        ui->cartellaProgettiEdit->setEnabled(true);
+        ui->fileEdit->setText(".\\setup.zip (semplice file di testo)");
+        ui->databaseEdit->setText(globalPathDB);
+        ui->salvaBtn->setEnabled(true);
+        ui->generaGroup->setVisible(true);
+    }
 }
+
+
 
 Impostazioni::~Impostazioni()
 {
     delete ui;
 }
 
-void Impostazioni::on_pushButton_2_clicked()
-{
-//    if(!globalAdmin)
-//    {
-//        QMessageBox::warning(this, "Attenzione!", "Devi essere Admin per poter effettuare questa operazione");
-//        return;
-//    }
-
-    ui->label_2->setText("db: " + globalPathDB);
-
-    ui->label_3->setText("user: " + getUtenteWin());
-
-    ui->pushButton->setEnabled(true);
-    ui->lineEdit->setEnabled(true);
-}
 
 
 QString Impostazioni::getUtenteWin()
@@ -51,10 +47,11 @@ QString Impostazioni::getUtenteWin()
 }
 
 
-void Impostazioni::on_pushButton_clicked()
+
+void Impostazioni::on_salvaBtn_clicked()
 {
     if(!db.isOpen()) db.open();
-    globalPathProgetti = ui->lineEdit->text();
+    globalPathProgetti = ui->cartellaProgettiEdit->text();
     if(db.isOpen())
     {
         QSqlQuery *qry = new QSqlQuery(db);
@@ -64,5 +61,11 @@ void Impostazioni::on_pushButton_clicked()
     }
     db.close();
     this->close();
+}
+
+
+void Impostazioni::on_criptaBtn_clicked()
+{
+    ui->testoCriptatoEdit->setPlainText( Criptazione::cripta512( ui->testoEdit->text() ));
 }
 

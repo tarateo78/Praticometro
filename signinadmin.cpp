@@ -1,5 +1,7 @@
 #include "signinadmin.h"
 #include "ui_signinadmin.h"
+#include "criptazione.h"
+
 
 #include <QSqlQuery>
 
@@ -20,11 +22,8 @@ SignInAdmin::~SignInAdmin()
 
 void SignInAdmin::on_pushButton_clicked()
 {
-    QByteArray pwdChiara = ui->lineEdit->text().toUtf8();
-    QCryptographicHash *pwd = new QCryptographicHash(QCryptographicHash::Sha512);
-    pwd->addData(pwdChiara);
-    QByteArray cript = pwd->result();
-    QString pwdCriptata = cript.toHex();
+
+    QString pwdCriptata = Criptazione::cripta512( ui->lineEdit->text() );
 
     db.open();
     QSqlQuery *qry = new QSqlQuery(db);

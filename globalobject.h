@@ -14,6 +14,8 @@ extern QString globalPathProgetti;
 extern int globalAdmin;
 extern int globalCount;
 
+extern QString globalKey;
+
 
 #endif // GLOBALOBJECT_H
 

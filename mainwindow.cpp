@@ -9,6 +9,7 @@
 #include "verificaaggiornamenti.h"
 #include "monitoraggi.h"
 #include "colore.h"
+#include "criptazione.h"
 
 #include <QCheckBox>
 #include <QFileInfo>
@@ -16,6 +17,7 @@
 #include <QSqlRecord>
 #include <QDateTime>
 #include <QClipboard>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -30,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     iconaTempo = "⏳";
     iconaAppunto = "📌";
 
+
     // EFFETTUA VERIFICHE CONTROLLO FILE E PATH DATABASE
     if(!verifichePath())
         return;
@@ -38,17 +41,24 @@ MainWindow::MainWindow(QWidget *parent)
     db = conn.getConn();
     qry = new QSqlQuery(db);
 
+
+    // VERIFICA UTENTE
+    if(verificaUtente())
+    {
+        ui->statusbar->showMessage("Utente abilitato.", 3000);
+    }
+    else
+    {
+        qInfo() << "Utente non abilitato!";
+        ui->statusbar->showMessage("Utente non abilitato.", 5000);
+        QMessageBox::critical(this,"ERRORE","Utente non abilitato.");
+        exit(4);
+
+    }
+
     // DISABILITA EDIT TABELLA
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    // POPOLA STATUSBAR
-    //    ui->statusbar->addWidget(ui->legenda);
-    //    ui->statusbar->addWidget(ui->prog);
-    //    ui->statusbar->addWidget(ui->label_2);
-    //    ui->statusbar->addWidget(ui->lavoriInCorso);
-    //    ui->statusbar->addWidget(ui->label_3);
-    //    ui->statusbar->addWidget(ui->creFatto);
-    //    ui->statusbar->addWidget(ui->label_4);
 
     // POPOLA COMBO
     ui->comboBox->addItem("Tutti");
@@ -79,6 +89,35 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+
+int MainWindow::verificaUtente()
+{
+//    QByteArray user = globalKey.toUtf8() + Impostazioni::getUtenteWin().toUtf8();
+//    QCryptographicHash *criptoHash = new QCryptographicHash(QCryptographicHash::Sha512);
+//    criptoHash->addData(user);
+//    QByteArray cript = criptoHash->result();
+//    QString userCriptato = cript.toHex();
+
+    QString userCriptato = Criptazione::cripta512( Impostazioni::getUtenteWin() );
+
+    db.open();
+    QSqlQuery *qry = new QSqlQuery(db);
+    bool controllo = false;
+    if(qry->exec("SELECT * FROM Utenti;"))
+    {
+        while(qry->next())
+        {
+            if(userCriptato.compare(qry->value("Utente").toString())==0)
+            {
+                controllo = true;
+            }
+        }
+    }
+    db.close();
+
+    return controllo;
 }
 
 
@@ -592,9 +631,11 @@ void MainWindow::on_action_Log_In_triggered()
     adminLabel->setText(globalAdmin?"🟡 Modalità Amministratore":"🟢 Modalità utente");
 
     // ABILITA/DISABILITA VOCE MENU
-    ui->action_Log_Out->setEnabled(true);
-    ui->action_Log_In->setEnabled(false);
-
+    if(globalAdmin)
+    {
+        ui->action_Log_Out->setEnabled(true);
+        ui->action_Log_In->setEnabled(false);
+    }
 
 }
 

@@ -12,6 +12,7 @@ SOURCES += \
     colonna.cpp \
     colore.cpp \
     connessionedb.cpp \
+    criptazione.cpp \
     globalobject.cpp \
     impostazioni.cpp \
     main.cpp \
@@ -27,6 +28,7 @@ HEADERS += \
     colonna.h \
     colore.h \
     connessionedb.h \
+    criptazione.h \
     globalobject.h \
     impostazioni.h \
     mainwindow.h \
