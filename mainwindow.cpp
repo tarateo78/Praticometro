@@ -78,7 +78,7 @@ MainWindow::MainWindow(QWidget *parent)
     adminLabel = new QLabel(globalAdmin?"🟡 Modalità Amministratore":"🟢 Modalità utente");
     ui->statusbar->addPermanentWidget(adminLabel);
 
-    // DISABILITA MENU > ESCI
+    // DISABILITA MENU > LOGOUT
     ui->action_Log_Out->setEnabled(false);
 
     db.close();
