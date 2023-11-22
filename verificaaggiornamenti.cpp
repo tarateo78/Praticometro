@@ -52,7 +52,7 @@ void VerificaAggiornamenti::compilaTabella()
 
     // COMPILA LA TABELLA
 
-    ui->tableWidget->setColumnCount(5);
+    ui->tableWidget->setColumnCount(6);
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->clearContents();
 
@@ -62,14 +62,15 @@ void VerificaAggiornamenti::compilaTabella()
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     QStringList hTable;
-    hTable << "Pratica" << "Titolo" << "n. File" << "n. File effettivi" << "Stato";
+    hTable << "Pratica" << "Titolo" << "n. File" << "n. File effettivi" << "Data" << "Stato";
     ui->tableWidget->setHorizontalHeaderLabels(hTable);
 
     ui->tableWidget->setColumnWidth(0,70);
     ui->tableWidget->setColumnWidth(1,400);
     ui->tableWidget->setColumnWidth(2,80);
     ui->tableWidget->setColumnWidth(3,100);
-    ui->tableWidget->setColumnWidth(4,130);
+    ui->tableWidget->setColumnWidth(4,90);
+    ui->tableWidget->setColumnWidth(5,130);
 
     QFont fontBold;
     fontBold.setBold(true);
@@ -86,7 +87,8 @@ void VerificaAggiornamenti::compilaTabella()
         PraticaObject *p = new PraticaObject(qry->value("Pratica").toString(),
                                              qry->value("Titolo").toString(),
                                              qry->value("nFile").toInt(),
-                                             qry->value("nFileEffettivi").toInt());
+                                             qry->value("nFileEffettivi").toInt(),
+                                             qry->value("dataCheck").toString());
         mapPratiche[qry->value("Pratica").toString()] = p;
 
 
@@ -95,12 +97,14 @@ void VerificaAggiornamenti::compilaTabella()
         QTableWidgetItem *item3;
         QTableWidgetItem *item4;
         QTableWidgetItem *item5;
+        QTableWidgetItem *item6;
 
         item1 = new QTableWidgetItem();
         item2 = new QTableWidgetItem();
         item3 = new QTableWidgetItem();
         item4 = new QTableWidgetItem();
         item5 = new QTableWidgetItem();
+        item6 = new QTableWidgetItem();
 
         // COLORA LE RIGHE IN BASE ALLA FASE
         Colore colore;
@@ -110,6 +114,7 @@ void VerificaAggiornamenti::compilaTabella()
             item2->setBackground(colore.prog());
             item3->setBackground(colore.prog());
             item4->setBackground(colore.prog());
+            item5->setBackground(colore.prog());
         }
         if(qry->value("AvvioGara").toInt())
         {
@@ -117,6 +122,7 @@ void VerificaAggiornamenti::compilaTabella()
             item2->setBackground(colore.gara());
             item3->setBackground(colore.gara());
             item4->setBackground(colore.gara());
+            item5->setBackground(colore.gara());
         }
         if(qry->value("LavoriInCorso").toInt())
         {
@@ -124,6 +130,7 @@ void VerificaAggiornamenti::compilaTabella()
             item2->setBackground(colore.lavori());
             item3->setBackground(colore.lavori());
             item4->setBackground(colore.lavori());
+            item5->setBackground(colore.lavori());
         }
         if(qry->value("CreFatto").toInt())
         {
@@ -131,6 +138,7 @@ void VerificaAggiornamenti::compilaTabella()
             item2->setBackground(colore.cre());
             item3->setBackground(colore.cre());
             item4->setBackground(colore.cre());
+            item5->setBackground(colore.cre());
         }
 
 
@@ -143,16 +151,17 @@ void VerificaAggiornamenti::compilaTabella()
         else
         {
             stato = iconaEscalmativo + " AGGIORNARE";
-            item5->setForeground(QColor(255, 0, 0));
-            item5->setFont(QFont(fontBold));
-            item5->setTextAlignment(Qt::AlignCenter);
+            item6->setForeground(QColor(255, 0, 0));
+            item6->setFont(QFont(fontBold));
+            item6->setTextAlignment(Qt::AlignCenter);
         }
 
         item1->setText(qry->value("Pratica").toString());
         item2->setText(qry->value("Titolo").toString());
         item3->setText(qry->value("nFile").toString());
         item4->setText(qry->value("nFileEffettivi").toString());
-        item5->setText(stato);
+        item5->setText(qry->value("DataCheck").toString());
+        item6->setText(stato);
 
         ui->tableWidget->insertRow(row);
 
@@ -161,6 +170,7 @@ void VerificaAggiornamenti::compilaTabella()
         ui->tableWidget->setItem(row,2,item3);
         ui->tableWidget->setItem(row,3,item4);
         ui->tableWidget->setItem(row,4,item5);
+        ui->tableWidget->setItem(row,5,item6);
 
         row++;
     }
@@ -185,13 +195,17 @@ void VerificaAggiornamenti::on_aggiorna_clicked()
 {
     // AGGIORNA TUTTI I NFILE CON QUELLI EFFETTIVI
 
+    QDate oggiData = QDate::currentDate();
+    QString oggiString = oggiData.toString("yyyy-MM-dd");
+
     db.open();
     qryUpdate = new QSqlQuery(db);
-    qryUpdate->prepare("UPDATE Pratiche SET nFile = nFileEffettivi WHERE inCorso = 1;");
+    qryUpdate->prepare("UPDATE Pratiche SET nFile = nFileEffettivi, DataCheck = '" + oggiString + "' WHERE inCorso = 1 AND nFile != nFileEffettivi;");
     qryUpdate->exec();
     db.close();
 
     compilaTabella();
+
 }
 
 
