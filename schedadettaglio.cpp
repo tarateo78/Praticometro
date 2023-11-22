@@ -395,11 +395,14 @@ void SchedaDettaglio::on_treeView_2_doubleClicked(const QModelIndex &index)
 }
 
 
-
-
-
 void SchedaDettaglio::on_pushButtonEsci_clicked()
 {
     this->close();
+}
+
+
+void SchedaDettaglio::on_aggiorna_clicked()
+{
+    qInfo() << "OK";
 }
 

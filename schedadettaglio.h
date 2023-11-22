@@ -36,6 +36,8 @@ private slots:
 
     void on_pushButtonEsci_clicked();
 
+    void on_aggiorna_clicked();
+
 private:
     Ui::SchedaDettaglio *ui;
     QSqlDatabase db;
