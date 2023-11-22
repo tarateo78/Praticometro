@@ -415,11 +415,15 @@ void SchedaDettaglio::on_aggiorna_clicked()
     QLineEdit *lEditFE = new QLineEdit(this);
     lEditFE = qobject_cast<QLineEdit*>(mapCampi["nFileEffettivi"]);
     QString nFileEffettivi = lEditFE->text();
+
+    QDateEdit *dEditD = new QDateEdit(this);
+    dEditD = qobject_cast<QDateEdit*>(mapCampi["DataCheck"]);
+
     if(nFile.compare(nFileEffettivi) != 0)
     {
-        qInfo() << "diversi";
         lEditF->setText(nFileEffettivi);
-
+        QDate miaData = QDate::currentDate();
+        dEditD->setDate(miaData);
     }
 }
 
