@@ -11,6 +11,7 @@
 #include <QCheckBox>
 #include <QDateEdit>
 #include <QFileSystemModel>
+#include <QMap>
 
 namespace Ui {
 class SchedaDettaglio;
@@ -27,15 +28,10 @@ public:
 private slots:
     void on_pushButton_clicked();
     void aggiungiCampoCambiato();
-
     void on_pushButton_2_clicked();
-
     void on_treeView_2_doubleClicked(const QModelIndex &index);
-
     void on_pushButtonSalvaEsci_clicked();
-
     void on_pushButtonEsci_clicked();
-
     void on_aggiorna_clicked();
 
 private:
@@ -43,6 +39,7 @@ private:
     QSqlDatabase db;
     QString pratica;
     QList<QWidget*> *campi;
+    QMap<QString, QWidget*> mapCampi;
     QList<QWidget*> *campiModificati;
     QString cartellaLavori;
 

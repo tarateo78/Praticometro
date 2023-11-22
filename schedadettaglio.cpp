@@ -46,6 +46,7 @@ void SchedaDettaglio::popolaCampi()
 
     QLocale ita = QLocale::Italian;
     campi = new QList<QWidget*>;
+    //mapCampi = new QMap<QString, QWidget*>;
     campiModificati = new QList<QWidget*>;
 
     if(!db.isOpen()) db.open();
@@ -80,6 +81,7 @@ void SchedaDettaglio::popolaCampi()
             tEdit->setObjectName(qry->value("NomeColonna").toString());
             //connect(tEdit, &QTextEdit::textChanged, this, &SchedaDettaglio::aggiungiCampoCambiato);
             campi->append(tEdit);
+            mapCampi.insert(qry->value("NomeColonna").toString(), tEdit);
             pubblicaCampo(qry->value("Categoria").toString(), label, tEdit);
         }
         else if(qry->value("TipoColonna").toString().compare("Testo")==0 ||
@@ -90,6 +92,7 @@ void SchedaDettaglio::popolaCampi()
             lEdit->setObjectName(qry->value("NomeColonna").toString());
             //connect(lEdit, &QLineEdit::textChanged, this, &SchedaDettaglio::aggiungiCampoCambiato);
             campi->append(lEdit);
+            mapCampi.insert(qry->value("NomeColonna").toString(), lEdit);
             pubblicaCampo(qry->value("Categoria").toString(), label, lEdit);
         }
         else if(qry->value("TipoColonna").toString().compare("Data")==0)
@@ -110,6 +113,7 @@ void SchedaDettaglio::popolaCampi()
             }
 
             campi->append(dEdit);
+            mapCampi.insert(qry->value("NomeColonna").toString(), dEdit);
             pubblicaCampo(qry->value("Categoria").toString(), label, dEdit);
         }
         else if(qry->value("TipoColonna").toString().compare("Decimale")==0)
@@ -122,6 +126,7 @@ void SchedaDettaglio::popolaCampi()
             dEdit->setObjectName(qry->value("NomeColonna").toString());
             //connect(lEdit, &QLineEdit::textChanged, this, &SchedaDettaglio::aggiungiCampoCambiato);
             campi->append(dEdit);
+            mapCampi.insert(qry->value("NomeColonna").toString(), dEdit);
             pubblicaCampo(qry->value("Categoria").toString(), label, dEdit);
         }
         else if(qry->value("TipoColonna").toString().compare("Bool")==0)
@@ -130,6 +135,7 @@ void SchedaDettaglio::popolaCampi()
             cBox->setChecked(qryPratica->value(qry->value("NomeColonna").toString()).toInt());
             cBox->setObjectName(qry->value("NomeColonna").toString());
             campi->append(cBox);
+            mapCampi.insert(qry->value("NomeColonna").toString(), cBox);
             pubblicaCampo(qry->value("Categoria").toString(), label, cBox);
         }
 
@@ -403,6 +409,17 @@ void SchedaDettaglio::on_pushButtonEsci_clicked()
 
 void SchedaDettaglio::on_aggiorna_clicked()
 {
-    qInfo() << "OK";
+    QLineEdit *lEditF = new QLineEdit(this);
+    lEditF = qobject_cast<QLineEdit*>(mapCampi["nFile"]);
+    QString nFile = lEditF->text();
+    QLineEdit *lEditFE = new QLineEdit(this);
+    lEditFE = qobject_cast<QLineEdit*>(mapCampi["nFileEffettivi"]);
+    QString nFileEffettivi = lEditFE->text();
+    if(nFile.compare(nFileEffettivi) != 0)
+    {
+        qInfo() << "diversi";
+        lEditF->setText(nFileEffettivi);
+
+    }
 }
 
