@@ -126,7 +126,7 @@
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>4</number>
+            <number>0</number>
            </property>
            <property name="elideMode">
             <enum>Qt::ElideNone</enum>
@@ -137,7 +137,7 @@
               <normaloff>:/icone/icone_32/squadra.png</normaloff>:/icone/icone_32/squadra.png</iconset>
             </attribute>
             <attribute name="title">
-             <string>Progetto</string>
+             <string>Prog</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <item>
@@ -239,7 +239,7 @@
            </widget>
            <widget class="QWidget" name="tabAltro">
             <attribute name="title">
-             <string>🚽Altro</string>
+             <string>📊Bdap</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_6">
              <item>
