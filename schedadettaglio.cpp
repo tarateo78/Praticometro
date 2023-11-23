@@ -28,11 +28,24 @@ SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidge
     pratica = praticaPassata;
 //    qInfo() << "Scheda dettaglio" << praticaPassata;
 
+
     settaCartellaLavori();
     popolaCampi();
     compilaTreeAtti();
     compilaTreePratica();
+    verificaAggiornamenti();
 
+}
+
+
+SchedaDettaglio::~SchedaDettaglio()
+{
+    delete ui;
+}
+
+
+void SchedaDettaglio::verificaAggiornamenti()
+{
     // Copiata da VerificaAggiornamenti compreso il metodo contaFile
     globalCount = 0;
     QDir rootBase(cartellaLavori);
@@ -42,15 +55,22 @@ SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidge
                 sub.fileName().contains("cantiere",  Qt::CaseInsensitive))
         contaFile(cartellaLavori + "\\" + sub.fileName());
     }
-    qInfo() << globalCount;
 
-    // ###################### CONTROLLA SE DIVERSO DA nFILE --> Alert
+    QLineEdit *lEditNumFileEff = qobject_cast<QLineEdit*>(mapCampi["nFileEffettivi"]);
+    lEditNumFileEff->setText(QString::number(globalCount));
+
+    // CONTROLLA SE DIVERSO DA nFILE
+    QLineEdit *lEditNumFile = qobject_cast<QLineEdit*>(mapCampi["nFile"]);
+    int nFile = lEditNumFile->text().toInt();
+
+    if(nFile != globalCount)
+    {
+        ui->tabWidget->setTabText(4, "Check❗️");
+        ui->listaFile->addItems(listaFile);
+    }
+
 }
 
-SchedaDettaglio::~SchedaDettaglio()
-{
-    delete ui;
-}
 
 
 void SchedaDettaglio::popolaCampi()
@@ -421,23 +441,26 @@ void SchedaDettaglio::on_pushButtonEsci_clicked()
 
 void SchedaDettaglio::on_aggiorna_clicked()
 {
-    QLineEdit *lEditF = new QLineEdit(this);
-    lEditF = qobject_cast<QLineEdit*>(mapCampi["nFile"]);
-    QString nFile = lEditF->text();
-    QLineEdit *lEditFE = new QLineEdit(this);
-    lEditFE = qobject_cast<QLineEdit*>(mapCampi["nFileEffettivi"]);
-    QString nFileEffettivi = lEditFE->text();
+    QLineEdit *lEditNumFile = new QLineEdit(this);
+    lEditNumFile = qobject_cast<QLineEdit*>(mapCampi["nFile"]);
+    QString nFile = lEditNumFile->text();
 
-    QDateEdit *dEditD = new QDateEdit(this);
-    dEditD = qobject_cast<QDateEdit*>(mapCampi["DataCheck"]);
+
+    QLineEdit *lEditNumFileEff = new QLineEdit(this);
+    lEditNumFileEff = qobject_cast<QLineEdit*>(mapCampi["nFileEffettivi"]);
+    QString nFileEffettivi = lEditNumFileEff->text();
+
+    QDateEdit *dEditDataCheck = new QDateEdit(this);
+    dEditDataCheck = qobject_cast<QDateEdit*>(mapCampi["DataCheck"]);
 
     if(nFile.compare(nFileEffettivi) != 0)
     {
-        lEditF->setText(nFileEffettivi);
+        lEditNumFile->setText(nFileEffettivi);
         QDate miaData = QDate::currentDate();
-        dEditD->setDate(miaData);
+        dEditDataCheck->setDate(miaData);
     }
 }
+
 
 void SchedaDettaglio::contaFile(QString cartella)
 {
@@ -451,6 +474,17 @@ void SchedaDettaglio::contaFile(QString cartella)
         if(entita.isDir())
             contaFile(cartella + "\\" + entita.fileName());
         if(entita.isFile())
+        {
             globalCount++;
+            QDateEdit *dEditDataCheck = qobject_cast<QDateEdit*>(mapCampi["DataCheck"]);
+            QDate dataRegistrata = QDate::fromString(dEditDataCheck->text(), "dd/MM/yyyy");
+
+            if(entita.lastModified().date() > dataRegistrata)
+            {
+                QString pathTmp = cartella + "\\" + entita.fileName();
+                pathTmp = pathTmp.replace(cartellaLavori, "");
+                listaFile.append(pathTmp);
+            }
+        }
     }
 }

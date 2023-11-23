@@ -33,6 +33,7 @@ private slots:
     void on_pushButtonSalvaEsci_clicked();
     void on_pushButtonEsci_clicked();
     void on_aggiorna_clicked();
+    void verificaAggiornamenti();
 
 private:
     Ui::SchedaDettaglio *ui;
@@ -42,6 +43,7 @@ private:
     QMap<QString, QWidget*> mapCampi;
     QList<QWidget*> *campiModificati;
     QString cartellaLavori;
+    QList<QString> listaFile;
 
     void popolaCampi();
     void pubblicaCampo(QString, QLabel *, QWidget *);

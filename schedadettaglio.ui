@@ -30,8 +30,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1330</width>
-        <height>680</height>
+        <width>1326</width>
+        <height>676</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -231,6 +231,9 @@
                 </spacer>
                </item>
               </layout>
+             </item>
+             <item>
+              <widget class="QListWidget" name="listaFile"/>
              </item>
             </layout>
            </widget>

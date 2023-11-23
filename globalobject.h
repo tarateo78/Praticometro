@@ -2,6 +2,7 @@
 #define GLOBALOBJECT_H
 
 #include <QString>
+#include <QList>
 
 class GlobalObject
 {
