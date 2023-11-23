@@ -50,6 +50,7 @@ private:
     void settaCartellaLavori();
     void impostaTabCorrente(int);
     void salvaModifiche();
+    void contaFile(QString);
 };
 
 #endif // SCHEDADETTAGLIO_H

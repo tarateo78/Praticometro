@@ -25,7 +25,6 @@ public:
 
 private slots:
     void on_tableWidget_cellDoubleClicked(int row, int column);
-
     void on_aggiorna_clicked();
     void on_verifica_clicked();
 

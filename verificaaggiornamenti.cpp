@@ -45,6 +45,7 @@ void VerificaAggiornamenti::contaFile(QString cartella)
 }
 
 
+
 void VerificaAggiornamenti::compilaTabella()
 {
 
@@ -75,11 +76,9 @@ void VerificaAggiornamenti::compilaTabella()
     QFont fontBold;
     fontBold.setBold(true);
 
-
     if(!db.isOpen()) db.open();
     qry->prepare("SELECT * FROM Pratiche WHERE Incorso = 1 ORDER BY Pratica DESC;");
     qry->exec();
-
 
     int row = 0;
     while(qry->next())
@@ -90,7 +89,6 @@ void VerificaAggiornamenti::compilaTabella()
                                              qry->value("nFileEffettivi").toInt(),
                                              qry->value("dataCheck").toString());
         mapPratiche[qry->value("Pratica").toString()] = p;
-
 
         QTableWidgetItem *item1;
         QTableWidgetItem *item2;
@@ -140,7 +138,6 @@ void VerificaAggiornamenti::compilaTabella()
             item4->setBackground(colore.cre());
             item5->setBackground(colore.cre());
         }
-
 
         QString stato = "";
         if(qry->value("nFile").toInt() == qry->value("nFileEffettivi").toInt())

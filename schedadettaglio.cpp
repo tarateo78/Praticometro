@@ -33,6 +33,18 @@ SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidge
     compilaTreeAtti();
     compilaTreePratica();
 
+    // Copiata da VerificaAggiornamenti compreso il metodo contaFile
+    globalCount = 0;
+    QDir rootBase(cartellaLavori);
+    QFileInfoList elencoBase = rootBase.entryInfoList(QDir::Filter::AllEntries | QDir::Filter::NoDotAndDotDot);
+    foreach (QFileInfo sub, elencoBase) {
+        if(sub.fileName().contains("amministrativi",  Qt::CaseInsensitive) ||
+                sub.fileName().contains("cantiere",  Qt::CaseInsensitive))
+        contaFile(cartellaLavori + "\\" + sub.fileName());
+    }
+    qInfo() << globalCount;
+
+    // ###################### CONTROLLA SE DIVERSO DA nFILE --> Alert
 }
 
 SchedaDettaglio::~SchedaDettaglio()
@@ -427,3 +439,18 @@ void SchedaDettaglio::on_aggiorna_clicked()
     }
 }
 
+void SchedaDettaglio::contaFile(QString cartella)
+{
+    // RICORSIVO
+    QDir root(cartella);
+    QFileInfoList elenco = root.entryInfoList(QDir::Filter::AllEntries | QDir::Filter::NoDotAndDotDot);
+
+
+    foreach (QFileInfo entita, elenco)
+    {
+        if(entita.isDir())
+            contaFile(cartella + "\\" + entita.fileName());
+        if(entita.isFile())
+            globalCount++;
+    }
+}
