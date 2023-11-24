@@ -28,7 +28,7 @@
           <item>
            <widget class="QGroupBox" name="groupBox_3">
             <property name="title">
-             <string>Filtra</string>
+             <string>Filtri</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_7">
              <item>
@@ -139,13 +139,19 @@
           <item>
            <widget class="QGroupBox" name="groupBox">
             <property name="title">
-             <string>Legenda</string>
+             <string>Fase in corso</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout">
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_8">
                <item>
                 <widget class="QCheckBox" name="coloraCheck">
+                 <property name="minimumSize">
+                  <size>
+                   <width>100</width>
+                   <height>0</height>
+                  </size>
+                 </property>
                  <property name="text">
                   <string>Colora</string>
                  </property>
@@ -155,30 +161,26 @@
                 </widget>
                </item>
                <item>
-                <spacer name="horizontalSpacer_2">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_3">
                  <item>
                   <widget class="QLabel" name="prog">
                    <property name="minimumSize">
                     <size>
                      <width>20</width>
-                     <height>0</height>
+                     <height>15</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>15</height>
                     </size>
                    </property>
                    <property name="frameShape">
-                    <enum>QFrame::Box</enum>
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
                    </property>
                    <property name="text">
                     <string/>
@@ -189,12 +191,12 @@
                   <widget class="QLabel" name="label_2">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>60</width>
                      <height>0</height>
                     </size>
                    </property>
                    <property name="text">
-                    <string>Progettazione</string>
+                    <string>Prog</string>
                    </property>
                   </widget>
                  </item>
@@ -203,11 +205,20 @@
                    <property name="minimumSize">
                     <size>
                      <width>20</width>
-                     <height>0</height>
+                     <height>15</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>15</height>
                     </size>
                    </property>
                    <property name="frameShape">
-                    <enum>QFrame::Box</enum>
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
                    </property>
                    <property name="text">
                     <string/>
@@ -218,12 +229,12 @@
                   <widget class="QLabel" name="label_5">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>60</width>
                      <height>0</height>
                     </size>
                    </property>
                    <property name="text">
-                    <string>Gara in corso</string>
+                    <string>Gara</string>
                    </property>
                   </widget>
                  </item>
@@ -232,11 +243,20 @@
                    <property name="minimumSize">
                     <size>
                      <width>20</width>
-                     <height>0</height>
+                     <height>15</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>15</height>
                     </size>
                    </property>
                    <property name="frameShape">
-                    <enum>QFrame::Box</enum>
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
                    </property>
                    <property name="text">
                     <string/>
@@ -247,12 +267,12 @@
                   <widget class="QLabel" name="label_3">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>60</width>
                      <height>0</height>
                     </size>
                    </property>
                    <property name="text">
-                    <string>Lavori in corso</string>
+                    <string>Lavori</string>
                    </property>
                   </widget>
                  </item>
@@ -261,11 +281,20 @@
                    <property name="minimumSize">
                     <size>
                      <width>20</width>
-                     <height>0</height>
+                     <height>15</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>15</height>
                     </size>
                    </property>
                    <property name="frameShape">
-                    <enum>QFrame::Box</enum>
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
                    </property>
                    <property name="text">
                     <string/>
@@ -276,12 +305,12 @@
                   <widget class="QLabel" name="label_4">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>60</width>
                      <height>0</height>
                     </size>
                    </property>
                    <property name="text">
-                    <string>Cre fatto</string>
+                    <string>Cre</string>
                    </property>
                   </widget>
                  </item>
@@ -313,13 +342,13 @@
        <widget class="QGroupBox" name="groupBoxColonne">
         <property name="minimumSize">
          <size>
-          <width>180</width>
+          <width>200</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>190</width>
+          <width>200</width>
           <height>16777215</height>
          </size>
         </property>
@@ -337,7 +366,7 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>158</width>
+              <width>178</width>
               <height>599</height>
              </rect>
             </property>
@@ -429,7 +458,7 @@
      <normaloff>:/icone/icone_32/esporta.png</normaloff>:/icone/icone_32/esporta.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Esporta csv</string>
+    <string>&amp;Esporta csv filtrato</string>
    </property>
   </action>
   <action name="action_Log_In">

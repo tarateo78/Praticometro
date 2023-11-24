@@ -440,9 +440,9 @@ void MainWindow::copiaSelezione()
     copiaTabella.append('\n');
 
     // CICLO SU RIGHE SELEZIONATE
-    primo = true;
     for(int y = q.begin()->topRow(); y <= q.begin()->bottomRow(); y++)
     {
+        primo = true;
         for(int x = 0; x < ui->tableWidget->columnCount(); x++)
         {
             if(!ui->tableWidget->isColumnHidden(x))
@@ -581,7 +581,7 @@ void MainWindow::on_actionEsporta_csv_triggered()
             nRecord++;
         }
     }
-    csv.append("\n\r");
+    csv.append("\n");
     stream << csv;
     csv.clear();
 
@@ -598,7 +598,7 @@ void MainWindow::on_actionEsporta_csv_triggered()
             csv.append( qry->value(listaHead[i]).toString().replace("\n"," # "));
         }
 
-        csv.append("\n\r");
+        csv.append("\n");
 
         stream << csv;
         csv.clear();
