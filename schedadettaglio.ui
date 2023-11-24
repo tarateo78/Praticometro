@@ -30,8 +30,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1326</width>
-        <height>676</height>
+        <width>1330</width>
+        <height>680</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -126,7 +126,7 @@
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>5</number>
            </property>
            <property name="elideMode">
             <enum>Qt::ElideNone</enum>
@@ -245,7 +245,7 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_7">
                <item>
-                <layout class="QFormLayout" name="formAltro"/>
+                <layout class="QFormLayout" name="formBdap"/>
                </item>
               </layout>
              </item>
@@ -262,22 +262,12 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_3">
               <item>
-               <spacer name="horizontalSpacer">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
+               <widget class="QTreeView" name="treeView_2"/>
               </item>
               <item>
                <widget class="QPushButton" name="pushButton_2">
                 <property name="text">
-                 <string>Apri Cartella</string>
+                 <string>Apri</string>
                 </property>
                 <property name="icon">
                  <iconset resource="Immagini.qrc">
@@ -286,9 +276,6 @@
                </widget>
               </item>
              </layout>
-            </item>
-            <item>
-             <widget class="QTreeView" name="treeView_2"/>
             </item>
            </layout>
           </widget>

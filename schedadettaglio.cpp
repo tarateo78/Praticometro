@@ -385,7 +385,7 @@ void SchedaDettaglio::pubblicaCampo(QString cat, QLabel *lab, QWidget *wid)
     }
     else
     {
-        ui->formAltro->addRow(lab, wid);
+        ui->formBdap->addRow(lab, wid);
     }
 
 }
