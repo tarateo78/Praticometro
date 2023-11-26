@@ -7,8 +7,9 @@
 #include <QProcess>
 #include <QLocale>
 #include <QDesktopServices>
-
-
+#include <QMessageBox>
+#include <QPainter>
+#include <QPrinter>
 
 
 SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidget *parent) :
@@ -21,9 +22,12 @@ SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidge
     QGroupBox *b = ui->groupBox_4;
     ui->gridLayout->addWidget(b,0,1,1,3);
 
+
     this->db = db;
     if(!db.isOpen()) db.open();
 //    if(db.isOpen()) qInfo() << "aperto";
+
+    qryPratica = new QSqlQuery(db);
 
     pratica = praticaPassata;
 //    qInfo() << "Scheda dettaglio" << praticaPassata;
@@ -63,15 +67,23 @@ void SchedaDettaglio::verificaAggiornamenti()
     QLineEdit *lEditNumFile = qobject_cast<QLineEdit*>(mapCampi["nFile"]);
     int nFile = lEditNumFile->text().toInt();
 
+    // ALLERT AGGIORNAMENTI
     if(nFile != globalCount)
     {
-        ui->tabWidget->setTabText(4, "Check❗️");
+        ui->tabWidget->setTabText(4, "Check🔴"); /*❗️*/
+        QMessageBox::warning(this, "Attenzione", "Sono stati aggiunti File alle cartelle 'Atti Amministrativi' o 'Lavori'");
         ui->listaFile->addItems(listaFile);
     }
 
 }
 
-
+void SchedaDettaglio::queryPratica()
+{
+    qryPratica->prepare("SELECT * FROM Pratiche WHERE Pratica = :pratica;");
+    qryPratica->bindValue(":pratica", pratica);
+    qryPratica->exec();
+    qryPratica->next();
+}
 
 void SchedaDettaglio::popolaCampi()
 {
@@ -84,16 +96,9 @@ void SchedaDettaglio::popolaCampi()
     if(!db.isOpen()) db.open();
 
     // PESCA LA PRATICA
-
-    QSqlQuery *qryPratica;
-    qryPratica = new QSqlQuery(db);
-    qryPratica->prepare("SELECT * FROM Pratiche WHERE Pratica = :pratica;");
-    qryPratica->bindValue(":pratica", pratica);
-    qryPratica->exec();
-    qryPratica->next();
+    queryPratica();
 
     // PESCA LE COLONNE
-
     QSqlQuery *qry;
     qry = new QSqlQuery(db);
     qry->prepare("SELECT * FROM Colonne WHERE Attivo=1 ORDER BY OrdineColonna;");
@@ -272,7 +277,7 @@ void SchedaDettaglio::impostaTabCorrente(int tabCorrente)
 }
 
 
-void SchedaDettaglio::salvaModifiche()
+ void SchedaDettaglio::salvaModifiche()
 {
     // SALVA
 
@@ -337,6 +342,10 @@ void SchedaDettaglio::salvaModifiche()
         qry->bindValue(":pratica", pratica);
         qry->exec();
     }
+
+    // AGGIORNA LA QUERY PRATICA
+    queryPratica();
+
     db.close();
 }
 
@@ -487,4 +496,62 @@ void SchedaDettaglio::contaFile(QString cartella)
             }
         }
     }
+}
+
+void SchedaDettaglio::on_creaPdf_clicked()
+{
+
+#include <QTextDocument>
+
+    QDate data = QDate::currentDate();
+    QString dataString = data.toString("yyyyMMdd");
+
+    QPrinter printer;
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(cartellaLavori + "\\Scheda Dettaglio " + dataString+ ".pdf");
+
+/*
+   QTextDocument doc;
+   QString a = "<p'>"+data.toString("dd.MM.yyyy")+"</p>"
+               "<i>Hello</i> "
+               "<b>"+qryPratica->value("TitoloEsteso").toString()+"</b>"
+               "<br> a";
+   doc.setHtml(a);
+
+   doc.print(&printer);
+   printer.newPage();
+*/
+
+    QPainter painter;
+    if (! painter.begin(&printer)) { // failed to open file
+        qWarning("failed to open file, is it writable?");
+        return;
+    }
+    QRectF rect(15,30,740,20);
+ QTextOption wrap;
+
+    painter.setPen(Qt::gray);
+    painter.setFont(QFont("Arial", 10));
+    painter.drawText(rect, Qt::AlignRight,"Matteo Tarabini " + data.toString("dd.MM.yyyy"));
+
+    painter.setPen(Qt::black);
+    painter.setFont(QFont("Arial", 11, QFont::Bold));
+    painter.drawText(15, 45, "Pratica: " + qryPratica->value("Pratica").toString());
+    painter.setFont(QFont("Arial", 11, QFont::Normal));
+    rect = QRectF(15,60,740,80);
+    painter.drawRect(rect);
+//    painter.fillRect(rect, Qt::lightGray);
+
+    wrap.setWrapMode(QTextOption::WordWrap);
+    painter.drawText(rect, "Titolo: " + qryPratica->value("TitoloEsteso").toString(), wrap);
+
+    painter.drawText(15,180,"Cup: " + qryPratica->value("Cup").toString());
+    painter.drawText(280,180,"Importo: € " + qryPratica->value("Importo").toString());
+    painter.drawText(560,180,"Rup: " + qryPratica->value("Rup").toString());
+
+    painter.drawText(15,210,"Fascicolo: " + qryPratica->value("Fascicolo").toString());
+    painter.drawText(280,210,"Finanziamento: " + qryPratica->value("Finanziamento").toString());
+    painter.drawText(560,210,"RL codice: " + qryPratica->value("RLcodice").toString());
+    painter.drawText(560,240,"MIMS Codice: " + qryPratica->value("MIMSCodice").toString());
+
 }

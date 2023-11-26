@@ -35,8 +35,11 @@ private slots:
     void on_aggiorna_clicked();
     void verificaAggiornamenti();
 
+    void on_creaPdf_clicked();
+
 private:
     Ui::SchedaDettaglio *ui;
+    QSqlQuery *qryPratica;
     QSqlDatabase db;
     QString pratica;
     QList<QWidget*> *campi;
@@ -46,6 +49,7 @@ private:
     QList<QString> listaFile;
 
     void popolaCampi();
+    void queryPratica();
     void pubblicaCampo(QString, QLabel *, QWidget *);
     void compilaTreeAtti();
     void compilaTreePratica();

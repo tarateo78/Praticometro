@@ -36,10 +36,10 @@ MainWindow::MainWindow(QWidget *parent)
     // EFFETTUA VERIFICHE CONTROLLO FILE E PATH DATABASE
     if(!verifichePath())
         return;
-
     ConnessioneDB conn;
     db = conn.getConn();
     qry = new QSqlQuery(db);
+
 
 
     // VERIFICA UTENTE
