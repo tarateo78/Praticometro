@@ -531,27 +531,36 @@ void SchedaDettaglio::on_creaPdf_clicked()
  QTextOption wrap;
 
     painter.setPen(Qt::gray);
-    painter.setFont(QFont("Arial", 10));
-    painter.drawText(rect, Qt::AlignRight,"Matteo Tarabini " + data.toString("dd.MM.yyyy"));
+    painter.setFont(QFont("Liberation Sans", 10));
+    painter.drawText(rect, Qt::AlignRight,"Praticometro " + data.toString("dd.MM.yyyy"));
 
     painter.setPen(Qt::black);
-    painter.setFont(QFont("Arial", 11, QFont::Bold));
+    painter.setFont(QFont("Liberation Sans", 11, QFont::Bold));
     painter.drawText(15, 45, "Pratica: " + qryPratica->value("Pratica").toString());
     painter.setFont(QFont("Arial", 11, QFont::Normal));
     rect = QRectF(15,60,740,80);
+    QRectF rectInterno = QRectF(18,63,737,77);
     painter.drawRect(rect);
+
 //    painter.fillRect(rect, Qt::lightGray);
 
     wrap.setWrapMode(QTextOption::WordWrap);
-    painter.drawText(rect, "Titolo: " + qryPratica->value("TitoloEsteso").toString(), wrap);
+    painter.drawText(rectInterno, "Titolo: " + qryPratica->value("TitoloEsteso").toString(), wrap);
 
-    painter.drawText(15,180,"Cup: " + qryPratica->value("Cup").toString());
-    painter.drawText(280,180,"Importo: € " + qryPratica->value("Importo").toString());
-    painter.drawText(560,180,"Rup: " + qryPratica->value("Rup").toString());
+    int riga = 180;
 
-    painter.drawText(15,210,"Fascicolo: " + qryPratica->value("Fascicolo").toString());
-    painter.drawText(280,210,"Finanziamento: " + qryPratica->value("Finanziamento").toString());
-    painter.drawText(560,210,"RL codice: " + qryPratica->value("RLcodice").toString());
-    painter.drawText(560,240,"MIMS Codice: " + qryPratica->value("MIMSCodice").toString());
+    painter.drawText(15,riga,"Cup: " + qryPratica->value("Cup").toString());
+    painter.drawText(280,riga,"Importo: € " + qryPratica->value("Importo").toString());
+    painter.drawText(560,riga,"Rup: " + qryPratica->value("Rup").toString());
+
+    riga += 30;
+
+    painter.drawText(15,riga,"Fascicolo: " + qryPratica->value("Fascicolo").toString());
+    painter.drawText(280,riga,"Finanziamento: " + qryPratica->value("Finanziamento").toString());
+    painter.drawText(560,riga,"RL codice: " + qryPratica->value("RLcodice").toString());
+
+    riga += 30;
+
+    painter.drawText(560,riga,"MIMS Codice: " + qryPratica->value("MIMSCodice").toString());
 
 }
