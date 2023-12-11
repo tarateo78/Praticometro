@@ -366,8 +366,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>178</width>
-              <height>599</height>
+              <width>174</width>
+              <height>579</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -391,7 +391,7 @@
      <x>0</x>
      <y>0</y>
      <width>1404</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuStrumenti">
@@ -467,7 +467,7 @@
      <normaloff>:/icone/icone_32/chiave.png</normaloff>:/icone/icone_32/chiave.png</iconset>
    </property>
    <property name="text">
-    <string>Log&amp;In</string>
+    <string>Log&amp;In...</string>
    </property>
    <property name="toolTip">
     <string>LogIn</string>
@@ -522,6 +522,12 @@
    </property>
    <property name="text">
     <string>Copia</string>
+   </property>
+   <property name="toolTip">
+    <string>Copia</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
  </widget>
