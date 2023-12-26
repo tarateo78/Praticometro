@@ -12,6 +12,7 @@
 #include <QDateEdit>
 #include <QFileSystemModel>
 #include <QMap>
+#include <QComboBox>
 
 namespace Ui {
 class SchedaDettaglio;
@@ -47,6 +48,8 @@ private:
     QList<QWidget*> *campiModificati;
     QString cartellaLavori;
     QList<QString> listaFile;
+    QStringList listaProfessionisti;
+    QStringList listaImprese;
 
     void popolaCampi();
     void queryPratica();
@@ -57,6 +60,8 @@ private:
     void impostaTabCorrente(int);
     void salvaModifiche();
     void contaFile(QString);
+    void settaListaProfessionisti();
+    void settaListaImprese();
 };
 
 #endif // SCHEDADETTAGLIO_H

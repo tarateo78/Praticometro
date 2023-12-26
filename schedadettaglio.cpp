@@ -12,6 +12,7 @@
 #include <QPrinter>
 
 
+
 SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SchedaDettaglio)
@@ -34,6 +35,8 @@ SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidge
 
 
     settaCartellaLavori();
+    settaListaProfessionisti();
+    settaListaImprese();
     popolaCampi();
     compilaTreeAtti();
     compilaTreePratica();
@@ -124,13 +127,36 @@ void SchedaDettaglio::popolaCampi()
         else if(qry->value("TipoColonna").toString().compare("Testo")==0 ||
                 qry->value("TipoColonna").toString().compare("Intero")==0)
         {
-            QLineEdit *lEdit = new QLineEdit(this);
-            lEdit->setText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
-            lEdit->setObjectName(qry->value("NomeColonna").toString());
-            //connect(lEdit, &QLineEdit::textChanged, this, &SchedaDettaglio::aggiungiCampoCambiato);
-            campi->append(lEdit);
-            mapCampi.insert(qry->value("NomeColonna").toString(), lEdit);
-            pubblicaCampo(qry->value("Categoria").toString(), label, lEdit);
+            if(qry->value("NomeColonna").toString().compare("Progettista") == 0 || qry->value("NomeColonna").toString().compare("DirezioneLavori") == 0 || qry->value("NomeColonna").toString().compare("Sicurezza") == 0)
+            {
+                QComboBox *cbEdit = new QComboBox(this);
+                cbEdit->addItems(listaProfessionisti);
+                cbEdit->setCurrentText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
+                campi->append(cbEdit);
+                cbEdit->setObjectName(qry->value("NomeColonna").toString());
+                mapCampi.insert(qry->value("NomeColonna").toString(), cbEdit);
+                pubblicaCampo(qry->value("Categoria").toString(), label, cbEdit);
+            }
+            else if(qry->value("NomeColonna").toString().compare("Impresa") == 0)
+            {
+                QComboBox *cbEdit = new QComboBox(this);
+                cbEdit->addItems(listaImprese);
+                cbEdit->setCurrentText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
+                campi->append(cbEdit);
+                cbEdit->setObjectName(qry->value("NomeColonna").toString());
+                mapCampi.insert(qry->value("NomeColonna").toString(), cbEdit);
+                pubblicaCampo(qry->value("Categoria").toString(), label, cbEdit);
+            }
+            else
+            {
+                QLineEdit *lEdit = new QLineEdit(this);
+                lEdit->setText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
+                lEdit->setObjectName(qry->value("NomeColonna").toString());
+                //connect(lEdit, &QLineEdit::textChanged, this, &SchedaDettaglio::aggiungiCampoCambiato);
+                campi->append(lEdit);
+                mapCampi.insert(qry->value("NomeColonna").toString(), lEdit);
+                pubblicaCampo(qry->value("Categoria").toString(), label, lEdit);
+            }
         }
         else if(qry->value("TipoColonna").toString().compare("Data")==0)
         {
@@ -290,6 +316,7 @@ void SchedaDettaglio::impostaTabCorrente(int tabCorrente)
         QWidget *wid = i.next();
         QTextEdit *tEdit;
         QLineEdit *lEdit;
+        QComboBox *cbEdit;
         QCheckBox *cBox;
         QDoubleSpinBox *dEdit;
         QDateEdit *dDate;
@@ -302,6 +329,12 @@ void SchedaDettaglio::impostaTabCorrente(int tabCorrente)
             lEdit = qobject_cast<QLineEdit*>(wid);
             chiave = lEdit->objectName();
             valore = lEdit->text();
+        }
+        if(wid->inherits(QComboBox::staticMetaObject.className()))
+        {
+            cbEdit = qobject_cast<QComboBox*>(wid);
+            chiave = cbEdit->objectName();
+            valore = cbEdit->currentText();
         }
         if(wid->inherits(QTextEdit::staticMetaObject.className()))
         {
@@ -496,6 +529,41 @@ void SchedaDettaglio::contaFile(QString cartella)
             }
         }
     }
+}
+
+void SchedaDettaglio::settaListaProfessionisti()
+{
+    listaProfessionisti.append(NULL);
+    if(!db.isOpen()) db.open();
+
+    QSqlQuery *qry;
+    qry = new QSqlQuery(db);
+    qry->prepare("SELECT * FROM Professionisti ORDER BY NomeProfessionista ASC;");
+    qry->exec();
+
+    while(qry->next())
+    {
+        listaProfessionisti.append(qry->value("NomeProfessionista").toString());
+    }
+    db.close();
+
+}
+
+void SchedaDettaglio::settaListaImprese()
+{
+    listaImprese.append(NULL);
+    if(!db.isOpen()) db.open();
+
+    QSqlQuery *qry;
+    qry = new QSqlQuery(db);
+    qry->prepare("SELECT * FROM Imprese ORDER BY NomeImpresa ASC;");
+    qry->exec();
+
+    while(qry->next())
+    {
+        listaImprese.append(qry->value("NomeImpresa").toString());
+    }
+    db.close();
 }
 
 void SchedaDettaglio::on_creaPdf_clicked()
