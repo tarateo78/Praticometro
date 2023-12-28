@@ -632,3 +632,13 @@ void SchedaDettaglio::on_creaPdf_clicked()
     painter.drawText(560,riga,"MIMS Codice: " + qryPratica->value("MIMSCodice").toString());
 
 }
+
+void SchedaDettaglio::on_ErogazioneContributi_clicked()
+{
+    // APRI SCHEDA EROGAZIONECONTRIBUTI
+//    ErogazioneContributi erogazioneContributi(pratica, db);
+    ErogazioneContributi erogazioneContributi(pratica, db, this);
+    erogazioneContributi.setModal(true);
+    erogazioneContributi.exec();
+}
+

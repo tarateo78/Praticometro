@@ -13,6 +13,7 @@ SOURCES += \
     colore.cpp \
     connessionedb.cpp \
     criptazione.cpp \
+    erogazionecontributi.cpp \
     globalobject.cpp \
     impostazioni.cpp \
     main.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     colore.h \
     connessionedb.h \
     criptazione.h \
+    erogazionecontributi.h \
     globalobject.h \
     impostazioni.h \
     mainwindow.h \
@@ -40,6 +42,7 @@ HEADERS += \
     verificaaggiornamenti.h
 
 FORMS += \
+    erogazionecontributi.ui \
     impostazioni.ui \
     mainwindow.ui \
     monitoraggi.ui \

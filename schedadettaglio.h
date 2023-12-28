@@ -4,6 +4,8 @@
 #include <QDialog>
 
 #include "connessionedb.h"
+#include "erogazionecontributi.h"
+
 #include <QLabel>
 #include <QSqlDatabase>
 #include <QLineEdit>
@@ -37,6 +39,8 @@ private slots:
     void verificaAggiornamenti();
 
     void on_creaPdf_clicked();
+
+    void on_ErogazioneContributi_clicked();
 
 private:
     Ui::SchedaDettaglio *ui;
