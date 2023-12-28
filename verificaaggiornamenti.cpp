@@ -77,18 +77,18 @@ void VerificaAggiornamenti::compilaTabella()
     fontBold.setBold(true);
 
     if(!db.isOpen()) db.open();
-    qry->prepare("SELECT * FROM Pratiche WHERE Incorso = 1 ORDER BY Pratica DESC;");
+    qry->prepare("SELECT * FROM Pratiche WHERE Incorso = 1 ORDER BY CodicePratica DESC;");
     qry->exec();
 
     int row = 0;
     while(qry->next())
     {
-        PraticaObject *p = new PraticaObject(qry->value("Pratica").toString(),
+        PraticaObject *p = new PraticaObject(qry->value("CodicePratica").toString(),
                                              qry->value("Titolo").toString(),
                                              qry->value("nFile").toInt(),
                                              qry->value("nFileEffettivi").toInt(),
                                              qry->value("dataCheck").toString());
-        mapPratiche[qry->value("Pratica").toString()] = p;
+        mapPratiche[qry->value("CodicePratica").toString()] = p;
 
         QTableWidgetItem *item1;
         QTableWidgetItem *item2;
@@ -153,7 +153,7 @@ void VerificaAggiornamenti::compilaTabella()
             item6->setTextAlignment(Qt::AlignCenter);
         }
 
-        item1->setText(qry->value("Pratica").toString());
+        item1->setText(qry->value("CodicePratica").toString());
         item2->setText(qry->value("Titolo").toString());
         item3->setText(qry->value("nFile").toString());
         item4->setText(qry->value("nFileEffettivi").toString());
@@ -244,7 +244,7 @@ void VerificaAggiornamenti::on_verifica_clicked()
         {
             db.open();
             qryUpdate = new QSqlQuery(db);
-            qryUpdate->prepare("UPDATE Pratiche SET nFileEffettivi = :nFileEffettivi WHERE Pratica = :pratica;");
+            qryUpdate->prepare("UPDATE Pratiche SET nFileEffettivi = :nFileEffettivi WHERE CodicePratica = :pratica;");
             qryUpdate->bindValue(":nFileEffettivi", globalCount);
             qryUpdate->bindValue(":pratica", nome);
             qryUpdate->exec();

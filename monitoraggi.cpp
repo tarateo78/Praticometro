@@ -126,7 +126,7 @@ void Monitoraggi::compilaTabella()
         queryTmp += "MIMS = 1 ";
     }
     queryTmp += (ui->checkBox->isChecked() ? " AND Incorso = 1 " : "");
-    queryTmp += " ORDER BY Pratica DESC;";
+    queryTmp += " ORDER BY CodicePratica DESC;";
 
     qry->prepare(queryTmp);
     qry->exec();

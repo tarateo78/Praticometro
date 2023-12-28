@@ -36,11 +36,11 @@ void StatoPratiche::popolaMap()
     if(db.isOpen())
     {
         QSqlQuery *qry = new QSqlQuery(db);
-        if(qry->exec("SELECT * FROM Pratiche ORDER BY Pratica DESC;"))
+        if(qry->exec("SELECT * FROM Pratiche ORDER BY CodicePratica DESC;"))
         {
             while(qry->next())
             {
-                QString pratica = qry->value("Pratica").toString();
+                QString pratica = qry->value("CodicePratica").toString();
                 int stato = qry->value("Incorso").toInt();
                 map[pratica]= stato;
             }
@@ -151,7 +151,7 @@ void StatoPratiche::inserisciProgetto2DB()
 
     if(!db.isOpen()) db.open();
 
-    qry->prepare("INSERT INTO Pratiche (Pratica, Titolo, Incorso) VALUES (:pratica, :titolo, 0);");
+    qry->prepare("INSERT INTO Pratiche (CodicePratica, Titolo, Incorso) VALUES (:pratica, :titolo, 0);");
     qry->bindValue(":pratica", itemPratica->text());
     qry->bindValue(":titolo", itemTitolo->text());
 
@@ -211,7 +211,7 @@ void StatoPratiche::on_cambiaStato_clicked()
         QSqlQuery *qry;
         qry = new QSqlQuery(db);
 
-        qry->prepare("UPDATE Pratiche SET Incorso = :incorso WHERE Pratica = :pratica");
+        qry->prepare("UPDATE Pratiche SET Incorso = :incorso WHERE CodicePratica = :pratica");
         qry->bindValue(":pratica", itemPratica->text());
         int statoTmp = statoMap.key( itemIncorso->text() );
         qry->bindValue(":incorso", !statoTmp);
@@ -266,7 +266,7 @@ void StatoPratiche::rimuoviProgetto2DB()
         QSqlQuery *qry;
         qry = new QSqlQuery(db);
 
-        qry->prepare("DELETE FROM Pratiche WHERE Pratica = :pratica");
+        qry->prepare("DELETE FROM Pratiche WHERE CodicePratica = :pratica");
         qry->bindValue(":pratica", itemPratica->text());
 
         qry->exec();

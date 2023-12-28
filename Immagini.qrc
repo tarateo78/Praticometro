@@ -22,5 +22,7 @@
         <file>icone_32/copia.png</file>
         <file>icone_32/impostazioni.png</file>
         <file>icone_32/pdf.png</file>
+        <file>icone_32/scavatore.png</file>
+        <file>icone_32/users.png</file>
     </qresource>
 </RCC>

@@ -82,7 +82,7 @@ void SchedaDettaglio::verificaAggiornamenti()
 
 void SchedaDettaglio::queryPratica()
 {
-    qryPratica->prepare("SELECT * FROM Pratiche WHERE Pratica = :pratica;");
+    qryPratica->prepare("SELECT * FROM Pratiche WHERE CodicePratica = :pratica;");
     qryPratica->bindValue(":pratica", pratica);
     qryPratica->exec();
     qryPratica->next();
@@ -370,7 +370,7 @@ void SchedaDettaglio::impostaTabCorrente(int tabCorrente)
 
         QSqlQuery *qry;
         qry = new QSqlQuery(db);
-        qry->prepare("UPDATE Pratiche SET "+ chiave +" = :valore WHERE Pratica = :pratica");
+        qry->prepare("UPDATE Pratiche SET "+ chiave +" = :valore WHERE CodicePratica = :pratica");
         qry->bindValue(":valore", valore);
         qry->bindValue(":pratica", pratica);
         qry->exec();
@@ -604,7 +604,7 @@ void SchedaDettaglio::on_creaPdf_clicked()
 
     painter.setPen(Qt::black);
     painter.setFont(QFont("Liberation Sans", 11, QFont::Bold));
-    painter.drawText(15, 45, "Pratica: " + qryPratica->value("Pratica").toString());
+    painter.drawText(15, 45, "Pratica: " + qryPratica->value("CodicePratica").toString());
     painter.setFont(QFont("Arial", 11, QFont::Normal));
     rect = QRectF(15,60,740,80);
     QRectF rectInterno = QRectF(18,63,737,77);

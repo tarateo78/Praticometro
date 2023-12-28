@@ -397,13 +397,13 @@ void MainWindow::eseguiQuerySelect()
         lCombo = "AND CreFatto = 1 ";
 
     query ="SELECT * FROM Pratiche WHERE Incorso > :incorso AND (";
-    query += "Pratica LIKE :filtro OR Titolo LIKE :filtro OR TitoloEsteso LIKE :filtro OR ";
+    query += "CodicePratica LIKE :filtro OR Titolo LIKE :filtro OR TitoloEsteso LIKE :filtro OR ";
     query += "Progettista LIKE :filtro OR Sicurezza LIKE :filtro OR Impresa LIKE :filtro OR ";
-    query += "Rup LIKE :filtro OR Alias LIKE :filtro OR  ";
+    query += "Rup LIKE :filtro OR  ";
     query += "Finanziamento LIKE :filtro OR DirezioneLavori LIKE :filtro OR  ";
     query += "Cup LIKE :filtro OR Fascicolo LIKE :filtro ";
     query += ") " + lCombo;
-    query += " ORDER BY Pratica DESC;";
+    query += " ORDER BY CodicePratica DESC;";
 
     qry->prepare(query);
     qry->bindValue(":incorso", ui->checkBox->isChecked()?"0":"-1");

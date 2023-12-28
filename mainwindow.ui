@@ -366,8 +366,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>174</width>
-              <height>579</height>
+              <width>178</width>
+              <height>599</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -391,13 +391,16 @@
      <x>0</x>
      <y>0</y>
      <width>1404</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuStrumenti">
     <property name="title">
      <string>Strumenti</string>
     </property>
+    <addaction name="actionProfessionisti"/>
+    <addaction name="actionImprese"/>
+    <addaction name="separator"/>
     <addaction name="action_Monitoraggi"/>
     <addaction name="separator"/>
     <addaction name="action_Verifica_Aggiornamenti"/>
@@ -528,6 +531,24 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionProfessionisti">
+   <property name="icon">
+    <iconset resource="Immagini.qrc">
+     <normaloff>:/icone/icone_32/users.png</normaloff>:/icone/icone_32/users.png</iconset>
+   </property>
+   <property name="text">
+    <string>Elenco Professionisti...</string>
+   </property>
+  </action>
+  <action name="actionImprese">
+   <property name="icon">
+    <iconset resource="Immagini.qrc">
+     <normaloff>:/icone/icone_32/scavatore.png</normaloff>:/icone/icone_32/scavatore.png</iconset>
+   </property>
+   <property name="text">
+    <string>Elenco Imprese...</string>
    </property>
   </action>
  </widget>
