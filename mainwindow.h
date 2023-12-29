@@ -43,6 +43,8 @@ private slots:
     void on_actionCopia_triggered();
     void copiaSelezione();
 
+    void on_actionProfessionisti_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

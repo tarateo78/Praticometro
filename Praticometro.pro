@@ -20,6 +20,7 @@ SOURCES += \
     mainwindow.cpp \
     monitoraggi.cpp \
     praticaobject.cpp \
+    professionisti.cpp \
     schedadettaglio.cpp \
     signinadmin.cpp \
     statopratiche.cpp \
@@ -36,6 +37,7 @@ HEADERS += \
     mainwindow.h \
     monitoraggi.h \
     praticaobject.h \
+    professionisti.h \
     schedadettaglio.h \
     signinadmin.h \
     statopratiche.h \
@@ -46,6 +48,7 @@ FORMS += \
     impostazioni.ui \
     mainwindow.ui \
     monitoraggi.ui \
+    professionisti.ui \
     schedadettaglio.ui \
     signinadmin.ui \
     statopratiche.ui \

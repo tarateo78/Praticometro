@@ -10,6 +10,7 @@
 #include "monitoraggi.h"
 #include "colore.h"
 #include "criptazione.h"
+#include "professionisti.h"
 
 #include <QCheckBox>
 #include <QFileInfo>
@@ -620,6 +621,11 @@ void MainWindow::on_actionEsporta_csv_completo_triggered()
 
 }
 
+void MainWindow::on_prog_linkActivated(const QString &link)
+{
+
+}
+
 
 void MainWindow::on_action_Log_In_triggered()
 {
@@ -679,12 +685,11 @@ void MainWindow::on_action_Monitoraggi_triggered()
 
 
 
-
-void MainWindow::on_prog_linkActivated(const QString &link)
+void MainWindow::on_actionProfessionisti_triggered()
 {
-
+    Professionisti professionisti(db, this);
+    professionisti.setModal(true);
+    professionisti.exec();
 }
-
-
 
 
