@@ -1,6 +1,8 @@
 #include "professionisti.h"
 #include "ui_professionisti.h"
 
+#include <QMessageBox>
+
 Professionisti::Professionisti(QSqlDatabase db, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Professionisti)
@@ -28,13 +30,19 @@ void Professionisti::avviaMaschera()
 {
     ui->setupUi(this);
 
-
+    // SIGNAL PER SELEZIONE RIGA
     QTableWidget *t = ui->tabella;
     connect(t, SIGNAL(itemSelectionChanged()), this, SLOT( compilaForm()  ));
+
+//    // SIGNAL PER CLICK SU CASELLA NOTE
+//    QPlainTextEdit *qpt = ui->noteEdit;
+//    connect(qpt, SIGNAL(cursorPositionChanged() ), this, SLOT( scrivi()  ));
 
     if(nomeProfessionista.compare("") != 0)
     {
     }
+
+    qry = new QSqlQuery(db);
 
     nome = "";
     note = "";
@@ -45,12 +53,14 @@ void Professionisti::avviaMaschera()
     compilaTabella();
 }
 
-void Professionisti::compilaTabella()
+void Professionisti::compilaTabella(QString nomeSelezionato)
 {
 
     if(!db.isOpen()) db.open();
-    // SELEZIONE PRATICHE
-    qry = new QSqlQuery(db);
+
+    // IMPOSTA A FALSO IL CONTROLLO AGGIUNGI
+    // Serve per verificare se è un'aggiunta o una modifica
+    controlloAggiungi = false;
 
     QString queryString = "SELECT * FROM Professionisti ";
     //    queryString += " WHERE CodicePratica = :pratica ";
@@ -59,7 +69,7 @@ void Professionisti::compilaTabella()
     //    qry->bindValue(":pratica", pratica);
     qry->exec();
 
-
+    ui->tabella->reset();
     // COMPILA LA TABELLA
     ui->tabella->setColumnCount(5);
     ui->tabella->setRowCount(0);
@@ -75,6 +85,7 @@ void Professionisti::compilaTabella()
     // DISABILITA EDIT TABELLA
     ui->tabella->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
+    int posNomeDaSelezionare = 0;
 
     int row = 0;
     while(qry->next())
@@ -94,7 +105,7 @@ void Professionisti::compilaTabella()
         item4->setText(qry->value("Email").toString());
         item5->setText(qry->value("Pec").toString());
 
-        item1->setData(Qt::TextAlignmentRole,Qt::AlignCenter);
+        //item1->setData(Qt::TextAlignmentRole,Qt::AlignCenter);
 
         ui->tabella->setItem(row,0,item1);
         ui->tabella->setItem(row,1,item2);
@@ -102,7 +113,23 @@ void Professionisti::compilaTabella()
         ui->tabella->setItem(row,3,item4);
         ui->tabella->setItem(row,4,item5);
 
+        ui->tabella->setColumnWidth(0,350);
+        ui->tabella->setColumnWidth(2,150);
+        ui->tabella->setColumnWidth(3,200);
+
+        ui->tabella->hideColumn(1);
+        ui->tabella->hideColumn(4);
+
+        if( !nomeSelezionato.isNull() && nomeSelezionato.compare(qry->value("NomeProfessionista").toString()) == 0)
+        {
+            posNomeDaSelezionare = row;
+        }
+
         row++;
+    }
+    if( !nomeSelezionato.isNull())
+    {
+        ui->tabella->selectRow(posNomeDaSelezionare);
     }
 
     db.close();
@@ -113,6 +140,9 @@ void Professionisti::compilaTabella()
 void Professionisti::compilaForm()
 {
     ui->btnModifica->setEnabled(false);
+    ui->btnElimina->setEnabled(true);
+
+    abilitaCampi(true);
 
     int row = ui->tabella->currentRow();
 
@@ -122,11 +152,16 @@ void Professionisti::compilaForm()
     email = ui->tabella->item(row, 3)->text();
     pec = ui->tabella->item(row, 4)->text();
     ui->nomeEdit->setText(nome);
-    ui->noteEdit->setText(note);
+    ui->noteEdit->setPlainText(note);
     ui->telefonoEdit->setText(telefono);
     ui->emailEdit->setText(email);
     ui->pecEdit->setText(pec);
 
+}
+
+void Professionisti::scrivi()
+{
+    qInfo() << "s";
 }
 
 void Professionisti::on_tabella_cellClicked(int row, int column)
@@ -135,13 +170,18 @@ void Professionisti::on_tabella_cellClicked(int row, int column)
 }
 
 
-void Professionisti::on_nomeEdit_textChanged(const QString &arg1)
-{
-}
 
 
 void Professionisti::on_btnAggiungi_clicked()
 {
+
+    // ABILITA IL CONTROLLO AGGIUNGI
+    // necessario per determinare se nuovo o modifica
+    controlloAggiungi = true;
+
+    abilitaCampi(true);
+
+    ui->btnElimina->setEnabled(false);
 
     nome = "";
     note = "";
@@ -150,7 +190,7 @@ void Professionisti::on_btnAggiungi_clicked()
     pec = "";
 
     ui->nomeEdit->setText("");
-    ui->noteEdit->setText("");
+    ui->noteEdit->setPlainText("");
     ui->telefonoEdit->setText("");
     ui->emailEdit->setText("");
     ui->pecEdit->setText("");
@@ -165,11 +205,19 @@ void Professionisti::on_nomeEdit_editingFinished()
     abilitaBtnModifica();
 }
 
-void Professionisti::on_noteEdit_editingFinished()
+void Professionisti::on_noteEdit_textChanged()
 {
+//    qInfo() << note;
+//    qInfo() << ui->noteEdit->toPlainText();
+    if(note.compare(ui->noteEdit->toPlainText()) != 0)
     abilitaBtnModifica();
 }
 
+
+void Professionisti::on_noteEdit_cursorPositionChanged()
+{
+
+}
 
 void Professionisti::on_telefonoEdit_editingFinished()
 {
@@ -194,10 +242,114 @@ void Professionisti::abilitaBtnModifica()
     // VERIFICA SE IL CONTENUTO DEI CAMPI è CAMBIATO
     if(
             ui->nomeEdit->text() != nome ||
-            ui->noteEdit->text() != note ||
+            ui->noteEdit->toPlainText() != note ||
             ui->telefonoEdit->text() != telefono  ||
             ui->emailEdit->text() != email  ||
             ui->pecEdit->text() != pec
-            )   ui->btnModifica->setEnabled(true);
+            )
+    {
+        ui->btnModifica->setEnabled(true);
+        ui->btnElimina->setEnabled(false);
 }
+    }
+
+void Professionisti::abilitaCampi(bool siNo)
+{
+    ui->nomeEdit->setEnabled(siNo);
+    ui->noteEdit->setEnabled(siNo);
+    ui->telefonoEdit->setEnabled(siNo);
+    ui->emailEdit->setEnabled(siNo);
+    ui->pecEdit->setEnabled(siNo);
+}
+
+
+void Professionisti::on_btnModifica_clicked()
+{
+
+    if(!db.isOpen()) db.open();
+
+    QString queryString;
+
+    if(controlloAggiungi)
+    {
+        queryString = "INSERT INTO Professionisti ";
+        queryString += " (NomeProfessionista, NoteProfessionista, Telefono, Email, Pec) ";
+        queryString += " VALUES (:nomeProfessionista, :note, :telefono, :email, :pec); ";
+
+    }
+    else
+    {
+        queryString = "UPDATE Professionisti ";
+        queryString += " SET NomeProfessionista = :nomeProfessionista ";
+        queryString += ", NoteProfessionista = :note ";
+        queryString += ", Telefono = :telefono ";
+        queryString += ", Email = :email ";
+        queryString += ", Pec = :pec ";
+        queryString += " WHERE NomeProfessionista = :nome ";
+
+    }
+    // qInfo() << queryString;
+
+    qry->prepare(queryString);
+    qry->bindValue(":nomeProfessionista", ui->nomeEdit->text());
+    qry->bindValue(":note", ui->noteEdit->toPlainText());
+    qry->bindValue(":telefono", ui->telefonoEdit->text());
+    qry->bindValue(":email", ui->emailEdit->text());
+    qry->bindValue(":pec", ui->pecEdit->text());
+    qry->bindValue(":nome", nome);
+
+    qry->exec();
+    db.close();
+
+    compilaTabella(ui->nomeEdit->text());
+
+}
+
+
+void Professionisti::on_btnElimina_clicked()
+{
+
+    if(!db.isOpen()) db.open();
+    int ret = QMessageBox::warning(this, tr("Attenzione"),
+                                   tr("Vuoi davvero cancellare \n"
+                                      "il presente professionista?"),
+                                   QMessageBox::Ok | QMessageBox::Cancel);
+
+    //qInfo() << QString::number(ret);
+
+    if(ret != 1024) return;
+
+    QString queryString = "DELETE FROM Professionisti ";
+        queryString += " WHERE NomeProfessionista = :nomeProfessionista; ";
+
+    qry->prepare(queryString);
+    qry->bindValue(":nomeProfessionista", ui->nomeEdit->text());
+
+    qry->exec();
+    db.close();
+
+    nome = "";
+    note = "";
+    telefono = "";
+    email = "";
+    pec = "";
+
+    ui->nomeEdit->setText("");
+    ui->noteEdit->setPlainText("");
+    ui->telefonoEdit->setText("");
+    ui->emailEdit->setText("");
+    ui->pecEdit->setText("");
+
+    ui->btnElimina->setEnabled(false);
+    abilitaCampi(false);
+
+    compilaTabella();
+}
+
+
+
+
+
+
+
 
