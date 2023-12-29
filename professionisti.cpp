@@ -34,9 +34,9 @@ void Professionisti::avviaMaschera()
     QTableWidget *t = ui->tabella;
     connect(t, SIGNAL(itemSelectionChanged()), this, SLOT( compilaForm()  ));
 
-//    // SIGNAL PER CLICK SU CASELLA NOTE
-//    QPlainTextEdit *qpt = ui->noteEdit;
-//    connect(qpt, SIGNAL(cursorPositionChanged() ), this, SLOT( scrivi()  ));
+    //    // SIGNAL PER CLICK SU CASELLA NOTE
+    //    QPlainTextEdit *qpt = ui->noteEdit;
+    //    connect(qpt, SIGNAL(cursorPositionChanged() ), this, SLOT( scrivi()  ));
 
     if(nomeProfessionista.compare("") != 0)
     {
@@ -63,8 +63,7 @@ void Professionisti::compilaTabella(QString nomeSelezionato)
     controlloAggiungi = false;
 
     QString queryString = "SELECT * FROM Professionisti ";
-    //    queryString += " WHERE CodicePratica = :pratica ";
-    //    queryString += " ORDER BY DataRichiesta DESC;";
+    queryString += " ORDER BY NomeProfessionista ASC;";
     qry->prepare(queryString);
     //    qry->bindValue(":pratica", pratica);
     qry->exec();
@@ -172,34 +171,6 @@ void Professionisti::on_tabella_cellClicked(int row, int column)
 
 
 
-void Professionisti::on_btnAggiungi_clicked()
-{
-
-    // ABILITA IL CONTROLLO AGGIUNGI
-    // necessario per determinare se nuovo o modifica
-    controlloAggiungi = true;
-
-    abilitaCampi(true);
-
-    ui->btnElimina->setEnabled(false);
-
-    nome = "";
-    note = "";
-    telefono = "";
-    email = "";
-    pec = "";
-
-    ui->nomeEdit->setText("");
-    ui->noteEdit->setPlainText("");
-    ui->telefonoEdit->setText("");
-    ui->emailEdit->setText("");
-    ui->pecEdit->setText("");
-
-    ui->nomeEdit->setFocus();
-
-}
-
-
 void Professionisti::on_nomeEdit_editingFinished()
 {
     abilitaBtnModifica();
@@ -207,10 +178,10 @@ void Professionisti::on_nomeEdit_editingFinished()
 
 void Professionisti::on_noteEdit_textChanged()
 {
-//    qInfo() << note;
-//    qInfo() << ui->noteEdit->toPlainText();
+    //    qInfo() << note;
+    //    qInfo() << ui->noteEdit->toPlainText();
     if(note.compare(ui->noteEdit->toPlainText()) != 0)
-    abilitaBtnModifica();
+        abilitaBtnModifica();
 }
 
 
@@ -250,8 +221,8 @@ void Professionisti::abilitaBtnModifica()
     {
         ui->btnModifica->setEnabled(true);
         ui->btnElimina->setEnabled(false);
-}
     }
+}
 
 void Professionisti::abilitaCampi(bool siNo)
 {
@@ -270,6 +241,15 @@ void Professionisti::on_btnModifica_clicked()
 
     QString queryString;
 
+    // ESCE SE CAMPO NOME è NULLO O VUOTO
+    if(ui->nomeEdit->text().isNull() || ui->nomeEdit->text().isEmpty() ||
+            ui->nomeEdit->text().trimmed().length() == 0)
+    {
+        QMessageBox::warning(this, "Attenzione", "Il campo Nome non può essere vuoto");
+        ui->nomeEdit->setText(nome);
+        return;
+    }
+
     if(controlloAggiungi)
     {
         queryString = "INSERT INTO Professionisti ";
@@ -286,7 +266,6 @@ void Professionisti::on_btnModifica_clicked()
         queryString += ", Email = :email ";
         queryString += ", Pec = :pec ";
         queryString += " WHERE NomeProfessionista = :nome ";
-
     }
     // qInfo() << queryString;
 
@@ -297,8 +276,39 @@ void Professionisti::on_btnModifica_clicked()
     qry->bindValue(":email", ui->emailEdit->text());
     qry->bindValue(":pec", ui->pecEdit->text());
     qry->bindValue(":nome", nome);
-
     qry->exec();
+
+
+    if( !controlloAggiungi && nome.compare( ui->nomeEdit->text() ) != 0)
+    {
+        // MODIFICA IN PRATICHE Progettista
+        queryString = "UPDATE Pratiche ";
+        queryString += " SET Progettista = :nomeProfessionista ";
+        queryString += " WHERE Progettista = :nome; ";
+        qry->prepare(queryString);
+        qry->bindValue(":nomeProfessionista", ui->nomeEdit->text());
+        qry->bindValue(":nome", nome);
+        qry->exec();
+
+        // MODIFICA IN PRATICHE Sicurezza
+        queryString = "UPDATE Pratiche ";
+        queryString += " SET Sicurezza= :nomeProfessionista ";
+        queryString += " WHERE Sicurezza = :nome; ";
+        qry->prepare(queryString);
+        qry->bindValue(":nomeProfessionista", ui->nomeEdit->text());
+        qry->bindValue(":nome", nome);
+        qry->exec();
+
+        // MODIFICA IN PRATICHE DirezioneLavori
+        queryString = "UPDATE Pratiche ";
+        queryString += " SET DirezioneLavori = :nomeProfessionista ";
+        queryString += " WHERE DirezioneLavori = :nome; ";
+        qry->prepare(queryString);
+        qry->bindValue(":nomeProfessionista", ui->nomeEdit->text());
+        qry->bindValue(":nome", nome);
+        qry->exec();
+    }
+
     db.close();
 
     compilaTabella(ui->nomeEdit->text());
@@ -309,24 +319,53 @@ void Professionisti::on_btnModifica_clicked()
 void Professionisti::on_btnElimina_clicked()
 {
 
-    if(!db.isOpen()) db.open();
+
     int ret = QMessageBox::warning(this, tr("Attenzione"),
-                                   tr("Vuoi davvero cancellare \n"
-                                      "il presente professionista?"),
+                                   tr("Vuoi davvero cancellare il \n"
+                                      "presente professionista?\n"
+                                      "Verrà eliminato da tutte le\n"
+                                      "pratiche in cui è memorizzato"),
                                    QMessageBox::Ok | QMessageBox::Cancel);
 
     //qInfo() << QString::number(ret);
 
     if(ret != 1024) return;
 
-    QString queryString = "DELETE FROM Professionisti ";
-        queryString += " WHERE NomeProfessionista = :nomeProfessionista; ";
+    if(!db.isOpen()) db.open();
 
+    // ELIMINA DA PROFESSIONISTI
+    QString queryString = "DELETE FROM Professionisti ";
+    queryString += " WHERE NomeProfessionista = :nomeProfessionista; ";
     qry->prepare(queryString);
     qry->bindValue(":nomeProfessionista", ui->nomeEdit->text());
-
     qry->exec();
+
+    // ELIMINA DA PRATICHE Progettista
+    queryString = "UPDATE Pratiche ";
+    queryString += " SET Progettista = '' ";
+    queryString += " WHERE Progettista = :nomeProfessionista; ";
+    qry->prepare(queryString);
+    qry->bindValue(":nomeProfessionista", ui->nomeEdit->text());
+    qry->exec();
+
+    // ELIMINA DA PRATICHE Sicurezza
+    queryString = "UPDATE Pratiche ";
+    queryString += " SET Sicurezza = '' ";
+    queryString += " WHERE Sicurezza = :nomeProfessionista; ";
+    qry->prepare(queryString);
+    qry->bindValue(":nomeProfessionista", ui->nomeEdit->text());
+    qry->exec();
+
+    // ELIMINA DA PRATICHE DirezioneLavori
+    queryString = "UPDATE Pratiche ";
+    queryString += " SET DirezioneLavori = '' ";
+    queryString += " WHERE DirezioneLavori = :nomeProfessionista; ";
+    qry->prepare(queryString);
+    qry->bindValue(":nomeProfessionista", ui->nomeEdit->text());
+    qry->exec();
+
     db.close();
+
 
     nome = "";
     note = "";
@@ -348,6 +387,33 @@ void Professionisti::on_btnElimina_clicked()
 
 
 
+
+void Professionisti::on_btnAggiungi_clicked()
+{
+
+    // ABILITA IL CONTROLLO AGGIUNGI
+    // necessario per determinare se nuovo o modifica
+    controlloAggiungi = true;
+
+    abilitaCampi(true);
+
+    ui->btnElimina->setEnabled(false);
+
+    nome = "";
+    note = "";
+    telefono = "";
+    email = "";
+    pec = "";
+
+    ui->nomeEdit->setText("");
+    ui->noteEdit->setPlainText("");
+    ui->telefonoEdit->setText("");
+    ui->emailEdit->setText("");
+    ui->pecEdit->setText("");
+
+    ui->nomeEdit->setFocus();
+
+}
 
 
 
