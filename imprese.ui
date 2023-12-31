@@ -62,6 +62,66 @@
     <string>PushButton</string>
    </property>
   </widget>
+  <widget class="QLineEdit" name="nomeEdit">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>60</y>
+     <width>113</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="telefonoEdit">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>250</y>
+     <width>113</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="emailEdit">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>290</y>
+     <width>113</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="pecEdit">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>340</y>
+     <width>113</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="pivaEdit">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>390</y>
+     <width>113</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="noteEdit">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>110</y>
+     <width>104</width>
+     <height>87</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

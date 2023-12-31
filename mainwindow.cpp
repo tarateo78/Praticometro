@@ -697,7 +697,7 @@ void MainWindow::on_actionProfessionisti_triggered()
 
 void MainWindow::on_actionImprese_triggered()
 {
-    Imprese imprese(this);
+    Imprese imprese(db, this);
     imprese.setModal(true);
     imprese.exec();
 }
