@@ -11,6 +11,7 @@
 #include "colore.h"
 #include "criptazione.h"
 #include "professionisti.h"
+#include "imprese.h"
 
 #include <QCheckBox>
 #include <QFileInfo>
@@ -692,4 +693,12 @@ void MainWindow::on_actionProfessionisti_triggered()
     professionisti.exec();
 }
 
+
+
+void MainWindow::on_actionImprese_triggered()
+{
+    Imprese imprese(this);
+    imprese.setModal(true);
+    imprese.exec();
+}
 

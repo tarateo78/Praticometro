@@ -16,6 +16,7 @@ SOURCES += \
     erogazionecontributi.cpp \
     globalobject.cpp \
     impostazioni.cpp \
+    imprese.cpp \
     main.cpp \
     mainwindow.cpp \
     monitoraggi.cpp \
@@ -34,6 +35,7 @@ HEADERS += \
     erogazionecontributi.h \
     globalobject.h \
     impostazioni.h \
+    imprese.h \
     mainwindow.h \
     monitoraggi.h \
     praticaobject.h \
@@ -46,6 +48,7 @@ HEADERS += \
 FORMS += \
     erogazionecontributi.ui \
     impostazioni.ui \
+    imprese.ui \
     mainwindow.ui \
     monitoraggi.ui \
     professionisti.ui \

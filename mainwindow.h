@@ -45,6 +45,8 @@ private slots:
 
     void on_actionProfessionisti_triggered();
 
+    void on_actionImprese_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
