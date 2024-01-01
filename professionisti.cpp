@@ -185,11 +185,6 @@ void Professionisti::on_noteEdit_textChanged()
 }
 
 
-void Professionisti::on_noteEdit_cursorPositionChanged()
-{
-
-}
-
 void Professionisti::on_telefonoEdit_editingFinished()
 {
     abilitaBtnModifica();

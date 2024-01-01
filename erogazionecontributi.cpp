@@ -52,7 +52,6 @@ void ErogazioneContributi::compilaTabella()
     qry->bindValue(":pratica", pratica);
     qry->exec();
 
-
     // COMPILA LA TABELLA
     ui->tabella->reset();
     ui->tabella->setColumnCount(6);
@@ -73,9 +72,11 @@ void ErogazioneContributi::compilaTabella()
     ui->tabella->hideColumn(5);
 
     // LARGHEZZA COLONNE
-    ui->tabella->setColumnWidth(1,100);
-    ui->tabella->setColumnWidth(3,100);
-    ui->tabella->setColumnWidth(4,200);
+    ui->tabella->setColumnWidth(0,100);
+    ui->tabella->setColumnWidth(1,130);
+    ui->tabella->setColumnWidth(2,100);
+    ui->tabella->setColumnWidth(3,130);
+    ui->tabella->setColumnWidth(4,250);
 
     int row = 0;
     while(qry->next())
@@ -98,6 +99,9 @@ void ErogazioneContributi::compilaTabella()
         item6->setText(qry->value("IdErogazione").toString());
 
         item1->setData(Qt::TextAlignmentRole,Qt::AlignCenter);
+        item2->setData(Qt::TextAlignmentRole,int(Qt::AlignVCenter|Qt::AlignRight));
+        item3->setData(Qt::TextAlignmentRole,Qt::AlignCenter);
+        item4->setData(Qt::TextAlignmentRole,int(Qt::AlignVCenter|Qt::AlignRight));
 
         ui->tabella->setItem(row,0,item1);
         ui->tabella->setItem(row,1,item2);
@@ -116,17 +120,12 @@ void ErogazioneContributi::compilaTabella()
 
 void ErogazioneContributi::compilaForm()
 {
+    ui->btnModifica->setEnabled(false);
     ui->btnElimina->setEnabled(true);
 
     abilitaCampi(true);
 
     int row = ui->tabella->currentRow();
-    QString idErogazione;
-    QString dataRichiesta;
-    QString importoRichiesto;
-    QString dataErogazione;
-    QString importoErogato;
-    QString notaErogazione;
 
     dataRichiesta = ui->tabella->item(row, 0)->text();
     importoRichiesto = ui->tabella->item(row, 1)->text();
@@ -306,7 +305,8 @@ void ErogazioneContributi::on_impErogEdit_editingFinished()
 
 void ErogazioneContributi::on_notaEdit_textChanged()
 {
-    abilitaBtnModifica();
+    if(notaErogazione.compare(ui->notaEdit->toPlainText()) != 0)
+        abilitaBtnModifica();
 }
 
 

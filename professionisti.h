@@ -39,10 +39,6 @@ private slots:
 
     void on_btnElimina_clicked();
 
-
-
-    void on_noteEdit_cursorPositionChanged();
-
     void on_noteEdit_textChanged();
 
 private:
