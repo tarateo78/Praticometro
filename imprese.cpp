@@ -60,10 +60,6 @@ void Imprese::avviaMaschera()
     //    QPlainTextEdit *qpt = ui->noteEdit;
     //    connect(qpt, SIGNAL(cursorPositionChanged() ), this, SLOT( scrivi()  ));
 
-    if(nomeImpresa.compare("") != 0)
-    {
-    }
-
     qry = new QSqlQuery(db);
 
     nome = "";
@@ -73,7 +69,15 @@ void Imprese::avviaMaschera()
     pec = "";
     piva = "";
 
-    compilaTabella();
+
+    if(nomeImpresa.compare("") == 0)
+    {
+        compilaTabella();
+    }
+    else
+    {
+        compilaTabella(nomeImpresa);
+    }
 
 }
 

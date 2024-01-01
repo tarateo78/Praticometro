@@ -38,10 +38,6 @@ void Professionisti::avviaMaschera()
     //    QPlainTextEdit *qpt = ui->noteEdit;
     //    connect(qpt, SIGNAL(cursorPositionChanged() ), this, SLOT( scrivi()  ));
 
-    if(nomeProfessionista.compare("") != 0)
-    {
-    }
-
     qry = new QSqlQuery(db);
 
     nome = "";
@@ -50,7 +46,15 @@ void Professionisti::avviaMaschera()
     email = "";
     pec = "";
 
-    compilaTabella();
+    if(nomeProfessionista.compare("") == 0)
+    {
+        compilaTabella();
+    }
+    else
+    {
+        compilaTabella(nomeProfessionista);
+    }
+
 }
 
 void Professionisti::compilaTabella(QString nomeSelezionato)

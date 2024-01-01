@@ -26,12 +26,12 @@ SchedaDettaglio::SchedaDettaglio(QString praticaPassata, QSqlDatabase db, QWidge
 
     this->db = db;
     if(!db.isOpen()) db.open();
-//    if(db.isOpen()) qInfo() << "aperto";
+    //    if(db.isOpen()) qInfo() << "aperto";
 
     qryPratica = new QSqlQuery(db);
 
     pratica = praticaPassata;
-//    qInfo() << "Scheda dettaglio" << praticaPassata;
+    //    qInfo() << "Scheda dettaglio" << praticaPassata;
 
 
     settaCartellaLavori();
@@ -60,7 +60,7 @@ void SchedaDettaglio::verificaAggiornamenti()
     foreach (QFileInfo sub, elencoBase) {
         if(sub.fileName().contains("amministrativi",  Qt::CaseInsensitive) ||
                 sub.fileName().contains("cantiere",  Qt::CaseInsensitive))
-        contaFile(cartellaLavori + "\\" + sub.fileName());
+            contaFile(cartellaLavori + "\\" + sub.fileName());
     }
 
     QLineEdit *lEditNumFileEff = qobject_cast<QLineEdit*>(mapCampi["nFileEffettivi"]);
@@ -129,23 +129,75 @@ void SchedaDettaglio::popolaCampi()
         {
             if(qry->value("NomeColonna").toString().compare("Progettista") == 0 || qry->value("NomeColonna").toString().compare("DirezioneLavori") == 0 || qry->value("NomeColonna").toString().compare("Sicurezza") == 0)
             {
+
+                QString nome = qryPratica->value(qry->value("NomeColonna").toString()).toString();
+                QHBoxLayout *hLayout = new QHBoxLayout();
+                hLayout->setObjectName("lay" + nome);
+                QPushButton *bottone = new QPushButton();
+                bottone->setText("🔎");
+                bottone->setObjectName("btn" + nome);
+
+                // -------------------------------------------------
+                // Uso LAMBDA per passare argomento altrimenti non funziona
+                connect(bottone, &QPushButton::clicked, this, [=]() {
+                    Professionisti professionisti(nome, db, this);
+                    professionisti.setModal(true);
+                    professionisti.exec();
+                });
+                // -------------------------------------------------
+
                 QComboBox *cbEdit = new QComboBox(this);
                 cbEdit->addItems(listaProfessionisti);
                 cbEdit->setCurrentText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
                 campi->append(cbEdit);
                 cbEdit->setObjectName(qry->value("NomeColonna").toString());
                 mapCampi.insert(qry->value("NomeColonna").toString(), cbEdit);
-                pubblicaCampo(qry->value("Categoria").toString(), label, cbEdit);
+
+                hLayout->addWidget(cbEdit);
+                hLayout->addWidget(bottone);
+
+                pubblicaCampo(qry->value("Categoria").toString(), label, hLayout);
+
             }
             else if(qry->value("NomeColonna").toString().compare("Impresa") == 0)
             {
+//                QComboBox *cbEdit = new QComboBox(this);
+//                cbEdit->addItems(listaImprese);
+//                cbEdit->setCurrentText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
+//                campi->append(cbEdit);
+//                cbEdit->setObjectName(qry->value("NomeColonna").toString());
+//                mapCampi.insert(qry->value("NomeColonna").toString(), cbEdit);
+//                pubblicaCampo(qry->value("Categoria").toString(), label, cbEdit);
+
+
+                QString nome = qryPratica->value(qry->value("NomeColonna").toString()).toString();
+                QHBoxLayout *hLayout = new QHBoxLayout();
+                hLayout->setObjectName("lay" + nome);
+                QPushButton *bottone = new QPushButton();
+                bottone->setText("🔎");
+                bottone->setObjectName("btn" + nome);
+
+                // -------------------------------------------------
+                // Uso LAMBDA per passare argomento altrimenti non funziona
+                connect(bottone, &QPushButton::clicked, this, [=]() {
+                    Imprese imprese(nome, db, this);
+                    imprese.setModal(true);
+                    imprese.exec();
+                });
+                // -------------------------------------------------
+
                 QComboBox *cbEdit = new QComboBox(this);
                 cbEdit->addItems(listaImprese);
                 cbEdit->setCurrentText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
                 campi->append(cbEdit);
                 cbEdit->setObjectName(qry->value("NomeColonna").toString());
                 mapCampi.insert(qry->value("NomeColonna").toString(), cbEdit);
-                pubblicaCampo(qry->value("Categoria").toString(), label, cbEdit);
+
+                hLayout->addWidget(cbEdit);
+                hLayout->addWidget(bottone);
+
+                pubblicaCampo(qry->value("Categoria").toString(), label, hLayout);
+
             }
             else
             {
@@ -236,6 +288,7 @@ void SchedaDettaglio::popolaCampi()
 }
 
 
+
 void SchedaDettaglio::compilaTreeAtti()
 {
     // TROVA IL PATH DEGLI ATTI AMMINISTRATIVI
@@ -276,7 +329,7 @@ void SchedaDettaglio::settaCartellaLavori()
         if(file.fileName().left(5).compare(pratica)==0)
             cartellaLavori = globalPathProgetti + "\\" + file.fileName();
     }
-//    qInfo() << cartellaLavori;
+    //    qInfo() << cartellaLavori;
     db.close();
 }
 
@@ -303,7 +356,7 @@ void SchedaDettaglio::impostaTabCorrente(int tabCorrente)
 }
 
 
- void SchedaDettaglio::salvaModifiche()
+void SchedaDettaglio::salvaModifiche()
 {
     // SALVA
 
@@ -347,7 +400,7 @@ void SchedaDettaglio::impostaTabCorrente(int tabCorrente)
             dEdit = qobject_cast<QDoubleSpinBox*>(wid);
             chiave = dEdit->objectName();
             valore = ita.toString(dEdit->value(), 'f', 2);
-//            qInfo() << valore;
+            //            qInfo() << valore;
         }
         if(wid->inherits(QCheckBox::staticMetaObject.className()))
         {
@@ -382,6 +435,18 @@ void SchedaDettaglio::impostaTabCorrente(int tabCorrente)
     db.close();
 }
 
+
+void SchedaDettaglio::pubblicaCampo(QString cat, QLabel *lab, QLayout *lay)
+{
+    if(cat.compare("Progettazione") == 0)
+    {
+        ui->formProgetto->addRow(lab, lay);
+    }
+    else if(cat.compare("Lavori") == 0)
+    {
+        ui->formLavori->addRow(lab, lay);
+    }
+}
 
 void SchedaDettaglio::pubblicaCampo(QString cat, QLabel *lab, QWidget *wid)
 {
@@ -469,7 +534,7 @@ void SchedaDettaglio::on_treeView_2_doubleClicked(const QModelIndex &index)
     QFileInfo fileInfo = model->fileInfo(index);
     if(fileInfo.isFile())
     {
-//        qDebug() << fileInfo.fileName() << fileInfo.filePath() << '\n';
+        //        qDebug() << fileInfo.fileName() << fileInfo.filePath() << '\n';
         QDesktopServices::openUrl(QUrl::fromLocalFile(fileInfo.filePath()));
     }
 }
@@ -578,7 +643,7 @@ void SchedaDettaglio::on_creaPdf_clicked()
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(cartellaLavori + "\\Scheda Dettaglio " + dataString+ ".pdf");
 
-/*
+    /*
    QTextDocument doc;
    QString a = "<p'>"+data.toString("dd.MM.yyyy")+"</p>"
                "<i>Hello</i> "
@@ -596,7 +661,7 @@ void SchedaDettaglio::on_creaPdf_clicked()
         return;
     }
     QRectF rect(15,30,740,20);
- QTextOption wrap;
+    QTextOption wrap;
 
     painter.setPen(Qt::gray);
     painter.setFont(QFont("Liberation Sans", 10));
@@ -610,7 +675,7 @@ void SchedaDettaglio::on_creaPdf_clicked()
     QRectF rectInterno = QRectF(18,63,737,77);
     painter.drawRect(rect);
 
-//    painter.fillRect(rect, Qt::lightGray);
+    //    painter.fillRect(rect, Qt::lightGray);
 
     wrap.setWrapMode(QTextOption::WordWrap);
     painter.drawText(rectInterno, "Titolo: " + qryPratica->value("TitoloEsteso").toString(), wrap);
@@ -636,7 +701,7 @@ void SchedaDettaglio::on_creaPdf_clicked()
 void SchedaDettaglio::on_ErogazioneContributi_clicked()
 {
     // APRI SCHEDA EROGAZIONECONTRIBUTI
-//    ErogazioneContributi erogazioneContributi(pratica, db);
+    //    ErogazioneContributi erogazioneContributi(pratica, db);
     ErogazioneContributi erogazioneContributi(pratica, db, this);
     erogazioneContributi.setModal(true);
     erogazioneContributi.exec();

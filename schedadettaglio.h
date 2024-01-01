@@ -5,6 +5,8 @@
 
 #include "connessionedb.h"
 #include "erogazionecontributi.h"
+#include "professionisti.h"
+#include "imprese.h"
 
 #include <QLabel>
 #include <QSqlDatabase>
@@ -57,6 +59,7 @@ private:
 
     void popolaCampi();
     void queryPratica();
+    void pubblicaCampo(QString, QLabel *, QLayout *);
     void pubblicaCampo(QString, QLabel *, QWidget *);
     void compilaTreeAtti();
     void compilaTreePratica();
