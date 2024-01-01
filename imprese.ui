@@ -6,21 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1118</width>
-    <height>680</height>
+    <width>1150</width>
+    <height>650</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Elenco Imprese</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_3">
+  <layout class="QHBoxLayout" name="horizontalLayout_5">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
       <widget class="QTableWidget" name="tabella">
        <property name="minimumSize">
         <size>
-         <width>600</width>
+         <width>750</width>
          <height>0</height>
         </size>
        </property>
@@ -77,11 +77,45 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="Immagini.qrc">:/icone/icone_32/scavatore.png</pixmap>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QFormLayout" name="formLayout">
           <item row="0" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>🔧Nome</string>
+             <string>👤Nome</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="nomeEdit">
+            <property name="enabled">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -144,19 +178,12 @@
           <item row="5" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
-             <string>📋P. Iva</string>
+             <string>🏷P. Iva</string>
             </property>
            </widget>
           </item>
           <item row="5" column="1">
            <widget class="QLineEdit" name="pivaEdit">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="nomeEdit">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -224,6 +251,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="Immagini.qrc"/>
+ </resources>
  <connections/>
 </ui>
