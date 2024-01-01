@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QMessageBox>
 
 
 namespace Ui {
@@ -19,17 +20,38 @@ public:
     ~ErogazioneContributi();
 
 private slots:
+    void compilaForm();
     void on_btnAggiungi_clicked();
     void on_btnModifica_clicked();
     void on_btnElimina_clicked();
 
+    void on_dataRicEdit_editingFinished();
+
+    void on_impRicEdit_editingFinished();
+
+    void on_dataErogEdit_editingFinished();
+
+    void on_impErogEdit_editingFinished();
+
+    void on_notaEdit_textChanged();
+
 private:
     Ui::ErogazioneContributi *ui;
-    QSqlQuery *qry;
     QSqlDatabase db;
+    QSqlQuery *qry;
     QString pratica;
+    bool controlloAggiungi;
+
+    QString idErogazione;
+    QString dataRichiesta;
+    QString importoRichiesto;
+    QString dataErogazione;
+    QString importoErogato;
+    QString notaErogazione;
 
     void compilaTabella();
+    void abilitaBtnModifica();
+    void abilitaCampi(bool siNo);
 
 };
 
