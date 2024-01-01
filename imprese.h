@@ -4,6 +4,7 @@
 #include <QDialog>
 #include<QSqlDatabase>
 #include <QSqlQuery>
+#include <QMessageBox>
 
 namespace Ui {
 class Imprese;
@@ -19,6 +20,8 @@ public:
     ~Imprese();
 
 private slots:
+    void compilaForm();
+
     void on_btnModifica_clicked();
 
     void on_nomeEdit_editingFinished();
@@ -34,6 +37,8 @@ private slots:
     void on_btnAggiungi_clicked();
 
     void on_btnElimina_clicked();
+
+    void on_noteEdit_textChanged();
 
 private:
     Ui::Imprese *ui;
