@@ -137,6 +137,13 @@ void SchedaDettaglio::popolaCampi()
                 bottone->setText("🔎");
                 bottone->setObjectName("btn" + nome);
 
+                QComboBox *cbEdit = new QComboBox(this);
+                cbEdit->addItems(listaProfessionisti);
+                cbEdit->setCurrentText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
+                campi->append(cbEdit);
+                cbEdit->setObjectName(qry->value("NomeColonna").toString());
+                mapCampi.insert(qry->value("NomeColonna").toString(), cbEdit);
+
                 // -------------------------------------------------
                 // Uso LAMBDA per passare argomento altrimenti non funziona
                 connect(bottone, &QPushButton::clicked, this, [=]() {
@@ -146,13 +153,6 @@ void SchedaDettaglio::popolaCampi()
                 });
                 // -------------------------------------------------
 
-                QComboBox *cbEdit = new QComboBox(this);
-                cbEdit->addItems(listaProfessionisti);
-                cbEdit->setCurrentText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
-                campi->append(cbEdit);
-                cbEdit->setObjectName(qry->value("NomeColonna").toString());
-                mapCampi.insert(qry->value("NomeColonna").toString(), cbEdit);
-
                 hLayout->addWidget(cbEdit);
                 hLayout->addWidget(bottone);
 
@@ -161,6 +161,7 @@ void SchedaDettaglio::popolaCampi()
             }
             else if(qry->value("NomeColonna").toString().compare("Impresa") == 0)
             {
+//                VECCHIO SISTEMA SOSTITUITO CON Combobox+Bottone
 //                QComboBox *cbEdit = new QComboBox(this);
 //                cbEdit->addItems(listaImprese);
 //                cbEdit->setCurrentText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
@@ -177,21 +178,22 @@ void SchedaDettaglio::popolaCampi()
                 bottone->setText("🔎");
                 bottone->setObjectName("btn" + nome);
 
-                // -------------------------------------------------
-                // Uso LAMBDA per passare argomento altrimenti non funziona
-                connect(bottone, &QPushButton::clicked, this, [=]() {
-                    Imprese imprese(nome, db, this);
-                    imprese.setModal(true);
-                    imprese.exec();
-                });
-                // -------------------------------------------------
-
                 QComboBox *cbEdit = new QComboBox(this);
                 cbEdit->addItems(listaImprese);
                 cbEdit->setCurrentText(qryPratica->value(qry->value("NomeColonna").toString()).toString());
                 campi->append(cbEdit);
                 cbEdit->setObjectName(qry->value("NomeColonna").toString());
                 mapCampi.insert(qry->value("NomeColonna").toString(), cbEdit);
+
+                // -------------------------------------------------
+                // Uso LAMBDA per passare argomento altrimenti non funziona
+                connect(bottone, &QPushButton::clicked, this, [=]() {
+                    Imprese imprese(nome, db, this);
+                    imprese.setModal(true);
+                    imprese.exec();
+                    // settaListaImprese();
+                });
+                // -------------------------------------------------
 
                 hLayout->addWidget(cbEdit);
                 hLayout->addWidget(bottone);

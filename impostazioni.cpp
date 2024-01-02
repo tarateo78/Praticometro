@@ -12,10 +12,10 @@ Impostazioni::Impostazioni(QSqlDatabase db, QWidget *parent) :
     ui(new Ui::Impostazioni)
 {
     ui->setupUi(this);
-        this->db = db;
+    this->db = db;
     ui->cartellaProgettiEdit->setText(globalPathProgetti);
     ui->utenteEdit->setText(getUtenteWin());
-     ui->generaGroup->setVisible(false);
+    ui->generaGroup->setVisible(false);
 
     if(globalAdmin)
     {
