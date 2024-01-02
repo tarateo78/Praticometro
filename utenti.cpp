@@ -49,7 +49,7 @@ void Utenti::compilaTabella(QString nomeSelezionato)
     ui->tabella->clearContents();
 
     // TITOLI COLONNE
-    ui->tabella->setHorizontalHeaderLabels({"Utente cifrato", "Alias", "Path Lavori", "Password"});
+    ui->tabella->setHorizontalHeaderLabels({"Utente cifrato", "Alias", "Cartella Lavori", "Password"});
 
     // STILE TABELLA
     ui->tabella->setStyleSheet("QHeaderView::section { background-color:#d9d9d9 }");
@@ -207,23 +207,34 @@ void Utenti::on_btnModifica_clicked()
 
     QString queryString;
 
-    // ESCE SE CAMPO UTENTE è INFERIORE A 128 CARATTERI
+    // TERMINA SE CAMPO UTENTE è INFERIORE A 128 CARATTERI
     if(ui->utenteEdit->text().length() != 128)
     {
-        QMessageBox::warning(this, "Attenzione", "Campo [Utente cifrato] non conforme!");
+        QMessageBox::warning(this, "Attenzione", "Campo 'Utente cifrato' non conforme.");
         ui->utenteEdit->setText(utente);
         return;
     }
 
 
-    // ESCE SE CAMPO UTENTE è NULLO O VUOTO
+    // TERMINA SE CAMPO UTENTE è NULLO O VUOTO
     if(ui->utenteEdit->text().isNull() || ui->utenteEdit->text().isEmpty() ||
             ui->utenteEdit->text().trimmed().length() == 0)
     {
-        QMessageBox::warning(this, "Attenzione", "Il campo [Utente cifrato] non può essere vuoto!");
+        QMessageBox::warning(this, "Attenzione", "Il campo 'Utente cifrato' non può essere vuoto.");
         ui->utenteEdit->setText(utente);
         return;
     }
+
+
+    // TERMINA SE CAMPO Path Lavori è NULLO O VUOTO
+    if(ui->pathEdit->text().isNull() || ui->pathEdit->text().isEmpty() ||
+            ui->pathEdit->text().trimmed().length() == 0)
+    {
+        QMessageBox::warning(this, "Attenzione", "Il campo 'Cartella Lavori' non può essere vuoto.");
+        ui->pathEdit->setText(path);
+        return;
+    }
+
 
     if(controlloAggiungi)
     {
