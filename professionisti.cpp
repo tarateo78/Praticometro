@@ -67,9 +67,14 @@ void Professionisti::compilaTabella(QString nomeSelezionato)
     controlloAggiungi = false;
 
     QString queryString = "SELECT * FROM Professionisti ";
+    queryString += " WHERE NomeProfessionista LIKE :cerca ";
+    queryString += " OR Telefono LIKE :cerca ";
+    queryString += " OR Email LIKE :cerca ";
+    queryString += " OR NoteProfessionista LIKE :cerca ";
+    queryString += " OR Pec LIKE :cerca ";
     queryString += " ORDER BY NomeProfessionista ASC;";
     qry->prepare(queryString);
-    //    qry->bindValue(":pratica", pratica);
+    qry->bindValue(":cerca", "%" + ui->cercaEdit->text() + "%");
     qry->exec();
 
     ui->tabella->reset();
@@ -417,4 +422,16 @@ void Professionisti::on_btnAggiungi_clicked()
 
 
 
+
+
+void Professionisti::on_btnClear_clicked()
+{
+    ui->cercaEdit->setText("");
+}
+
+
+void Professionisti::on_cercaEdit_textChanged(const QString &arg1)
+{
+    compilaTabella();
+}
 

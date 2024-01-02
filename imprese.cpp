@@ -90,9 +90,14 @@ void Imprese::compilaTabella(QString nomeSelezionato)
     controlloAggiungi = false;
 
     QString queryString = "SELECT * FROM Imprese ";
+    queryString += " WHERE NomeImpresa LIKE :cerca ";
+    queryString += " OR Telefono LIKE :cerca ";
+    queryString += " OR Email LIKE :cerca ";
+    queryString += " OR NoteImpresa LIKE :cerca ";
+    queryString += " OR Pec LIKE :cerca ";
     queryString += " ORDER BY NomeImpresa ASC;";
     qry->prepare(queryString);
-    //    qry->bindValue(":pratica", pratica);
+    qry->bindValue(":cerca", "%"+ ui->cercaEdit->text()+"%");
     qry->exec();
 
     ui->tabella->reset();
@@ -378,5 +383,17 @@ void Imprese::abilitaBtnModifica()
         ui->btnModifica->setEnabled(true);
         ui->btnElimina->setEnabled(false);
     }
+}
+
+
+void Imprese::on_btnClear_clicked()
+{
+    ui->cercaEdit->setText("");
+}
+
+
+void Imprese::on_cercaEdit_textChanged(const QString &arg1)
+{
+    compilaTabella();
 }
 

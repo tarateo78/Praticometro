@@ -41,6 +41,10 @@ private slots:
 
     void on_noteEdit_textChanged();
 
+    void on_btnClear_clicked();
+
+    void on_cercaEdit_textChanged(const QString &arg1);
+
 private:
     Ui::Professionisti *ui;
     QSqlDatabase db;

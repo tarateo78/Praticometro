@@ -366,8 +366,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>178</width>
-              <height>599</height>
+              <width>174</width>
+              <height>579</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -391,7 +391,7 @@
      <x>0</x>
      <y>0</y>
      <width>1404</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuStrumenti">
@@ -536,7 +536,7 @@
   <action name="actionProfessionisti">
    <property name="icon">
     <iconset resource="Immagini.qrc">
-     <normaloff>:/icone/icone_32/users.png</normaloff>:/icone/icone_32/users.png</iconset>
+     <normaloff>:/icone/icone_32/utenti.png</normaloff>:/icone/icone_32/utenti.png</iconset>
    </property>
    <property name="text">
     <string>Elenco Professionisti...</string>
@@ -545,7 +545,7 @@
   <action name="actionImprese">
    <property name="icon">
     <iconset resource="Immagini.qrc">
-     <normaloff>:/icone/icone_32/scavatore.png</normaloff>:/icone/icone_32/scavatore.png</iconset>
+     <normaloff>:/icone/icone_32/impresa.png</normaloff>:/icone/icone_32/impresa.png</iconset>
    </property>
    <property name="text">
     <string>Elenco Imprese...</string>
