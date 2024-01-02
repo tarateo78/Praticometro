@@ -171,17 +171,39 @@ int MainWindow::verifichePath()
 
 void MainWindow::settaPathProgetti()
 {
-    // PESCA LA CARTELLA LAVORI
+    // PESCA LA CARTELLA LAVORI DAL PROFILO UTENTE
 
-    QSqlQuery *qryCartLavori;
-    qryCartLavori = new QSqlQuery(db);
-    qryCartLavori->prepare("SELECT * FROM Setup WHERE Chiave = :valore;");
-    qryCartLavori->bindValue(":valore", "PathLavori");
-    qryCartLavori->exec();
-    qryCartLavori->next();
+    QString utenteCifrato = Criptazione::cripta512( Impostazioni::getUtenteWin() );
+    QString stringQuery = "SELECT PathLavori FROM Utenti WHERE Utente = :Utente;";
 
-    globalPathProgetti = qryCartLavori->value("Valore").toString();
-    //    qInfo() << globalPathProgetti;
+    QSqlQuery *qry;
+    qry = new QSqlQuery(db);
+    qry->prepare(stringQuery);
+    qry->bindValue(":Utente", utenteCifrato);
+    qry->exec();
+    qry->next();
+
+    // VERIFICA PERCORSO PATH LAVORI
+    QFileInfo fileTemp(qry->value("PathLavori").toString());
+    if(!fileTemp.exists()){
+        ui->statusbar->showMessage(iconaO + " Attenzione: Percorso 'Cartella Lavori' errato.", 10000);
+        return;
+    }
+
+    globalPathProgetti = qry->value("PathLavori").toString();
+        qInfo() << globalPathProgetti;
+
+//    // PESCA LA CARTELLA LAVORI
+
+//    QSqlQuery *qryCartLavori;
+//    qryCartLavori = new QSqlQuery(db);
+//    qryCartLavori->prepare("SELECT * FROM Setup WHERE Chiave = :valore;");
+//    qryCartLavori->bindValue(":valore", "PathLavori");
+//    qryCartLavori->exec();
+//    qryCartLavori->next();
+
+//    globalPathProgetti = qryCartLavori->value("Valore").toString();
+//    //    qInfo() << globalPathProgetti;
 }
 
 
