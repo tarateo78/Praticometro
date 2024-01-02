@@ -282,10 +282,10 @@ void Imprese::on_btnElimina_clicked()
 {
 
     int ret = QMessageBox::warning(this, tr("Attenzione"),
-                                   tr("Vuoi davvero cancellare il \n"
-                                      "presente professionista?\n"
-                                      "Verrà eliminato da tutte le\n"
-                                      "pratiche in cui è memorizzato"),
+                                   tr("Vuoi davvero cancellare\n"
+                                      "la presente impresa?\n"
+                                      "Verrà eliminata da tutte le\n"
+                                      "pratiche in cui è memorizzata"),
                                    QMessageBox::Ok | QMessageBox::Cancel);
 
     //qInfo() << QString::number(ret);

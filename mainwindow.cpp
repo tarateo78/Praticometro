@@ -12,6 +12,7 @@
 #include "criptazione.h"
 #include "professionisti.h"
 #include "imprese.h"
+#include "utenti.h"
 
 #include <QCheckBox>
 #include <QFileInfo>
@@ -82,6 +83,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // DISABILITA MENU > LOGOUT
     ui->action_Log_Out->setEnabled(false);
+    ui->actionGestione_Utenti->setEnabled(false);
 
     db.close();
     qInfo() << "_Fine main!";
@@ -642,6 +644,7 @@ void MainWindow::on_action_Log_In_triggered()
     {
         ui->action_Log_Out->setEnabled(true);
         ui->action_Log_In->setEnabled(false);
+        ui->actionGestione_Utenti->setEnabled(true);
     }
 
 }
@@ -657,6 +660,7 @@ void MainWindow::on_action_Log_Out_triggered()
     // ABILITA/DISABILITA VOCE MENU
     ui->action_Log_Out->setEnabled(false);
     ui->action_Log_In->setEnabled(true);
+    ui->actionGestione_Utenti->setEnabled(false);
 
 }
 
@@ -700,5 +704,13 @@ void MainWindow::on_actionImprese_triggered()
     Imprese imprese(db, this);
     imprese.setModal(true);
     imprese.exec();
+}
+
+
+void MainWindow::on_actionGestione_Utenti_triggered()
+{
+    Utenti utenti(db, this);
+    utenti.setModal(true);
+    utenti.exec();
 }
 

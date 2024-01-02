@@ -25,6 +25,7 @@ SOURCES += \
     schedadettaglio.cpp \
     signinadmin.cpp \
     statopratiche.cpp \
+    utenti.cpp \
     verificaaggiornamenti.cpp
 
 HEADERS += \
@@ -43,6 +44,7 @@ HEADERS += \
     schedadettaglio.h \
     signinadmin.h \
     statopratiche.h \
+    utenti.h \
     verificaaggiornamenti.h
 
 FORMS += \
@@ -55,6 +57,7 @@ FORMS += \
     schedadettaglio.ui \
     signinadmin.ui \
     statopratiche.ui \
+    utenti.ui \
     verificaaggiornamenti.ui
 
 # Default rules for deployment.

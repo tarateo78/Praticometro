@@ -419,6 +419,8 @@
     </property>
     <addaction name="action_Log_In"/>
     <addaction name="action_Log_Out"/>
+    <addaction name="separator"/>
+    <addaction name="actionGestione_Utenti"/>
    </widget>
    <widget class="QMenu" name="menuModifica">
     <property name="title">
@@ -549,6 +551,15 @@
    </property>
    <property name="text">
     <string>Elenco Imprese...</string>
+   </property>
+  </action>
+  <action name="actionGestione_Utenti">
+   <property name="icon">
+    <iconset resource="Immagini.qrc">
+     <normaloff>:/icone/icone_32/utenti.png</normaloff>:/icone/icone_32/utenti.png</iconset>
+   </property>
+   <property name="text">
+    <string>Gestione Utenti</string>
    </property>
   </action>
  </widget>
