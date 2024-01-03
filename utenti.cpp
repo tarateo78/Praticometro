@@ -216,6 +216,16 @@ void Utenti::on_btnModifica_clicked()
     }
 
 
+    // TERMINA SE CAMPO Alias è NULLO O VUOTO
+    if(ui->aliasEdit->text().isNull() || ui->aliasEdit->text().isEmpty() ||
+            ui->aliasEdit->text().trimmed().length() == 0)
+    {
+        QMessageBox::warning(this, "Attenzione", "Il campo 'Alias' non può essere vuoto\n"
+                                                 "e deve corrispondere all'utenza Windows.");
+        ui->aliasEdit->setText(path);
+        return;
+    }
+
     // TERMINA SE CAMPO UTENTE è NULLO O VUOTO
     if(ui->utenteEdit->text().isNull() || ui->utenteEdit->text().isEmpty() ||
             ui->utenteEdit->text().trimmed().length() == 0)
@@ -234,6 +244,7 @@ void Utenti::on_btnModifica_clicked()
         ui->pathEdit->setText(path);
         return;
     }
+
 
 
     if(controlloAggiungi)

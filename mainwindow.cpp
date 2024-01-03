@@ -164,7 +164,7 @@ int MainWindow::verifichePath()
         return 0;
     if(sPath.right(sPath.length()-1).compare("\\") != 0)
         sPath += "\\";
-    globalPathDB = sPath + "config_db.db";
+    globalPathDB = sPath + "Praticometro.db";
 
     return 1;
 }
