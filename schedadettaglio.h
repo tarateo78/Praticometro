@@ -14,6 +14,7 @@
 #include <QTextEdit>
 #include <QCheckBox>
 #include <QDateEdit>
+#include <QDateTime>
 #include <QFileSystemModel>
 #include <QMap>
 #include <QComboBox>

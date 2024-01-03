@@ -5,8 +5,10 @@
 #include<QSqlDatabase>
 #include <QSqlQuery>
 #include <QMessageBox>
+#include <QDateTime>
 
 #include "criptazione.h"
+#include "globalobject.h"
 
 namespace Ui {
 class Utenti;

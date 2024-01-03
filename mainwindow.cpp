@@ -116,6 +116,7 @@ int MainWindow::verificaUtente()
             if(userCriptato.compare(qry->value("Utente").toString())==0)
             {
                 controllo = true;
+                utenteWin = Impostazioni::getUtenteWin();
             }
         }
     }
@@ -173,13 +174,13 @@ void MainWindow::settaPathProgetti()
 {
     // PESCA LA CARTELLA LAVORI DAL PROFILO UTENTE
 
-    QString utenteCifrato = Criptazione::cripta512( Impostazioni::getUtenteWin() );
-    QString stringQuery = "SELECT PathLavori FROM Utenti WHERE Utente = :Utente;";
+//    QString utenteCifrato = Criptazione::cripta512( utenteWin );
+    QString stringQuery = "SELECT PathLavori FROM Utenti WHERE Alias = :Alias;";
 
     QSqlQuery *qry;
     qry = new QSqlQuery(db);
     qry->prepare(stringQuery);
-    qry->bindValue(":Utente", utenteCifrato);
+    qry->bindValue(":Alias", utenteWin);
     qry->exec();
     qry->next();
 

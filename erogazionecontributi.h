@@ -5,6 +5,9 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QMessageBox>
+#include <QDateTime>
+
+#include "globalobject.h"
 
 
 namespace Ui {

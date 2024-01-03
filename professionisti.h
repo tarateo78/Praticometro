@@ -4,6 +4,9 @@
 #include <QDialog>
 #include<QSqlDatabase>
 #include <QSqlQuery>
+#include <QDateTime>
+
+#include "globalobject.h"
 
 namespace Ui {
 class Professionisti;

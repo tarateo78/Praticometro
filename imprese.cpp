@@ -197,33 +197,38 @@ void Imprese::on_btnModifica_clicked()
         return;
     }
 
+
     if(controlloAggiungi)
     {
         queryString = "INSERT INTO Imprese ";
-        queryString += " (NomeImpresa, NoteImpresa, Telefono, Email, Pec, Piva) ";
-        queryString += " VALUES (:NomeImpresa, :note, :telefono, :email, :pec, :piva); ";
+        queryString += " (NomeImpresa, NoteImpresa, Telefono, Email, Pec, Piva, DataModifica, UtenteModifica) ";
+        queryString += " VALUES (:NomeImpresa, :Note, :Telefono, :Email, :Pec, :Piva, :DataModifica, :UtenteModifica); ";
 
     }
     else
     {
         queryString = "UPDATE Imprese ";
         queryString += " SET NomeImpresa = :NomeImpresa ";
-        queryString += ", NoteImpresa = :note ";
-        queryString += ", Telefono = :telefono ";
-        queryString += ", Email = :email ";
-        queryString += ", Pec = :pec ";
-        queryString += ", Piva = :piva ";
+        queryString += ", NoteImpresa = :Note ";
+        queryString += ", Telefono = :Telefono ";
+        queryString += ", Email = :Email ";
+        queryString += ", Pec = :Pec ";
+        queryString += ", Piva = :Piva ";
+        queryString += ", DataModifica = :DataModifica ";
+        queryString += ", UtenteModifica = :UtenteModifica ";
         queryString += " WHERE NomeImpresa = :nome ";
     }
     // qInfo() << queryString;
 
     qry->prepare(queryString);
     qry->bindValue(":NomeImpresa", ui->nomeEdit->text());
-    qry->bindValue(":note", ui->noteEdit->toPlainText());
-    qry->bindValue(":telefono", ui->telefonoEdit->text());
+    qry->bindValue(":Note", ui->noteEdit->toPlainText());
+    qry->bindValue(":Telefono", ui->telefonoEdit->text());
     qry->bindValue(":email", ui->emailEdit->text());
-    qry->bindValue(":pec", ui->pecEdit->text());
-    qry->bindValue(":piva", ui->pivaEdit->text());
+    qry->bindValue(":Pec", ui->pecEdit->text());
+    qry->bindValue(":Piva", ui->pivaEdit->text());
+    qry->bindValue(":DataModifica", QDateTime::currentDateTime());
+    qry->bindValue(":UtenteModifica", utenteWin);
     qry->bindValue(":nome", nome);
     qry->exec();
 
@@ -233,9 +238,13 @@ void Imprese::on_btnModifica_clicked()
         // MODIFICA IN PRATICHE Impresa
         queryString = "UPDATE Pratiche ";
         queryString += " SET Impresa = :NomeImpresa ";
+        queryString += ", DataModifica = :DataModifica ";
+        queryString += ", UtenteModifica = :UtenteModifica ";
         queryString += " WHERE Impresa = :nome; ";
         qry->prepare(queryString);
         qry->bindValue(":NomeImpresa", ui->nomeEdit->text());
+        qry->bindValue(":DataModifica", QDateTime::currentDateTime());
+        qry->bindValue(":UtenteModifica", utenteWin);
         qry->bindValue(":nome", nome);
         qry->exec();
 

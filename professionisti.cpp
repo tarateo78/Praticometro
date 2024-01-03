@@ -257,8 +257,8 @@ void Professionisti::on_btnModifica_clicked()
     if(controlloAggiungi)
     {
         queryString = "INSERT INTO Professionisti ";
-        queryString += " (NomeProfessionista, NoteProfessionista, Telefono, Email, Pec) ";
-        queryString += " VALUES (:nomeProfessionista, :note, :telefono, :email, :pec); ";
+        queryString += " (NomeProfessionista, NoteProfessionista, Telefono, Email, Pec, DataModifica, UtenteModifica) ";
+        queryString += " VALUES (:nomeProfessionista, :note, :telefono, :email, :pec, :DataModifica, :UtenteModifica); ";
 
     }
     else
@@ -269,6 +269,8 @@ void Professionisti::on_btnModifica_clicked()
         queryString += ", Telefono = :telefono ";
         queryString += ", Email = :email ";
         queryString += ", Pec = :pec ";
+        queryString += ", DataModifica = :DataModifica ";
+        queryString += ", UtenteModifica = :UtenteModifica ";
         queryString += " WHERE NomeProfessionista = :nome ";
     }
     // qInfo() << queryString;
@@ -279,6 +281,8 @@ void Professionisti::on_btnModifica_clicked()
     qry->bindValue(":telefono", ui->telefonoEdit->text());
     qry->bindValue(":email", ui->emailEdit->text());
     qry->bindValue(":pec", ui->pecEdit->text());
+    qry->bindValue(":DataModifica", QDateTime::currentDateTime());
+    qry->bindValue(":UtenteModifica", utenteWin);
     qry->bindValue(":nome", nome);
     qry->exec();
 
@@ -288,27 +292,41 @@ void Professionisti::on_btnModifica_clicked()
         // MODIFICA IN PRATICHE Progettista
         queryString = "UPDATE Pratiche ";
         queryString += " SET Progettista = :nomeProfessionista ";
+        queryString += ", DataModifica = :DataModifica ";
+        queryString += ", UtenteModifica = :UtenteModifica ";
         queryString += " WHERE Progettista = :nome; ";
         qry->prepare(queryString);
         qry->bindValue(":nomeProfessionista", ui->nomeEdit->text());
+        qry->bindValue(":DataModifica", QDateTime::currentDateTime());
+        qry->bindValue(":UtenteModifica", utenteWin);
         qry->bindValue(":nome", nome);
         qry->exec();
 
         // MODIFICA IN PRATICHE Sicurezza
         queryString = "UPDATE Pratiche ";
         queryString += " SET Sicurezza= :nomeProfessionista ";
+        queryString += ", DataModifica = :DataModifica ";
+        queryString += ", UtenteModifica = :UtenteModifica ";
+        queryString += ", DataModifica = :DataModifica ";
+        queryString += ", UtenteModifica = :UtenteModifica ";
         queryString += " WHERE Sicurezza = :nome; ";
         qry->prepare(queryString);
         qry->bindValue(":nomeProfessionista", ui->nomeEdit->text());
+        qry->bindValue(":DataModifica", QDateTime::currentDateTime());
+        qry->bindValue(":UtenteModifica", utenteWin);
         qry->bindValue(":nome", nome);
         qry->exec();
 
         // MODIFICA IN PRATICHE DirezioneLavori
         queryString = "UPDATE Pratiche ";
         queryString += " SET DirezioneLavori = :nomeProfessionista ";
+        queryString += ", DataModifica = :DataModifica ";
+        queryString += ", UtenteModifica = :UtenteModifica ";
         queryString += " WHERE DirezioneLavori = :nome; ";
         qry->prepare(queryString);
         qry->bindValue(":nomeProfessionista", ui->nomeEdit->text());
+        qry->bindValue(":DataModifica", QDateTime::currentDateTime());
+        qry->bindValue(":UtenteModifica", utenteWin);
         qry->bindValue(":nome", nome);
         qry->exec();
     }

@@ -250,8 +250,8 @@ void Utenti::on_btnModifica_clicked()
     if(controlloAggiungi)
     {
         queryString = "INSERT INTO Utenti ";
-        queryString += " (Utente, Alias, PathLavori, Password) ";
-        queryString += " VALUES (:Utente, :Alias, :PathLavori, :Password); ";
+        queryString += " (Utente, Alias, PathLavori, Password, DataModifica, UtenteModifica) ";
+        queryString += " VALUES (:Utente, :Alias, :PathLavori, :Password, :DataModifica, :UtenteModifica); ";
 
     }
     else
@@ -261,6 +261,8 @@ void Utenti::on_btnModifica_clicked()
         queryString += ", Alias = :Alias ";
         queryString += ", PathLavori = :PathLavori ";
         queryString += ", Password = :Password ";
+        queryString += ", DataModifica = :DataModifica ";
+        queryString += ", UtenteModifica = :UtenteModifica ";
         queryString += " WHERE Utente = :nome ";
     }
     // qInfo() << queryString;
@@ -270,6 +272,8 @@ void Utenti::on_btnModifica_clicked()
     qry->bindValue(":Alias", ui->aliasEdit->text());
     qry->bindValue(":PathLavori", ui->pathEdit->text());
     qry->bindValue(":Password", ui->pwdEdit->text());
+    qry->bindValue(":DataModifica", QDateTime::currentDateTime());
+    qry->bindValue(":UtenteModifica", utenteWin);
     qry->bindValue(":nome", utente);
     qry->exec();
 

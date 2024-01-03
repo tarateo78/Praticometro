@@ -12,6 +12,7 @@ public:
 
 extern QString globalPathDB;
 extern QString globalPathProgetti;
+extern QString utenteWin;
 extern int globalAdmin;
 extern int globalCount;
 

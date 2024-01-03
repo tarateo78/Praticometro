@@ -363,6 +363,9 @@ void SchedaDettaglio::salvaModifiche()
     // SALVA
 
     if(!db.isOpen()) db.open();
+
+    QSqlQuery *qry = new QSqlQuery(db);
+
     QLocale ita = QLocale::Italian;
 
     QListIterator<QWidget*> i(*campi);
@@ -375,6 +378,7 @@ void SchedaDettaglio::salvaModifiche()
         QCheckBox *cBox;
         QDoubleSpinBox *dEdit;
         QDateEdit *dDate;
+
 
         QString chiave = "";
         QString valore = "";
@@ -423,13 +427,22 @@ void SchedaDettaglio::salvaModifiche()
 
         if(chiave.compare("Pratica")==0) continue;
 
-        QSqlQuery *qry;
-        qry = new QSqlQuery(db);
+
         qry->prepare("UPDATE Pratiche SET "+ chiave +" = :valore WHERE CodicePratica = :pratica");
         qry->bindValue(":valore", valore);
         qry->bindValue(":pratica", pratica);
         qry->exec();
     }
+
+    // AGGIORNA DATA-UTENTE MODIFICA
+    QString queryString = "UPDATE Pratiche SET DataModifica = :DataModifica "
+                          ", UtenteModifica = :UtenteModifica "
+                          " WHERE CodicePratica = :pratica";
+    qry->prepare(queryString);
+    qry->bindValue(":DataModifica", QDateTime::currentDateTime());
+    qry->bindValue(":UtenteModifica", utenteWin);
+            qry->bindValue(":pratica", pratica);
+    qry->exec();
 
     // AGGIORNA LA QUERY PRATICA
     queryPratica();

@@ -2,9 +2,12 @@
 #define IMPRESE_H
 
 #include <QDialog>
-#include<QSqlDatabase>
+#include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QMessageBox>
+#include <QDateTime>
+
+#include "globalobject.h"
 
 namespace Ui {
 class Imprese;

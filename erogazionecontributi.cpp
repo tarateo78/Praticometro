@@ -195,8 +195,8 @@ void ErogazioneContributi::on_btnModifica_clicked()
     if(controlloAggiungi)
     {
         queryString = "INSERT INTO ErogazioneContributi ";
-        queryString += " (CodicePratica, DataRichiesta, ImportoRichiesto, ImportoErogato, DataErogazione, NotaErogazione) ";
-        queryString += " VALUES (:CodicePratica, :DataRichiesta, :ImportoRichiesto, :ImportoErogato, :DataErogazione, :NotaErogazione); ";
+        queryString += " (CodicePratica, DataRichiesta, ImportoRichiesto, ImportoErogato, DataErogazione, NotaErogazione, DataModifica, UtenteModifica) ";
+        queryString += " VALUES (:CodicePratica, :DataRichiesta, :ImportoRichiesto, :ImportoErogato, :DataErogazione, :NotaErogazione, :DataModifica, :UtenteModifica); ";
     }
     else
     {
@@ -206,6 +206,8 @@ void ErogazioneContributi::on_btnModifica_clicked()
         queryString += ", ImportoErogato = :ImportoErogato ";
         queryString += ", DataErogazione = :DataErogazione ";
         queryString += ", NotaErogazione = :NotaErogazione ";
+        queryString += ", DataModifica = :DataModifica ";
+        queryString += ", UtenteModifica = :UtenteModifica ";
 
         queryString += " WHERE IdErogazione = :IdErogazione ";
     }
@@ -225,6 +227,8 @@ void ErogazioneContributi::on_btnModifica_clicked()
     qry->bindValue(":ImportoErogato", ui->dataErogEdit->text());
     qry->bindValue(":DataErogazione", ui->impErogEdit->text());
     qry->bindValue(":NotaErogazione", ui->notaEdit->toPlainText());
+    qry->bindValue(":DataModifica", QDateTime::currentDateTime());
+    qry->bindValue(":UtenteModifica", utenteWin);
 
     qry->bindValue(":IdErogazione", ui->idEdit->text());
     qry->exec();
