@@ -98,11 +98,11 @@ MainWindow::~MainWindow()
 
 int MainWindow::verificaUtente()
 {
-//    QByteArray user = globalKey.toUtf8() + Impostazioni::getUtenteWin().toUtf8();
-//    QCryptographicHash *criptoHash = new QCryptographicHash(QCryptographicHash::Sha512);
-//    criptoHash->addData(user);
-//    QByteArray cript = criptoHash->result();
-//    QString userCriptato = cript.toHex();
+    //    QByteArray user = globalKey.toUtf8() + Impostazioni::getUtenteWin().toUtf8();
+    //    QCryptographicHash *criptoHash = new QCryptographicHash(QCryptographicHash::Sha512);
+    //    criptoHash->addData(user);
+    //    QByteArray cript = criptoHash->result();
+    //    QString userCriptato = cript.toHex();
 
     QString userCriptato = Criptazione::cripta512( Impostazioni::getUtenteWin() );
 
@@ -113,7 +113,7 @@ int MainWindow::verificaUtente()
     {
         while(qry->next())
         {
-            if(userCriptato.compare(qry->value("Utente").toString())==0)
+            if(userCriptato.compare(qry->value("ChiaveUtente").toString())==0)
             {
                 controllo = true;
                 utenteWin = Impostazioni::getUtenteWin();
@@ -173,14 +173,12 @@ int MainWindow::verifichePath()
 void MainWindow::settaPathProgetti()
 {
     // PESCA LA CARTELLA LAVORI DAL PROFILO UTENTE
-
-//    QString utenteCifrato = Criptazione::cripta512( utenteWin );
-    QString stringQuery = "SELECT PathLavori FROM Utenti WHERE Alias = :Alias;";
+    QString stringQuery = "SELECT PathLavori FROM Utenti WHERE Utente = :Utente;";
 
     QSqlQuery *qry;
     qry = new QSqlQuery(db);
     qry->prepare(stringQuery);
-    qry->bindValue(":Alias", utenteWin);
+    qry->bindValue(":Utente", utenteWin);
     qry->exec();
     qry->next();
 
@@ -192,548 +190,536 @@ void MainWindow::settaPathProgetti()
     }
 
     globalPathProgetti = qry->value("PathLavori").toString();
-        qInfo() << globalPathProgetti;
+    // qInfo() << globalPathProgetti;
 
-//    // PESCA LA CARTELLA LAVORI
-
-//    QSqlQuery *qryCartLavori;
-//    qryCartLavori = new QSqlQuery(db);
-//    qryCartLavori->prepare("SELECT * FROM Setup WHERE Chiave = :valore;");
-//    qryCartLavori->bindValue(":valore", "PathLavori");
-//    qryCartLavori->exec();
-//    qryCartLavori->next();
-
-//    globalPathProgetti = qryCartLavori->value("Valore").toString();
-//    //    qInfo() << globalPathProgetti;
 }
 
-
-void MainWindow::nascondiColonna()
-{
-    // RICEVE EVENTO DEL CHECKBOX E MODIFICA IL VALORE NELLA mapColonne
-
-    QCheckBox *cb  = qobject_cast<QCheckBox*>(sender());
-    mapColonne[cb->text()] = (cb->isChecked() ? 1 : 0);
-
-    // APPLICA CAMBIAMENTO A MAPPACOLONNE OGGETTI
-    mappaColonne[cb->text()]->setVisibile(cb->isChecked() ? 1 : 0);
-
-    compilaTabellaCompleta();
-}
-
-
-void MainWindow::compilaElencoColonne()
-{
-    // COMPILA L'ELENCO LATERALE DELLE COLONNE DISPONIBILI
-
-    //    if(!db.isOpen()) db.open();
-
-    qry->prepare("SELECT * FROM Colonne WHERE Attivo = 1 AND Intabella = 1 ORDER BY OrdineColonna;");
-    qry->exec();
-
-    while(qry->next())
+    void MainWindow::nascondiColonna()
     {
+        // RICEVE EVENTO DEL CHECKBOX E MODIFICA IL VALORE NELLA mapColonne
 
-        // COMPILA MAPPA DI OGGETTI COLONNE
-        mappaColonne.insert(
-                    qry->value("TestoColonna").toString(),
-                    new Colonna(
-                        qry->value("NomeColonna").toString(),
+        QCheckBox *cb  = qobject_cast<QCheckBox*>(sender());
+        mapColonne[cb->text()] = (cb->isChecked() ? 1 : 0);
+
+        // APPLICA CAMBIAMENTO A MAPPACOLONNE OGGETTI
+        mappaColonne[cb->text()]->setVisibile(cb->isChecked() ? 1 : 0);
+
+        compilaTabellaCompleta();
+    }
+
+
+    void MainWindow::compilaElencoColonne()
+    {
+        // COMPILA L'ELENCO LATERALE DELLE COLONNE DISPONIBILI
+
+        //    if(!db.isOpen()) db.open();
+
+        qry->prepare("SELECT * FROM Colonne WHERE Attivo = 1 AND Intabella = 1 ORDER BY OrdineColonna;");
+        qry->exec();
+
+        while(qry->next())
+        {
+
+            // COMPILA MAPPA DI OGGETTI COLONNE
+            mappaColonne.insert(
                         qry->value("TestoColonna").toString(),
-                        qry->value("Larghezza").toString(),
-                        qry->value("TipoColonna").toString(),
-                        qry->value("Categoria").toString(),
-                        qry->value("OrdineColonna").toInt(),
-                        qry->value("Visibile").toInt(),
-                        qry->value("InTabella").toInt(),
-                        qry->value("Attivo").toInt()
-                        )
-                    );
+                        new Colonna(
+                            qry->value("NomeColonna").toString(),
+                            qry->value("TestoColonna").toString(),
+                            qry->value("Larghezza").toString(),
+                            qry->value("TipoColonna").toString(),
+                            qry->value("Categoria").toString(),
+                            qry->value("OrdineColonna").toInt(),
+                            qry->value("Visibile").toInt(),
+                            qry->value("InTabella").toInt(),
+                            qry->value("Attivo").toInt()
+                            )
+                        );
 
-        QCheckBox *c = new QCheckBox(qry->value("TestoColonna").toString());
-        c->setChecked(qry->value("Visibile").toInt());
-        c->setObjectName(qry->value("NomeColonna").toString());
-        connect(c, SIGNAL(toggled(bool)), this, SLOT(nascondiColonna()));
-        ui->verticalLayoutColonne->addWidget(c);
-        mapColonne.insert(qry->value("TestoColonna").toString(), qry->value("Visibile").toInt());
-        mapColonneTipo.insert(qry->value("NomeColonna").toString(), qry->value("TipoColonna").toString());
-    }
-    //    db.close();
-    //qInfo() << mapColonne;
-}
-
-
-void MainWindow::compilaTabellaCompleta()
-{
-
-    // COMPILA LA TABELLA PRINCIPALE
-
-    refresh = 1;
-    if(!db.isOpen()) db.open();
-
-    qry->prepare("SELECT * FROM Colonne WHERE Intabella = 1 ORDER BY OrdineColonna;");
-    qry->exec();
-
-    ui->tableWidget->setColumnCount(0);
-    ui->tableWidget->setRowCount(0);
-    ui->tableWidget->clearContents();
-
-    ui->tableWidget->setAlternatingRowColors(true);
-
-    QList<QString> listaHeader;
-
-    // IMPOSTA TITOLI TABELLA
-    int nColonna=0;
-    while(qry->next())
-    {
-        listaHeader.append(qry->value("NomeColonna").toString());
-
-        ui->tableWidget->insertColumn(nColonna);
-        QTableWidgetItem *header = new QTableWidgetItem();
-        header->setText(qry->value("TestoColonna").toString());
-
-        ui->tableWidget->setHorizontalHeaderItem(nColonna, header);
-        ui->tableWidget->setStyleSheet("QHeaderView::section { background-color:#d9d9d9 }");
-
-        ui->tableWidget->setColumnWidth(nColonna, qry->value("Larghezza").toInt());
-
-        if(!mapColonne[qry->value("TestoColonna").toString()])
-            ui->tableWidget->hideColumn(nColonna);
-
-        nColonna++;
+            QCheckBox *c = new QCheckBox(qry->value("TestoColonna").toString());
+            c->setChecked(qry->value("Visibile").toInt());
+            c->setObjectName(qry->value("NomeColonna").toString());
+            connect(c, SIGNAL(toggled(bool)), this, SLOT(nascondiColonna()));
+            ui->verticalLayoutColonne->addWidget(c);
+            mapColonne.insert(qry->value("TestoColonna").toString(), qry->value("Visibile").toInt());
+            mapColonneTipo.insert(qry->value("NomeColonna").toString(), qry->value("TipoColonna").toString());
+        }
+        //    db.close();
+        //qInfo() << mapColonne;
     }
 
-    QFont fontBold;
-    fontBold.setBold(true);
 
-    eseguiQuerySelect();
-    int row = 0;
-    while(qry->next())
+    void MainWindow::compilaTabellaCompleta()
     {
-        //qInfo() << qry->value("Pratica").toString();
 
-        ui->tableWidget->insertRow(row);
+        // COMPILA LA TABELLA PRINCIPALE
 
-        nColonna = 0;
-        foreach (QString head, listaHeader) {
+        refresh = 1;
+        if(!db.isOpen()) db.open();
 
-            QTableWidgetItem *item = new QTableWidgetItem();
-            item->setText(qry->value(head).toString());
+        qry->prepare("SELECT * FROM Colonne WHERE Intabella = 1 ORDER BY OrdineColonna;");
+        qry->exec();
 
-            if(qry->value("Incorso").toString().compare("1")==0 &&
-                    head.compare("Pratica")==0 &&
-                    !ui->checkBox->isChecked())
-                item->setFont(fontBold);
+        ui->tableWidget->setColumnCount(0);
+        ui->tableWidget->setRowCount(0);
+        ui->tableWidget->clearContents();
 
-            if(mapColonneTipo.value(head).compare("Bool")==0)
-            {
-                if(qry->value(head).toString().compare("0")==0)
-                {
-                    item->setText("");
-                }
-                else
-                {
-                    item->setText(iconaV);
-                }
-                item->setData(Qt::TextAlignmentRole,Qt::AlignCenter);
-            }
-            else if(mapColonneTipo.value(head).compare("Intero")==0)
-            {
-                item->setText(qry->value(head).toString());
-            }
-            else if(mapColonneTipo.value(head).compare("Decimale")==0)
-            {
-                item->setText(qry->value(head).toString());
-                item->setData(Qt::TextAlignmentRole, int(Qt::AlignVCenter|Qt::AlignRight));
-            }
-            else
-            {
-                item->setText(qry->value(head).toString());
-            }
+        ui->tableWidget->setAlternatingRowColors(true);
 
-            // COLORA LE RIGHE IN BASE ALLA FASE
-            Colore colore;
-            if(qry->value("AvvioProgettazione").toInt() && ui->coloraCheck->isChecked())
-            {
-                item->setBackground(colore.prog());
-            }
+        QList<QString> listaHeader;
 
-            if(qry->value("AvvioGara").toInt() && ui->coloraCheck->isChecked())
-            {
-                item->setBackground(colore.gara());
-            }
+        // IMPOSTA TITOLI TABELLA
+        int nColonna=0;
+        while(qry->next())
+        {
+            listaHeader.append(qry->value("NomeColonna").toString());
 
-            if(qry->value("LavoriInCorso").toInt() && ui->coloraCheck->isChecked())
-            {
-                item->setBackground(colore.lavori());
-            }
+            ui->tableWidget->insertColumn(nColonna);
+            QTableWidgetItem *header = new QTableWidgetItem();
+            header->setText(qry->value("TestoColonna").toString());
 
-            if(qry->value("CreFatto").toInt() && ui->coloraCheck->isChecked())
-            {
-                item->setBackground(colore.cre());
-            }
+            ui->tableWidget->setHorizontalHeaderItem(nColonna, header);
+            ui->tableWidget->setStyleSheet("QHeaderView::section { background-color:#d9d9d9 }");
 
-            // URGENTE
-            if(qry->value("Urgente").toInt() && head.compare("Titolo") == 0
-                    && ui->coloraCheck->isChecked())
-            {
-                //item->setForeground(QColor(255, 0, 0));
-                item->setText(iconaAppunto + " " + item->text());
-                item->setToolTip("Urgente... " + qry->value("UrgenteNota").toString());
-            }
+            ui->tableWidget->setColumnWidth(nColonna, qry->value("Larghezza").toInt());
 
-            // SCADENZA
-            if(qry->value("ProsScadData").toString().compare("") != 0 &&
-                    QDate::currentDate() >= qry->value("ProsScadData").toDate() &&
-                    head.compare("Titolo") == 0 &&
-                    ui->coloraCheck->isChecked())
-            {
-                item->setText(iconaTempo + " " + item->text());
-                item->setToolTip(qry->value("ProsScadNote").toString());
-            }
-            ui->tableWidget->setItem(row,nColonna,item);
+            if(!mapColonne[qry->value("TestoColonna").toString()])
+                ui->tableWidget->hideColumn(nColonna);
+
             nColonna++;
         }
 
-        row++;
-    }
-    ui->prog->setStyleSheet("QLabel { background-color : rgb(255, 255, 179); }");
-    ui->gara->setStyleSheet("QLabel { background-color : rgb(179, 255, 179); }");
-    ui->lavoriInCorso->setStyleSheet("QLabel { background-color : rgb(179, 217, 255); }");
-    ui->creFatto->setStyleSheet("QLabel { background-color : rgb(153, 153, 255); }");
+        QFont fontBold;
+        fontBold.setBold(true);
 
-    //    db.close();
-    refresh = 0;
-}
-
-
-void MainWindow::eseguiQuerySelect()
-{
-    QString lCombo;
-    if(ui->comboBox->currentText().compare("Tutti"))
-        lCombo = "";
-    if(ui->comboBox->currentText().compare("Nulla in corso") == 0)
-        lCombo = "AND AvvioProgettazione = 0 AND AvvioGara = 0 AND LavoriInCorso = 0 AND CreFatto = 0 ";
-    if(ui->comboBox->currentText().compare("Progetti in corso") == 0)
-        lCombo = "AND AvvioProgettazione = 1 AND AvvioGara = 0 AND LavoriInCorso = 0 AND CreFatto = 0 ";
-    if(ui->comboBox->currentText().compare("Gara in corso") == 0)
-        lCombo = "AND AvvioGara = 1 AND LavoriInCorso = 0 AND CreFatto = 0 ";
-    if(ui->comboBox->currentText().compare("Lavori in corso") == 0)
-        lCombo = "AND LavoriInCorso = 1 AND CreFatto = 0 ";
-    if(ui->comboBox->currentText().compare("Lavori conclusi") == 0)
-        lCombo = "AND CreFatto = 1 ";
-
-    query ="SELECT * FROM Pratiche WHERE Incorso > :incorso AND (";
-    query += "CodicePratica LIKE :filtro OR Titolo LIKE :filtro OR TitoloEsteso LIKE :filtro OR ";
-    query += "Progettista LIKE :filtro OR Sicurezza LIKE :filtro OR Impresa LIKE :filtro OR ";
-    query += "Rup LIKE :filtro OR  ";
-    query += "Finanziamento LIKE :filtro OR DirezioneLavori LIKE :filtro OR  ";
-    query += "Cup LIKE :filtro OR Fascicolo LIKE :filtro ";
-    query += ") " + lCombo;
-    query += " ORDER BY CodicePratica DESC;";
-
-    qry->prepare(query);
-    qry->bindValue(":incorso", ui->checkBox->isChecked()?"0":"-1");
-    qry->bindValue(":filtro", "%" + ui->lineEdit->text() + "%");
-
-    qry->exec();
-}
-
-
-void MainWindow::copiaSelezione()
-{
-    QString copiaTabella;
-
-    QList<QTableWidgetSelectionRange> q = ui->tableWidget->selectedRanges();
-
-    if(q.isEmpty())
-    {
-        ui->statusbar->showMessage("Attenzione: Nessun dato selezionato.", 5000);
-        return;
-    }
-
-    // CICLO SU TITOLI COLONNE
-    bool primo = true;
-    for(int x = 0; x < ui->tableWidget->columnCount(); x++)
-    {
-        if(!ui->tableWidget->isColumnHidden(x))
+        eseguiQuerySelect();
+        int row = 0;
+        while(qry->next())
         {
-            if(!primo) copiaTabella.append('\t');
-            primo = false;
-            QString text = ui->tableWidget->horizontalHeaderItem(x)->text();
-            copiaTabella.append("\""+text+"\"");
-        }
-    }
-    copiaTabella.append('\n');
+            //qInfo() << qry->value("Pratica").toString();
 
-    // CICLO SU RIGHE SELEZIONATE
-    for(int y = q.begin()->topRow(); y <= q.begin()->bottomRow(); y++)
+            ui->tableWidget->insertRow(row);
+
+            nColonna = 0;
+            foreach (QString head, listaHeader) {
+
+                QTableWidgetItem *item = new QTableWidgetItem();
+                item->setText(qry->value(head).toString());
+
+                if(qry->value("Incorso").toString().compare("1")==0 &&
+                        head.compare("Pratica")==0 &&
+                        !ui->checkBox->isChecked())
+                    item->setFont(fontBold);
+
+                if(mapColonneTipo.value(head).compare("Bool")==0)
+                {
+                    if(qry->value(head).toString().compare("0")==0)
+                    {
+                        item->setText("");
+                    }
+                    else
+                    {
+                        item->setText(iconaV);
+                    }
+                    item->setData(Qt::TextAlignmentRole,Qt::AlignCenter);
+                }
+                else if(mapColonneTipo.value(head).compare("Intero")==0)
+                {
+                    item->setText(qry->value(head).toString());
+                }
+                else if(mapColonneTipo.value(head).compare("Decimale")==0)
+                {
+                    item->setText(qry->value(head).toString());
+                    item->setData(Qt::TextAlignmentRole, int(Qt::AlignVCenter|Qt::AlignRight));
+                }
+                else
+                {
+                    item->setText(qry->value(head).toString());
+                }
+
+                // COLORA LE RIGHE IN BASE ALLA FASE
+                Colore colore;
+                if(qry->value("AvvioProgettazione").toInt() && ui->coloraCheck->isChecked())
+                {
+                    item->setBackground(colore.prog());
+                }
+
+                if(qry->value("AvvioGara").toInt() && ui->coloraCheck->isChecked())
+                {
+                    item->setBackground(colore.gara());
+                }
+
+                if(qry->value("LavoriInCorso").toInt() && ui->coloraCheck->isChecked())
+                {
+                    item->setBackground(colore.lavori());
+                }
+
+                if(qry->value("CreFatto").toInt() && ui->coloraCheck->isChecked())
+                {
+                    item->setBackground(colore.cre());
+                }
+
+                // URGENTE
+                if(qry->value("Urgente").toInt() && head.compare("Titolo") == 0
+                        && ui->coloraCheck->isChecked())
+                {
+                    //item->setForeground(QColor(255, 0, 0));
+                    item->setText(iconaAppunto + " " + item->text());
+                    item->setToolTip("Urgente... " + qry->value("UrgenteNota").toString());
+                }
+
+                // SCADENZA
+                if(qry->value("ProsScadData").toString().compare("") != 0 &&
+                        QDate::currentDate() >= qry->value("ProsScadData").toDate() &&
+                        head.compare("Titolo") == 0 &&
+                        ui->coloraCheck->isChecked())
+                {
+                    item->setText(iconaTempo + " " + item->text());
+                    item->setToolTip(qry->value("ProsScadNote").toString());
+                }
+                ui->tableWidget->setItem(row,nColonna,item);
+                nColonna++;
+            }
+
+            row++;
+        }
+        ui->prog->setStyleSheet("QLabel { background-color : rgb(255, 255, 179); }");
+        ui->gara->setStyleSheet("QLabel { background-color : rgb(179, 255, 179); }");
+        ui->lavoriInCorso->setStyleSheet("QLabel { background-color : rgb(179, 217, 255); }");
+        ui->creFatto->setStyleSheet("QLabel { background-color : rgb(153, 153, 255); }");
+
+        //    db.close();
+        refresh = 0;
+    }
+
+
+    void MainWindow::eseguiQuerySelect()
     {
-        primo = true;
+        QString lCombo;
+        if(ui->comboBox->currentText().compare("Tutti"))
+            lCombo = "";
+        if(ui->comboBox->currentText().compare("Nulla in corso") == 0)
+            lCombo = "AND AvvioProgettazione = 0 AND AvvioGara = 0 AND LavoriInCorso = 0 AND CreFatto = 0 ";
+        if(ui->comboBox->currentText().compare("Progetti in corso") == 0)
+            lCombo = "AND AvvioProgettazione = 1 AND AvvioGara = 0 AND LavoriInCorso = 0 AND CreFatto = 0 ";
+        if(ui->comboBox->currentText().compare("Gara in corso") == 0)
+            lCombo = "AND AvvioGara = 1 AND LavoriInCorso = 0 AND CreFatto = 0 ";
+        if(ui->comboBox->currentText().compare("Lavori in corso") == 0)
+            lCombo = "AND LavoriInCorso = 1 AND CreFatto = 0 ";
+        if(ui->comboBox->currentText().compare("Lavori conclusi") == 0)
+            lCombo = "AND CreFatto = 1 ";
+
+        query ="SELECT * FROM Pratiche WHERE Incorso > :incorso AND (";
+        query += "CodicePratica LIKE :filtro OR Titolo LIKE :filtro OR TitoloEsteso LIKE :filtro OR ";
+        query += "Progettista LIKE :filtro OR Sicurezza LIKE :filtro OR Impresa LIKE :filtro OR ";
+        query += "Rup LIKE :filtro OR  ";
+        query += "Finanziamento LIKE :filtro OR DirezioneLavori LIKE :filtro OR  ";
+        query += "Cup LIKE :filtro OR Fascicolo LIKE :filtro ";
+        query += ") " + lCombo;
+        query += " ORDER BY CodicePratica DESC;";
+
+        qry->prepare(query);
+        qry->bindValue(":incorso", ui->checkBox->isChecked()?"0":"-1");
+        qry->bindValue(":filtro", "%" + ui->lineEdit->text() + "%");
+
+        qry->exec();
+    }
+
+
+    void MainWindow::copiaSelezione()
+    {
+        QString copiaTabella;
+
+        QList<QTableWidgetSelectionRange> q = ui->tableWidget->selectedRanges();
+
+        if(q.isEmpty())
+        {
+            ui->statusbar->showMessage("Attenzione: Nessun dato selezionato.", 5000);
+            return;
+        }
+
+        // CICLO SU TITOLI COLONNE
+        bool primo = true;
         for(int x = 0; x < ui->tableWidget->columnCount(); x++)
         {
             if(!ui->tableWidget->isColumnHidden(x))
             {
                 if(!primo) copiaTabella.append('\t');
                 primo = false;
-                QString text =  ui->tableWidget->item(y,x)->text();
-                if(mappaColonne[ui->tableWidget->horizontalHeaderItem(x)->text()]->getTipoColonna().compare("Decimale") == 0 || mappaColonne[ui->tableWidget->horizontalHeaderItem(x)->text()]->getTipoColonna().compare("Data") == 0)
-                {
-                    copiaTabella.append(text);
-                }
-                else
-                {
-                    copiaTabella.append("\""+text+"\"");
-                }
-
+                QString text = ui->tableWidget->horizontalHeaderItem(x)->text();
+                copiaTabella.append("\""+text+"\"");
             }
         }
         copiaTabella.append('\n');
+
+        // CICLO SU RIGHE SELEZIONATE
+        for(int y = q.begin()->topRow(); y <= q.begin()->bottomRow(); y++)
+        {
+            primo = true;
+            for(int x = 0; x < ui->tableWidget->columnCount(); x++)
+            {
+                if(!ui->tableWidget->isColumnHidden(x))
+                {
+                    if(!primo) copiaTabella.append('\t');
+                    primo = false;
+                    QString text =  ui->tableWidget->item(y,x)->text();
+                    if(mappaColonne[ui->tableWidget->horizontalHeaderItem(x)->text()]->getTipoColonna().compare("Decimale") == 0 || mappaColonne[ui->tableWidget->horizontalHeaderItem(x)->text()]->getTipoColonna().compare("Data") == 0)
+                    {
+                        copiaTabella.append(text);
+                    }
+                    else
+                    {
+                        copiaTabella.append("\""+text+"\"");
+                    }
+
+                }
+            }
+            copiaTabella.append('\n');
+        }
+        qInfo() << "Dati copiati in memoria";
+        ui->statusbar->showMessage("Dati copiati in memoria.", 5000);
+        QClipboard *clipboard = QApplication::clipboard();
+        clipboard->setText(copiaTabella);
+
     }
-    qInfo() << "Dati copiati in memoria";
-    ui->statusbar->showMessage("Dati copiati in memoria.", 5000);
-    QClipboard *clipboard = QApplication::clipboard();
-    clipboard->setText(copiaTabella);
-
-}
 
 
-void MainWindow::on_actionCopia_triggered()
-{
-    copiaSelezione();
-}
-
-
-void MainWindow::keyPressEvent(QKeyEvent *event)
-{
-    if (event->matches(QKeySequence::Copy))
+    void MainWindow::on_actionCopia_triggered()
     {
         copiaSelezione();
-
     }
-}
-
-void MainWindow::on_checkBox_stateChanged(int arg1)
-{
-    // CHECK SOLO IN CORSO
-
-    compilaTabellaCompleta();
-}
 
 
-void MainWindow::on_lineEdit_textChanged(const QString &arg1)
-{
-    // CAMPO FILTRO
-
-    compilaTabellaCompleta();
-}
-
-
-void MainWindow::on_pushButton_clicked()
-{
-    // CANCELLA CASELLA FILTRO
-
-    ui->lineEdit->setText("");
-}
-
-
-void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
-{
-    // APRI SCHEDA DETTAGLIO
-
-    QString pratica = ui->tableWidget->item(row, 0)->text();
-    //qInfo() << "testo doubleclick" << pratica;
-
-    SchedaDettaglio schedaDettaglio(pratica, db);
-    schedaDettaglio.setModal(true);
-    schedaDettaglio.exec();
-
-    compilaTabellaCompleta();
-}
-
-
-void MainWindow::on_actionGestione_Stato_Pratiche_triggered()
-{
-    StatoPratiche statoPratiche(db);
-    statoPratiche.setModal(true);
-    statoPratiche.exec();
-}
-
-
-void MainWindow::on_actionCartella_Progetti_triggered()
-{
-    Impostazioni impostazioni(db);
-    impostazioni.setModal(true);
-    impostazioni.exec();
-}
-
-
-void MainWindow::on_coloraCheck_stateChanged(int arg1)
-{
-    // CHECK COLORA
-
-    compilaTabellaCompleta();
-}
-
-
-void MainWindow::on_actionEsporta_csv_triggered()
-{
-    // CSV
-
-    QString csv;
-    QList<QString> listaHead;
-
-    // Data e ora per titolo
-    QDateTime dt;
-    QString dataTimeString = dt.currentDateTime().toString("yyyyMMdd_hhmm");
-
-    QString nomefileCsv = QFileDialog::getSaveFileName(this, tr("Salva File"), QDir::homePath() + "/Desktop/Pratiche_" + dataTimeString + ".csv", tr("File CSV (*.csv)"));
-
-    QFile file(nomefileCsv);
-    file.open(QIODevice::Truncate | QIODevice::ReadWrite);
-
-    QTextStream stream(&file);
-
-    db.open();
-
-    qry->prepare("SELECT * FROM Colonne ORDER BY OrdineColonna;");
-    qry->exec();
-    int nRecord = 0;
-    while (qry->next()) {
-        if(mapColonne[qry->value(1).toString()]){
-            if(nRecord!=0)
-                csv.append("\t");
-            csv.append(qry->value(0).toString());
-            listaHead.append(qry->value(0).toString());
-            nRecord++;
-        }
-    }
-    csv.append("\n");
-    stream << csv;
-    csv.clear();
-
-    //    qInfo() << listaHead;
-
-    eseguiQuerySelect();
-
-    int row = 0;
-    while(qry->next())
+    void MainWindow::keyPressEvent(QKeyEvent *event)
     {
-        for (int i = 0; i < nRecord; ++i) {
-            if(i!=0)
-                csv.append("\t");
-            csv.append( qry->value(listaHead[i]).toString().replace("\n"," # "));
+        if (event->matches(QKeySequence::Copy))
+        {
+            copiaSelezione();
+
         }
+    }
 
+    void MainWindow::on_checkBox_stateChanged(int arg1)
+    {
+        // CHECK SOLO IN CORSO
+
+        compilaTabellaCompleta();
+    }
+
+
+    void MainWindow::on_lineEdit_textChanged(const QString &arg1)
+    {
+        // CAMPO FILTRO
+
+        compilaTabellaCompleta();
+    }
+
+
+    void MainWindow::on_pushButton_clicked()
+    {
+        // CANCELLA CASELLA FILTRO
+
+        ui->lineEdit->setText("");
+    }
+
+
+    void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
+    {
+        // APRI SCHEDA DETTAGLIO
+
+        QString pratica = ui->tableWidget->item(row, 0)->text();
+        //qInfo() << "testo doubleclick" << pratica;
+
+        SchedaDettaglio schedaDettaglio(pratica, db);
+        schedaDettaglio.setModal(true);
+        schedaDettaglio.exec();
+
+        compilaTabellaCompleta();
+    }
+
+
+    void MainWindow::on_actionGestione_Stato_Pratiche_triggered()
+    {
+        StatoPratiche statoPratiche(db);
+        statoPratiche.setModal(true);
+        statoPratiche.exec();
+    }
+
+
+    void MainWindow::on_actionCartella_Progetti_triggered()
+    {
+        Impostazioni impostazioni(db);
+        impostazioni.setModal(true);
+        impostazioni.exec();
+    }
+
+
+    void MainWindow::on_coloraCheck_stateChanged(int arg1)
+    {
+        // CHECK COLORA
+
+        compilaTabellaCompleta();
+    }
+
+
+    void MainWindow::on_actionEsporta_csv_triggered()
+    {
+        // CSV
+
+        QString csv;
+        QList<QString> listaHead;
+
+        // Data e ora per titolo
+        QDateTime dt;
+        QString dataTimeString = dt.currentDateTime().toString("yyyyMMdd_hhmm");
+
+        QString nomefileCsv = QFileDialog::getSaveFileName(this, tr("Salva File"), QDir::homePath() + "/Desktop/Pratiche_" + dataTimeString + ".csv", tr("File CSV (*.csv)"));
+
+        QFile file(nomefileCsv);
+        file.open(QIODevice::Truncate | QIODevice::ReadWrite);
+
+        QTextStream stream(&file);
+
+        db.open();
+
+        qry->prepare("SELECT * FROM Colonne ORDER BY OrdineColonna;");
+        qry->exec();
+        int nRecord = 0;
+        while (qry->next()) {
+            if(mapColonne[qry->value(1).toString()]){
+                if(nRecord!=0)
+                    csv.append("\t");
+                csv.append(qry->value(0).toString());
+                listaHead.append(qry->value(0).toString());
+                nRecord++;
+            }
+        }
         csv.append("\n");
-
         stream << csv;
         csv.clear();
 
-        row++;
+        //    qInfo() << listaHead;
+
+        eseguiQuerySelect();
+
+        int row = 0;
+        while(qry->next())
+        {
+            for (int i = 0; i < nRecord; ++i) {
+                if(i!=0)
+                    csv.append("\t");
+                csv.append( qry->value(listaHead[i]).toString().replace("\n"," # "));
+            }
+
+            csv.append("\n");
+
+            stream << csv;
+            csv.clear();
+
+            row++;
+        }
+        db.close();
+        file.close();
     }
-    db.close();
-    file.close();
-}
 
 
 
-void MainWindow::on_actionEsporta_csv_completo_triggered()
-{
-    qInfo() << "ok";
-    QDateTime dt;
-    qInfo() << dt.currentDateTime();
-    qInfo() << dt.currentDateTime().toString("yyyyMMdd_hhmm");
-
-}
-
-void MainWindow::on_prog_linkActivated(const QString &link)
-{
-
-}
-
-
-void MainWindow::on_action_Log_In_triggered()
-{
-    SignInAdmin signInAdmin(db);
-    signInAdmin.setModal(true);
-    signInAdmin.exec();
-
-    // STATUSBAR
-    adminLabel->setText(globalAdmin?"🟡 Modalità Amministratore":"🟢 Modalità utente");
-
-    // ABILITA/DISABILITA VOCE MENU
-    if(globalAdmin)
+    void MainWindow::on_actionEsporta_csv_completo_triggered()
     {
-        ui->action_Log_Out->setEnabled(true);
-        ui->action_Log_In->setEnabled(false);
-        ui->actionGestione_Utenti->setEnabled(true);
+        qInfo() << "ok";
+        QDateTime dt;
+        qInfo() << dt.currentDateTime();
+        qInfo() << dt.currentDateTime().toString("yyyyMMdd_hhmm");
+
     }
 
-}
+    void MainWindow::on_prog_linkActivated(const QString &link)
+    {
+
+    }
 
 
-void MainWindow::on_action_Log_Out_triggered()
-{
-    globalAdmin = 0;
+    void MainWindow::on_action_Log_In_triggered()
+    {
+        SignInAdmin signInAdmin(db);
+        signInAdmin.setModal(true);
+        signInAdmin.exec();
 
-    // STATUSBAR
-    adminLabel->setText(globalAdmin?"🟡 Modalità Amministratore":"🟢 Modalità utente");
+        // STATUSBAR
+        adminLabel->setText(globalAdmin?"🟡 Modalità Amministratore":"🟢 Modalità utente");
 
-    // ABILITA/DISABILITA VOCE MENU
-    ui->action_Log_Out->setEnabled(false);
-    ui->action_Log_In->setEnabled(true);
-    ui->actionGestione_Utenti->setEnabled(false);
+        // ABILITA/DISABILITA VOCE MENU
+        if(globalAdmin)
+        {
+            ui->action_Log_Out->setEnabled(true);
+            ui->action_Log_In->setEnabled(false);
+            ui->actionGestione_Utenti->setEnabled(true);
+        }
 
-}
-
-
-void MainWindow::on_action_Verifica_Aggiornamenti_triggered()
-{
-    VerificaAggiornamenti verificaAggiornamenti(db);
-    verificaAggiornamenti.setModal(true);
-    verificaAggiornamenti.exec();
-}
+    }
 
 
+    void MainWindow::on_action_Log_Out_triggered()
+    {
+        globalAdmin = 0;
 
-void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
-{
-    // CAMBIA STATO COMBO
-    compilaTabellaCompleta();
-}
+        // STATUSBAR
+        adminLabel->setText(globalAdmin?"🟡 Modalità Amministratore":"🟢 Modalità utente");
 
+        // ABILITA/DISABILITA VOCE MENU
+        ui->action_Log_Out->setEnabled(false);
+        ui->action_Log_In->setEnabled(true);
+        ui->actionGestione_Utenti->setEnabled(false);
 
-void MainWindow::on_action_Monitoraggi_triggered()
-{
-    Monitoraggi monitoraggi(db);
-    monitoraggi.setModal(true);
-    monitoraggi.exec();
-}
-
+    }
 
 
-void MainWindow::on_actionProfessionisti_triggered()
-{
-    Professionisti professionisti(db, this);
-    professionisti.setModal(true);
-    professionisti.exec();
-}
+    void MainWindow::on_action_Verifica_Aggiornamenti_triggered()
+    {
+        VerificaAggiornamenti verificaAggiornamenti(db);
+        verificaAggiornamenti.setModal(true);
+        verificaAggiornamenti.exec();
+    }
 
 
 
-void MainWindow::on_actionImprese_triggered()
-{
-    Imprese imprese(db, this);
-    imprese.setModal(true);
-    imprese.exec();
-}
+    void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
+    {
+        // CAMBIA STATO COMBO
+        compilaTabellaCompleta();
+    }
 
 
-void MainWindow::on_actionGestione_Utenti_triggered()
-{
-    Utenti utenti(db, this);
-    utenti.setModal(true);
-    utenti.exec();
-}
+    void MainWindow::on_action_Monitoraggi_triggered()
+    {
+        Monitoraggi monitoraggi(db);
+        monitoraggi.setModal(true);
+        monitoraggi.exec();
+    }
+
+
+
+    void MainWindow::on_actionProfessionisti_triggered()
+    {
+        Professionisti professionisti(db, this);
+        professionisti.setModal(true);
+        professionisti.exec();
+    }
+
+
+
+    void MainWindow::on_actionImprese_triggered()
+    {
+        Imprese imprese(db, this);
+        imprese.setModal(true);
+        imprese.exec();
+    }
+
+
+    void MainWindow::on_actionGestione_Utenti_triggered()
+    {
+        Utenti utenti(db, this);
+        utenti.setModal(true);
+        utenti.exec();
+    }
 

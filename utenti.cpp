@@ -17,7 +17,7 @@ Utenti::Utenti(QSqlDatabase db, QWidget *parent) :
     qry = new QSqlQuery(db);
 
     utente = "";
-    alias = "";
+    chiaveUtente = "";
     path = "";
     pwd = "";
 
@@ -49,7 +49,7 @@ void Utenti::compilaTabella(QString nomeSelezionato)
     ui->tabella->clearContents();
 
     // TITOLI COLONNE
-    ui->tabella->setHorizontalHeaderLabels({"Utente cifrato", "Alias", "Cartella Lavori", "Password"});
+    ui->tabella->setHorizontalHeaderLabels({"Utente", "Chiave Utente", "Cartella Lavori", "Password"});
 
     // STILE TABELLA
     ui->tabella->setStyleSheet("QHeaderView::section { background-color:#d9d9d9 }");
@@ -72,7 +72,7 @@ void Utenti::compilaTabella(QString nomeSelezionato)
         QTableWidgetItem *item4 = new QTableWidgetItem();
 
         item1->setText(qry->value("Utente").toString());
-        item2->setText(qry->value("Alias").toString());
+        item2->setText(qry->value("ChiaveUtente").toString());
         item3->setText(qry->value("PathLavori").toString());
         item4->setText(qry->value("Password").toString());
 
@@ -115,12 +115,12 @@ void Utenti::compilaForm()
     int row = ui->tabella->currentRow();
 
     utente = ui->tabella->item(row, 0)->text();
-    alias = ui->tabella->item(row, 1)->text();
+    chiaveUtente = ui->tabella->item(row, 1)->text();
     path = ui->tabella->item(row, 2)->text();
     pwd = ui->tabella->item(row, 3)->text();
 
     ui->utenteEdit->setText(utente);
-    ui->aliasEdit->setText(alias);
+    ui->chiaveEdit->setText(chiaveUtente);
     ui->pathEdit->setText(path);
     ui->pwdEdit->setText(pwd);
 
@@ -130,7 +130,7 @@ void Utenti::compilaForm()
 void Utenti::abilitaCampi(bool siNo)
 {
     ui->utenteEdit->setEnabled(siNo);
-    ui->aliasEdit->setEnabled(siNo);
+    ui->chiaveEdit->setEnabled(siNo);
     ui->pathEdit->setEnabled(siNo);
     ui->pwdEdit->setEnabled(siNo);
 }
@@ -147,12 +147,12 @@ void Utenti::on_btnAggiungi_clicked()
     ui->btnElimina->setEnabled(false);
 
     utente = "";
-    alias = "";
+    chiaveUtente = "";
     path = "";
     pwd = "";
 
     ui->utenteEdit->setText("");
-    ui->aliasEdit->setText("");
+    ui->chiaveEdit->setText("");
     ui->pathEdit->setText("");
     ui->pwdEdit->setText("");
 
@@ -184,12 +184,12 @@ void Utenti::on_btnElimina_clicked()
     db.close();
 
     utente = "";
-    alias = "";
+    chiaveUtente = "";
     path = "";
     pwd = "";
 
     ui->utenteEdit->setText("");
-    ui->aliasEdit->setText("");
+    ui->chiaveEdit->setText("");
     ui->pathEdit->setText("");
     ui->pwdEdit->setText("");
 
@@ -217,12 +217,12 @@ void Utenti::on_btnModifica_clicked()
 
 
     // TERMINA SE CAMPO Alias è NULLO O VUOTO
-    if(ui->aliasEdit->text().isNull() || ui->aliasEdit->text().isEmpty() ||
-            ui->aliasEdit->text().trimmed().length() == 0)
+    if(ui->chiaveEdit->text().isNull() || ui->chiaveEdit->text().isEmpty() ||
+            ui->chiaveEdit->text().trimmed().length() == 0)
     {
         QMessageBox::warning(this, "Attenzione", "Il campo 'Alias' non può essere vuoto\n"
                                                  "e deve corrispondere all'utenza Windows.");
-        ui->aliasEdit->setText(path);
+        ui->chiaveEdit->setText(path);
         return;
     }
 
@@ -258,7 +258,7 @@ void Utenti::on_btnModifica_clicked()
     {
         queryString = "UPDATE Utenti ";
         queryString += " SET Utente = :Utente ";
-        queryString += ", Alias = :Alias ";
+        queryString += ", chiaveUtente = :Alias ";
         queryString += ", PathLavori = :PathLavori ";
         queryString += ", Password = :Password ";
         queryString += ", DataModifica = :DataModifica ";
@@ -269,7 +269,7 @@ void Utenti::on_btnModifica_clicked()
 
     qry->prepare(queryString);
     qry->bindValue(":Utente", ui->utenteEdit->text());
-    qry->bindValue(":Alias", ui->aliasEdit->text());
+    qry->bindValue(":Alias", ui->chiaveEdit->text());
     qry->bindValue(":PathLavori", ui->pathEdit->text());
     qry->bindValue(":Password", ui->pwdEdit->text());
     qry->bindValue(":DataModifica", QDateTime::currentDateTime());
@@ -290,7 +290,7 @@ void Utenti::on_utenteEdit_editingFinished()
 }
 
 
-void Utenti::on_aliasEdit_editingFinished()
+void Utenti::on_chiaveEdit_editingFinished()
 {
     abilitaBtnModifica();
 }
@@ -312,7 +312,7 @@ void Utenti::abilitaBtnModifica()
     // VERIFICA SE IL CONTENUTO DEI CAMPI è CAMBIATO
     if(
             ui->utenteEdit->text() != utente ||
-            ui->aliasEdit->text() != alias ||
+            ui->chiaveEdit->text() != chiaveUtente ||
             ui->pathEdit->text() != path ||
             ui->pwdEdit->text() != pwd
             )

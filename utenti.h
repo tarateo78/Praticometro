@@ -28,7 +28,7 @@ private slots:
     void on_btnElimina_clicked();
     void on_btnModifica_clicked();
     void on_utenteEdit_editingFinished();
-    void on_aliasEdit_editingFinished();
+    void on_chiaveEdit_editingFinished();
     void on_pwdEdit_editingFinished();
     void on_utenteWinEdit_textChanged(const QString &arg1);
 
@@ -41,8 +41,8 @@ private:
     QSqlDatabase db;
     QSqlQuery *qry;
     bool controlloAggiungi;
+    QString chiaveUtente;
     QString utente;
-    QString alias;
     QString path;
     QString pwd;
     void compilaTabella(QString nomeSelezionato = NULL);

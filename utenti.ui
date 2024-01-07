@@ -105,12 +105,12 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>Utente cifrato</string>
+             <string>Utente</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="utenteEdit">
+           <widget class="QLineEdit" name="chiaveEdit">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -130,7 +130,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="aliasEdit">
+           <widget class="QLineEdit" name="utenteEdit">
             <property name="enabled">
              <bool>false</bool>
             </property>
