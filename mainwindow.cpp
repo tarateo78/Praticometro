@@ -65,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // POPOLA COMBO
     ui->comboBox->addItem("Tutti");
-    ui->comboBox->addItem("Nulla in corso");
+    ui->comboBox->addItem("Nessuna attività");
     ui->comboBox->addItem("Progetti in corso");
     ui->comboBox->addItem("Gara in corso");
     ui->comboBox->addItem("Lavori in corso");
@@ -398,7 +398,7 @@ void MainWindow::settaPathProgetti()
         QString lCombo;
         if(ui->comboBox->currentText().compare("Tutti"))
             lCombo = "";
-        if(ui->comboBox->currentText().compare("Nulla in corso") == 0)
+        if(ui->comboBox->currentText().compare("Nessuna attività") == 0)
             lCombo = "AND AvvioProgettazione = 0 AND AvvioGara = 0 AND LavoriInCorso = 0 AND CreFatto = 0 ";
         if(ui->comboBox->currentText().compare("Progetti in corso") == 0)
             lCombo = "AND AvvioProgettazione = 1 AND AvvioGara = 0 AND LavoriInCorso = 0 AND CreFatto = 0 ";
