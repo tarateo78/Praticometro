@@ -195,16 +195,16 @@ void ErogazioneContributi::on_btnModifica_clicked()
     if(controlloAggiungi)
     {
         queryString = "INSERT INTO ErogazioneContributi ";
-        queryString += " (CodicePratica, DataRichiesta, ImportoRichiesto, ImportoErogato, DataErogazione, NotaErogazione, DataModifica, UtenteModifica) ";
-        queryString += " VALUES (:CodicePratica, :DataRichiesta, :ImportoRichiesto, :ImportoErogato, :DataErogazione, :NotaErogazione, :DataModifica, :UtenteModifica); ";
+        queryString += " (CodicePratica, DataRichiesta, ImportoRichiesto, DataErogazione,ImportoErogato,  NotaErogazione, DataModifica, UtenteModifica) ";
+        queryString += " VALUES (:CodicePratica, :DataRichiesta, :ImportoRichiesto, :DataErogazione, :ImportoErogato, :NotaErogazione, :DataModifica, :UtenteModifica); ";
     }
     else
     {
         queryString = "UPDATE ErogazioneContributi ";
         queryString += " SET DataRichiesta = :DataRichiesta ";
         queryString += ", ImportoRichiesto = :ImportoRichiesto ";
-        queryString += ", ImportoErogato = :ImportoErogato ";
         queryString += ", DataErogazione = :DataErogazione ";
+        queryString += ", ImportoErogato = :ImportoErogato ";
         queryString += ", NotaErogazione = :NotaErogazione ";
         queryString += ", DataModifica = :DataModifica ";
         queryString += ", UtenteModifica = :UtenteModifica ";
@@ -224,8 +224,8 @@ void ErogazioneContributi::on_btnModifica_clicked()
     qry->bindValue(":CodicePratica", pratica);
     qry->bindValue(":DataRichiesta", ui->dataRicEdit->text());
     qry->bindValue(":ImportoRichiesto", ui->impRicEdit->text());
-    qry->bindValue(":ImportoErogato", ui->dataErogEdit->text());
-    qry->bindValue(":DataErogazione", ui->impErogEdit->text());
+    qry->bindValue(":DataErogazione", ui->dataErogEdit->text());
+    qry->bindValue(":ImportoErogato", ui->impErogEdit->text());
     qry->bindValue(":NotaErogazione", ui->notaEdit->toPlainText());
     qry->bindValue(":DataModifica", QDateTime::currentDateTime());
     qry->bindValue(":UtenteModifica", utenteWin);
