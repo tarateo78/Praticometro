@@ -224,7 +224,7 @@ void Imprese::on_btnModifica_clicked()
     qry->bindValue(":NomeImpresa", ui->nomeEdit->text());
     qry->bindValue(":Note", ui->noteEdit->toPlainText());
     qry->bindValue(":Telefono", ui->telefonoEdit->text());
-    qry->bindValue(":email", ui->emailEdit->text());
+    qry->bindValue(":Email", ui->emailEdit->text());
     qry->bindValue(":Pec", ui->pecEdit->text());
     qry->bindValue(":Piva", ui->pivaEdit->text());
     qry->bindValue(":DataModifica", QDateTime::currentDateTime());

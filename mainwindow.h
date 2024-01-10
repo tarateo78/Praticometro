@@ -50,6 +50,8 @@ private slots:
 
     void on_actionGestione_Utenti_triggered();
 
+    void on_actionQt_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

@@ -24,5 +24,6 @@
         <file>icone_32/pdf.png</file>
         <file>icone_32/impresa.png</file>
         <file>icone_32/utenti.png</file>
+        <file>icone_32/Qt.png</file>
     </qresource>
 </RCC>

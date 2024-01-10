@@ -430,10 +430,17 @@
     <addaction name="separator"/>
     <addaction name="actionCartella_Progetti"/>
    </widget>
+   <widget class="QMenu" name="menuAiuto">
+    <property name="title">
+     <string>Aiuto</string>
+    </property>
+    <addaction name="actionQt"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menuModifica"/>
    <addaction name="menuStrumenti"/>
    <addaction name="menuAdmin"/>
+   <addaction name="menuAiuto"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionGestione_Stato_Pratiche">
@@ -560,6 +567,15 @@
    </property>
    <property name="text">
     <string>Gestione Utenti</string>
+   </property>
+  </action>
+  <action name="actionQt">
+   <property name="icon">
+    <iconset resource="Immagini.qrc">
+     <normaloff>:/icone/icone_32/Qt.png</normaloff>:/icone/icone_32/Qt.png</iconset>
+   </property>
+   <property name="text">
+    <string>About Qt...</string>
    </property>
   </action>
  </widget>

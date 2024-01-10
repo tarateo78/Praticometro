@@ -723,3 +723,9 @@ void MainWindow::settaPathProgetti()
         utenti.exec();
     }
 
+
+void MainWindow::on_actionQt_triggered()
+{
+    QMessageBox::aboutQt(this);
+}
+
