@@ -195,7 +195,7 @@ QStringList Monitoraggi::getListaColonne()
 {
     if(!db.isOpen()) db.open();
     QSqlQuery *qryList = new QSqlQuery(db);
-    qryList->prepare("SELECT * FROM Monitoraggi WHERE Area = 'Globale' OR Area = :area;");
+    qryList->prepare("SELECT * FROM Monitoraggi WHERE Area = 'Globale' OR Area = :area ORDER BY Ordine;");
     qryList->bindValue(":area", ui->comboBox->currentText());
     qryList->exec();
 
