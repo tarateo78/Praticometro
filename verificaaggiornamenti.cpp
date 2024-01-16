@@ -215,6 +215,7 @@ void VerificaAggiornamenti::on_verifica_clicked()
     QFileInfoList elenco = root.entryInfoList(QDir::Filter::AllDirs | QDir::Filter::NoDotAndDotDot);
 
     int row = 0;
+    bool yesToAll = 0;
     foreach (QFileInfo file, elenco)
     {
         globalCount = 0;
@@ -240,6 +241,8 @@ void VerificaAggiornamenti::on_verifica_clicked()
             contaFile(globalPathProgetti + "\\" + file.fileName() + "\\" + sub.fileName());
         }
 
+        QString tmpString;
+
         if(mapPratiche[nome]->nFileEffettivi != globalCount)
         {
             db.open();
@@ -249,9 +252,24 @@ void VerificaAggiornamenti::on_verifica_clicked()
             qryUpdate->bindValue(":pratica", nome);
             qryUpdate->exec();
             db.close();
+
+            tmpString = "Processata la pratica '" + nome + "'. ";
+        }
+        else
+        {
+            tmpString = "La pratica '" + nome + "' non "
+                    "contiene aggiornamenti. ";
         }
 
-        row++;
+        tmpString += "Analizzare la successiva?";
+
+        if(!yesToAll)
+        {
+            int i = QMessageBox::question(this, "Scelta opzione", tmpString, QMessageBox::Yes, QMessageBox::YesToAll, QMessageBox::Abort);
+            if(i == QMessageBox::Abort) break;
+            if(i == QMessageBox::YesToAll) yesToAll = 1;
+        }
+    row++;
     }
 
     compilaTabella();
