@@ -88,4 +88,5 @@ DISTFILES += \
     icone_32/squadra.png \
     icone_32/verde.png \
     icone_32/vero.png \
-    icone_32/vioala.png
+    icone_32/vioala.png \
+    secretKey.txt

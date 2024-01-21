@@ -6,4 +6,5 @@ QString utenteWin;
 int globalAdmin = 0;
 int globalCount = 0;
 
-QString globalKey = "TMgA90";
+QString globalKey;
+//QString globalKey = "TMgA90";
