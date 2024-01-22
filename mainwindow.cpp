@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
     #include "secretKey.txt"
     // il file 'secretKey.txt' è escluso da GIT per ragioni di sicurezza
     globalKey = secretKey;
-
+    // qInfo() << globalKey;
 
     // VERIFICA UTENTE
     if(verificaUtente())
@@ -110,7 +110,7 @@ int MainWindow::verificaUtente()
     //    QString userCriptato = cript.toHex();
 
     QString userCriptato = Criptazione::cripta512( Impostazioni::getUtenteWin() );
-    qInfo() << Impostazioni::getUtenteWin();
+    // qInfo() << Impostazioni::getUtenteWin();
 
     db.open();
     QSqlQuery *qry = new QSqlQuery(db);

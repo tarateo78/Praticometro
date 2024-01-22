@@ -89,4 +89,4 @@ DISTFILES += \
     icone_32/verde.png \
     icone_32/vero.png \
     icone_32/vioala.png \
-    secretKey.txt
+    secretKey.txt \
